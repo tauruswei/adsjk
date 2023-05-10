@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.primihub.biz.repository.primarydb.scd.ScdRuleRepository">
+    <resultMap type="com.primihub.biz.entity.scd.po.ScdRule" id="ScdRuleResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="attrName" column="attr_name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="INTEGER"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="saveRule" useGeneratedKeys="true" keyProperty="id" parameterType="com.primihub.biz.entity.scd.po.ScdRule">
+        insert into scd_rule (name,attr_name,type ,value,create_date,update_date)
+        values (#{name},#{attrName},#{type},#{value},now(),now())
+    </insert>
+    <select id="listRules" resultMap="ScdRuleResult" >
+        select
+        id,name,attr_name,type,value,create_date,update_date
+        from scd_rule
+    </select>
+    <select id="listRulesArray" parameterType="java.util.List" resultMap="ScdRuleResult" >
+        select
+        id,name,attr_name,type,value,create_date,update_date
+        from scd_rule
+        where id in
+        <foreach collection="list" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+    <select id="queryRule" resultMap="ScdRuleResult">
+        select
+        id,name,attr_name,type,value,create_date,update_date
+        from scd_rule
+        where id = #{id}
+    </select>
+    <update id="updateRule" parameterType="com.primihub.biz.entity.scd.po.ScdRule">
+        update scd_rule
+        <set>
+            <if test="name!=null">name = #{name},</if>
+            <if test="attrName!=null">attr_name = #{attrName},</if>
+            <if test="type!=null">type = #{type},</if>
+            <if test="value!=null">value = #{value},</if>
+            update_date = now()
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

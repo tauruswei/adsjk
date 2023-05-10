@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.primihub.biz.repository.primarydb.data.DataModelPrRepository">
+    <insert id="saveDataModel" keyProperty="modelId" useGeneratedKeys="true" parameterType="com.primihub.biz.entity.data.po.DataModel">
+        insert into data_model
+            (
+                model_uuid,model_name,model_desc,model_type,project_id,resource_num,y_value_column,create_date,update_date,component_speed,train_type,is_draft,user_id,organ_id,component_json,data
+            )
+        values
+            (
+                #{modelUUID},#{modelName},#{modelDesc},#{modelType},#{projectId},#{resourceNum},#{yValueColumn},
+                now(),now(),#{componentSpeed},#{trainType},#{isDraft},#{userId},#{organId},#{componentJson},#{data}
+            )
+    </insert>
+
+    <insert id="saveDataModelResourceList" keyProperty="id" useGeneratedKeys="true" parameterType="com.primihub.biz.entity.data.po.DataModelResource">
+        insert into data_mr (model_id,resource_id,task_id,take_part_type,alignment_num,primitive_param_num,modelParam_num,is_del,create_date,update_date)
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.modelId},#{item.resourceId},#{item.taskId},#{item.takePartType},#{item.alignmentNum},#{item.primitiveParamNum},#{item.modelParamNum},0,now(),now())
+        </foreach>
+    </insert>
+    <insert id="saveDataModelResource" keyProperty="id" useGeneratedKeys="true" parameterType="com.primihub.biz.entity.data.po.DataModelResource">
+        insert into data_mr (model_id,resource_id,task_id,take_part_type,alignment_num,primitive_param_num,modelParam_num,is_del,create_date,update_date)
+        values (#{modelId},#{resourceId},#{taskId},#{takePartType},#{alignmentNum},#{primitiveParamNum},#{modelParamNum},0,now(),now())
+    </insert>
+
+    <insert id="saveDataModelQuota" keyProperty="quota_id" useGeneratedKeys="true" parameterType="com.primihub.biz.entity.data.po.DataModelQuota">
+        insert into data_model_quota (quota_type,quota_images,model_id,auc,ks,gini,`precision`,recall,f1_score,create_date,update_date)
+        values (#{quotaType},#{quotaImage},#{modelId},#{auc},#{ks},#{gini},#{precision},#{recall},#{f1Score},now(),now())
+    </insert>
+    <insert id="saveDataComponent" keyProperty="componentId" useGeneratedKeys="true" parameterType="com.primihub.biz.entity.data.po.DataComponent">
+        insert into data_component (front_component_id,model_id,task_id,component_code,component_name,shape,width,height,coordinate_y,coordinate_x,data_json,start_time,end_time,is_del,create_date,update_date)
+        values (#{frontComponentId},#{modelId},#{taskId},#{componentCode},#{componentName},#{shape},#{width},#{height},#{coordinateY},#{coordinateX},#{dataJson},0,0,0,now(),now())
+    </insert>
+    <insert id="saveDataModelComponent" keyProperty="mcId" useGeneratedKeys="true" parameterType="com.primihub.biz.entity.data.po.DataModelComponent">
+        insert into data_model_component (model_id,task_id,input_component_id,output_component_id,point_type,point_json,is_del,create_date,update_date)
+        values (#{modelId},#{taskId},#{inputComponentId},#{outputComponentId},#{pointType},#{pointJson},0,now(),now())
+    </insert>
+    <insert id="saveDataModelTask" parameterType="com.primihub.biz.entity.data.po.DataModelTask" useGeneratedKeys="true" keyProperty="id">
+        insert into data_model_task (model_id,task_id,predict_file,predict_content,component_json,is_del,create_date,update_date)
+        values (#{modelId},#{taskId},#{predictFile},#{predictContent},#{componentJson},0,now(),now())
+    </insert>
+    <insert id="saveComponentDraft" parameterType="com.primihub.biz.entity.data.po.DataComponentDraft" useGeneratedKeys="true" keyProperty="draftId">
+        insert into data_component_draft (draft_name,user_id,component_json,component_image,is_del,create_date,update_date)
+        values (#{draftName},#{userId},#{componentJson},#{componentImage},0,now(),now())
+    </insert>
+    <update id="updateDataModel" parameterType="com.primihub.biz.entity.data.po.DataModel">
+        update data_model
+        <set>
+            <if test="modelName!=null">model_name = #{modelName},</if>
+            <if test="modelDesc!=null">model_desc = #{modelDesc},</if>
+            <if test="modelType!=null">model_type = #{modelType},</if>
+            <if test="projectId!=null">project_id = #{projectId},</if>
+            <if test="resourceNum!=null">resource_num = #{resourceNum},</if>
+            <if test="yValueColumn!=null">y_value_column = #{yValueColumn},</if>
+            <if test="trainType!=null">train_type = #{trainType},</if>
+            <if test="isDraft!=null">is_draft = #{isDraft},</if>
+            <if test="userId!=null">user_id = #{userId},</if>
+            <if test="organId!=null">organ_id = #{organId},</if>
+            <if test="componentJson!=null">component_json = #{componentJson},</if>
+            <if test="data!=null">data = #{data},</if>
+            update_date = now()
+        </set>
+        where model_id = #{modelId}
+    </update>
+    <update id="updateDataComponent" parameterType="com.primihub.biz.entity.data.po.DataComponent">
+        update data_component
+        <set>
+            <if test="modelId!=null">model_id = #{modelId},</if>
+            <if test="componentCode!=null">component_code = #{componentCode},</if>
+            <if test="componentName!=null">component_name = #{componentName},</if>
+            <if test="shape!=null">shape = #{shape},</if>
+            <if test="width!=null">width = #{width},</if>
+            <if test="height!=null">height = #{height},</if>
+            <if test="coordinateY!=null">coordinate_y = #{coordinateY},</if>
+            <if test="coordinateX!=null">coordinate_x = #{coordinateX},</if>
+            <if test="dataJson!=null">data_json = #{dataJson},</if>
+            <if test="startTime!=null">start_time = #{startTime},</if>
+            <if test="endTime!=null">end_time = #{endTime},</if>
+            <if test="componentState!=null">component_state = #{componentState},</if>
+            <if test="isDel!=null">is_del = #{isDel},</if>
+            update_date = now()
+        </set>
+        where component_id = #{componentId}
+    </update>
+    <update id="updateDataModelTask" parameterType="com.primihub.biz.entity.data.po.DataModelTask">
+        update data_model_task
+        <set>
+            <if test="predictFile!=null">predict_file = #{predictFile},</if>
+            <if test="predictContent!=null">predict_content = #{predictContent},</if>
+            <if test="componentJson!=null">component_json = #{componentJson},</if>
+            update_date = now()
+        </set>
+        where task_id = #{taskId}
+    </update>
+    <delete id="deleteModelByModelId">
+        <choose>
+            <when test="isDraft==null or isDraft==0">
+                delete from data_model where model_id = #{modelId}
+            </when>
+            <otherwise>
+                update data_model set is_del = 1 where model_id = #{modelId}
+            </otherwise>
+        </choose>
+
+    </delete>
+    <delete id="deleteDataComponent">
+        delete from data_component where model_id = #{modelId}
+    </delete>
+    <delete id="deleteDataModelComponent">
+        delete from data_model_component where model_id = #{modelId}
+    </delete>
+    <delete id="deleteDataModelResource">
+        delete from data_mr where model_id = #{modelId}
+    </delete>
+    <delete id="deleteDataModelTask">
+        delete from data_model_task where task_id = #{taskId}
+    </delete>
+    <delete id="deleteDataModelResourceByTaskId">
+        delete from data_mr where task_id = #{taskId}
+    </delete>
+    <delete id="deleteComponentDraft">
+        delete from data_component_draft where draft_id = #{draftId}
+    </delete>
+    <update id="deleteModelTask">
+        update data_model_task set is_del = 1 where model_id = #{modelId}
+    </update>
+    <update id="updateComponentDraft" parameterType="com.primihub.biz.entity.data.po.DataComponentDraft">
+        update data_component_draft
+        <set>
+            <if test="draftName!=null and draftName!=''">draft_name = #{draftName},</if>
+            <if test="componentJson!=null and componentJson!=''">component_json = #{componentJson},</if>
+            <if test="componentImage!=null and componentImage!=''">component_image = #{componentImage},</if>
+            update_date = now()
+        </set>
+        where draft_id = #{draftId}
+    </update>
+
+</mapper>

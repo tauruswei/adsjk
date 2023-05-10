@@ -1,0 +1,60 @@
+server:
+  port: 8090
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+      file-size-threshold: 1MB
+  application:
+    name: platform
+  rabbitmq:
+    host: rabbitmq1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  cloud:
+    stream:
+      bindings:
+        singleTaskOutput:
+          destination: singlTaskChannel
+        singleTaskInput:
+          destination: singlTaskChannel
+          group: single
+    nacos:
+      discovery:
+        server-addr: 192.168.2.150:8848
+        namespace: 46b6b568-e6ae-45ca-baa1-819932fc8947
+nacos:
+  config:
+    server-addr: 192.168.2.150:8848
+    namespace: 46b6b568-e6ae-45ca-baa1-819932fc8947
+    max-retry: 3
+    config-long-poll-timeout: 1000
+    config-retry-time: 1000
+    auto-refresh: true
+    username: nacos
+    password: nacos
+    context-path: /nacos
+    group: DEFAULT_GROUP
+    file-extension: yaml
+aj:
+  captcha:
+    #    jigsaw: classpath:images/yyjigsaw
+    cache-type: redis
+    water-mark: QitiQ
+    slip-offset: 5
+    aes-status: true
+    interference-options: 2
+    req-frequency-limit-enable: true
+    req-get-lock-limit: 60
+    req-get-lock-seconds: 30
+    req-get-minute-limit: 60
+    req-check-minute-limit: 60
+    req-verify-minute-limit: 60
+    type: BLOCKPUZZLE
+logging:
+  level:
+    root: info

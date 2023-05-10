@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.primihub.biz.repository.primarydb.abe.AbeProjectRepository">
+    <resultMap type="com.primihub.biz.entity.abe.po.AbeProject" id="AbeProjectResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="pk" column="pk" jdbcType="BLOB"/>
+        <result property="msk" column="msk" jdbcType="BLOB"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="saveProject" useGeneratedKeys="true" keyProperty="id" parameterType="com.primihub.biz.entity.abe.po.AbeProject">
+        insert into cp_abe_project (name,status,create_date,update_date)
+        values (#{name},#{status},now(),now())
+    </insert>
+    <select id="listProjects" resultMap="AbeProjectResult">
+        select
+        id,name,path,pk,msk,status,create_date,update_date
+        from cp_abe_project
+    </select>
+    <select id="listProjectsByName" resultMap="AbeProjectResult" parameterType="string">
+        select
+        id,name,path,pk,msk,status,create_date,update_date
+        from cp_abe_project
+        where name like CONCAT('%',#{name},'%')
+    </select>
+    <select id="queryProject" resultMap="AbeProjectResult">
+        select
+        id,name,path,pk,msk,status,create_date,update_date
+        from cp_abe_project
+        where id = #{id}
+    </select>
+    <update id="updateProject" parameterType="com.primihub.biz.entity.abe.po.AbeProject">
+        update cp_abe_project
+        <set>
+            <if test="pk!=null">pk = #{pk},</if>
+            <if test="msk!=null">msk = #{msk},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="path!=null">path = #{path},</if>
+            update_date = now()
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.primihub.biz.repository.primarydb.abe.AbeCipherRepository">
+    <resultMap type="com.primihub.biz.entity.abe.po.AbeCipher" id="AbeCipherResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="projectId" column="project_id" jdbcType="BIGINT"/>
+        <result property="policy" column="policy" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="plainText" column="plain_text" jdbcType="BLOB"/>
+        <result property="cipherText" column="cipher_text" jdbcType="BLOB"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="update_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="saveCipher" useGeneratedKeys="true" keyProperty="id" parameterType="com.primihub.biz.entity.abe.po.AbeCipher">
+        insert into cp_abe_cipher (project_id,policy,plain_text,status,create_date,update_date)
+        values (#{projectId},#{policy},#{plainText},#{status},now(),now())
+    </insert>
+    <select id="listCiphers" resultMap="AbeCipherResult">
+        select
+        *
+        from cp_abe_cipher
+    </select>
+    <select id="queryCipher" resultMap="AbeCipherResult">
+        select
+        *
+        from cp_abe_cipher
+        where id = #{id}
+    </select>
+    <update id="updateCipher" parameterType="com.primihub.biz.entity.abe.po.AbeCipher">
+        update cp_abe_cipher
+        <set>
+            <if test="cipherText!=null">cipher_text = #{cipherText},</if>
+            <if test="status!=null">status = #{status},</if>
+            <if test="path!=null">path = #{path},</if>
+            update_date = now()
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

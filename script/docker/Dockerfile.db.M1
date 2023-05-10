@@ -1,0 +1,12 @@
+FROM --platform=linux/amd64 mysql:5.7
+
+ENV MYSQL_ROOT_PASSWORD root
+ENV MYSQL_USER nacos
+ENV MYSQL_PASSWORD nacos
+ENV MYSQL_DATABASE nacos_config
+RUN mkdir /sql
+RUN chmod -R 777 /tmp /sql
+COPY script/db/dbinit.sql /docker-entrypoint-initdb.d/
+
+COPY script/db/ddl.sql /sql/
+COPY script/db/nacos_config.sql /sql/nacos_config.sql

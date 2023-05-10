@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.primihub.biz.repository.primarydb.fusion.FusionRepository">
+    <resultMap type="com.primihub.biz.entity.fusion.po.FusionOrgan" id="FusionOrganResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="globalId" column="global_id" jdbcType="VARCHAR"/>
+        <result property="globalName" column="global_name" jdbcType="VARCHAR"/>
+        <result property="pinCodeMd" column="pin_code_md" jdbcType="VARCHAR"/>
+        <result property="gatewayAddress" column="gateway_address" jdbcType="VARCHAR"/>
+        <result property="registerTime" column="register_time" jdbcType="BLOB"/>
+        <result property="isDel" column="is_del" jdbcType="TINYINT"/>
+        <result property="cTime" column="c_time" jdbcType="TIMESTAMP"/>
+        <result property="uTime" column="u_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <insert id="insertFusionOrgan" useGeneratedKeys="true" keyProperty="id">
+        insert into fusion_organ(global_id,global_name,pin_code_md,gateway_address,register_time,is_del)
+        values(#{globalId},#{globalName},#{pinCodeMd},#{gatewayAddress},#{registerTime},#{isDel})
+    </insert>
+
+    <update id="updateFusionOrganSpeByGlobalId">
+        update fusion_organ set global_name=#{globalName},gateway_address=#{gatewayAddress} where global_id=#{globalId}
+    </update>
+
+    <select id="getFusionOrganByGlobalId" resultType="com.primihub.biz.entity.fusion.po.FusionOrgan">
+        select
+        id,global_id globalId,global_name globalName,pin_code_md pinCodeMd,gateway_address gatewayAddress,register_time registerTime,is_del isDel,c_time cTime,u_time uTime
+        from
+        fusion_organ
+        where global_id=#{globalId}
+        limit 1
+    </select>
+
+    <select id="getFusionOrganList" resultMap="FusionOrganResult">
+        select
+        id,global_id globalId,global_name globalName,pin_code_md pinCodeMd,gateway_address gatewayAddress,register_time registerTime,is_del isDel,c_time cTime,u_time uTime
+        from
+        fusion_organ
+    </select>
+
+    <select id="selectFusionOrganByGlobalIds" resultType="com.primihub.biz.entity.fusion.po.FusionOrgan">
+        select
+            id,global_id globalId,global_name globalName,gateway_address gatewayAddress,register_time registerTime,is_del isDel,c_time cTime,u_time uTime
+        from
+            fusion_organ
+        where global_id in
+        <foreach collection="globalIds" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+</mapper>
