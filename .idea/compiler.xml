@@ -8,10 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common" />
         <module name="application" />
-        <module name="gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="gateway" target="1.8" />
       <module name="service" target="8" />
     </bytecodeTargetLevel>
   </component>

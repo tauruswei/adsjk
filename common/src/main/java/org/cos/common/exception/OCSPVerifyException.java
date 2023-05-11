@@ -1,9 +1,9 @@
 package org.cos.common.exception;
 
-public class VerifyException extends Exception {
+public class OCSPVerifyException extends Exception {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1419459563110058385L;
 
@@ -18,31 +18,31 @@ public class VerifyException extends Exception {
 		this.code = code;
 	}
 
-	public VerifyException() {
+	public OCSPVerifyException() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public VerifyException(String message) {
+	public OCSPVerifyException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public VerifyException(Throwable cause) {
+	public OCSPVerifyException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public VerifyException(String message, Throwable cause) {
+	public OCSPVerifyException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public VerifyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+	public OCSPVerifyException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
 		// TODO Auto-generated constructor stub
 	}
 
-	public VerifyException(int code, String message) {
+	public OCSPVerifyException(int code, String message) {
 		super(message);
 		this.code = code;
 		// TODO Auto-generated constructor stub

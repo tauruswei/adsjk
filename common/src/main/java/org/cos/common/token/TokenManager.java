@@ -95,15 +95,15 @@ public final class TokenManager {
 			checkResult.setClaims(claims);
 		} catch (ExpiredJwtException e) {
 			//token 超出有效期
-			logger.error(failLog(Arrays.asList(jwtStr),CodeMsg.TOKEN_EXPIRED_ERROR.fillArgs(e.getMessage())));
+			logger.error(failLog(CodeMsg.TOKEN_EXPIRED_ERROR.fillArgs(e.getMessage())));
 			throw new GlobalException(CodeMsg.TOKEN_EXPIRED_ERROR.fillArgs(e.getMessage()));
 		} catch (SignatureException e) {
 			//签名无效
-			logger.error(failLog(Arrays.asList(jwtStr),CodeMsg.TOKEN_SIGNATURE_ERROR.fillArgs(e.getMessage())));
+			logger.error(failLog(CodeMsg.TOKEN_SIGNATURE_ERROR.fillArgs(e.getMessage())));
 			throw new GlobalException(CodeMsg.TOKEN_SIGNATURE_ERROR.fillArgs(e.getMessage()));
 		} catch (Exception e) {
 			//其他异常
-			logger.error(failLog(Arrays.asList(jwtStr),CodeMsg.TOKEN_OTHER_ERROR.fillArgs(e.getMessage())));
+			logger.error(failLog(CodeMsg.TOKEN_OTHER_ERROR.fillArgs(e.getMessage())));
 			throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs(e.getMessage()));
 		}
 		return checkResult;

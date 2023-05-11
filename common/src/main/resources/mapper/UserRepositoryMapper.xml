@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cos.common.repository.UserRepository">
+    <resultMap type="org.cos.common.entity.User" id="UserResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="passwd" column="passwd" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="walletAddress" column="wallet_address" jdbcType="VARCHAR"/>
+        <result property="inviterId" column="inviter_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.User">
+        insert into user(name,passwd,email,wallet_address,inviter_id,create_time,update_time)
+        values(#{name},#{passwd},#{email},#{walletAddress},#{inviterId},#{createTime},#{updateTime})
+    </insert>
+
+    <select id="queryUserByEmail" resultMap="UserResult" parameterType="string">
+        select
+        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time
+        from user
+        where email=#{email}
+    </select>
+
+    <update id="updateSysUserExplicit">
+        update sys_user
+        <set>
+            <if test="isForbid!=null ">is_forbid = #{isForbid},</if>
+            <if test="userPassword!=null and userPassword!='' ">user_password = #{userPassword},</if>
+            <if test="userName!=null and userName!='' ">user_name = #{userName},</if>
+            <if test="roleIdList!=null and roleIdList!='' ">role_id_list = #{roleIdList},</if>
+            <if test="authUuid!=null and authUuid!='' ">auth_uuid = #{authUuid},</if>
+        </set>
+        where user_id=#{userId}
+    </update>
+
+    <insert id="insertSysUrBatch">
+        insert into sys_ur(user_id,role_id,is_del)
+        values
+        <foreach collection="urList" item="ur" separator=",">
+            (#{ur.userId},#{ur.roleId},#{ur.isDel})
+        </foreach>
+    </insert>
+
+    <delete id="deleteSysUrBatch">
+        delete from sys_ur
+        WHERE user_id=#{userId}
+        <!--and role_id IN
+        <foreach collection="roleArray" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>-->
+    </delete>
+
+    <update id="updateSysUserDelStatus">
+        update sys_user set is_del=1 where user_id=#{userId}
+    </update>
+    <update id="updateUserAccount">
+        update sys_user set user_account=#{userAccount} where user_id=#{userId}
+    </update>
+</mapper>

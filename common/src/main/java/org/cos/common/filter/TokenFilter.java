@@ -23,7 +23,7 @@ import java.io.IOException;
  * create on 2017/12/28.
  */
 
-@WebFilter(filterName = "tokenfilter", urlPatterns = {"/business/*", "/certificate/*", "/localCA/*"})
+@WebFilter(filterName = "tokenfilter", urlPatterns = { "/certificate/*", "/localCA/*"})
 public class TokenFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(TokenFilter.class);
 
@@ -40,7 +40,7 @@ public class TokenFilter implements Filter {
 		/*
 		  1.执行接口调用需要进行身份认证检查token 合法性
 		 */
-//		logger.debug("request url" + ((HttpServletRequest) request).getRequestURI());
+		logger.debug("request url" + ((HttpServletRequest) request).getRequestURI());
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
@@ -56,12 +56,12 @@ public class TokenFilter implements Filter {
 
 
 //		ManagePerson managePerson = (ManagePerson) JSON.toJSON(claim.get("operator"));
-        MDC.put("userName", claim.get("userName").toString());
-        MDC.put("cn",claim.get("cn").toString());
-        MDC.put("group_flag", claim.get("group_flag").toString());
-        MDC.put("uid", claim.get("uid").toString());
-        MDC.put("uCert", claim.get("uCert").toString());
-        MDC.put("udn", claim.get("udn").toString());
+//        MDC.put("userName", claim.get("userName").toString());
+//        MDC.put("cn",claim.get("cn").toString());
+//        MDC.put("group_flag", claim.get("group_flag").toString());
+//        MDC.put("uid", claim.get("uid").toString());
+//        MDC.put("uCert", claim.get("uCert").toString());
+//        MDC.put("udn", claim.get("udn").toString());
 
         //验证通过 执行后续操作
         chain.doFilter(request, response);

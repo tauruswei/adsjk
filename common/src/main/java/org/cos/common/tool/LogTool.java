@@ -1,5 +1,6 @@
 package org.cos.common.tool;
 
+
 import org.cos.common.result.CodeMsg;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,21 +25,15 @@ public final class LogTool {
 
     /**
      * 失败的日志
-     * @param keyName
      * @param codeMsg
      * @return
      */
-    public static String failLog(List keyName, CodeMsg codeMsg) {
+    public static String failLog( CodeMsg codeMsg) {
         StringBuilder sbf = new StringBuilder();
 
         sbf.append("[errcode:").append(codeMsg.getCode()).append(", ");
         sbf.append("errmsg:").append(codeMsg.getMsg()).append("] ");
 
-        if (!keyName.isEmpty()) {
-            sbf.append("[args =");
-            sbf.append(keyName.toString());
-            sbf.append("] ");
-        }
         return sbf.toString();
     }
 
@@ -48,7 +43,7 @@ public final class LogTool {
      * @param codeMsg
      * @return
      */
-    public static String successLog( List keyName, CodeMsg codeMsg) {
+    public static String successLog(List keyName, CodeMsg codeMsg) {
         StringBuilder sbf = new StringBuilder();
 
         sbf.append("[code: ").append(codeMsg.getCode()).append(", ");

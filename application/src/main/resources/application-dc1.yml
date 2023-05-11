@@ -1,0 +1,14 @@
+server:
+  port: 8090
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+      file-size-threshold: 1MB
+  application:
+    name: platform
+logging:
+  level:
+    root: info

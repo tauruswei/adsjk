@@ -9,7 +9,7 @@ import org.cos.common.result.CodeMsg;
  * @Description:自定义的全局异常
  * @Date: 2019/1/28 11:10
  */
-public class GlobalException extends RuntimeException {
+public class GlobalException extends RuntimeException{
     private CodeMsg codeMsg;
 
     public GlobalException(CodeMsg codeMsg) {

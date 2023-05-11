@@ -33,7 +33,8 @@ public class ComponentFilterOrderConfig {
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
         filterRegistrationBean.setFilter(tokenAuthorFilter());
         filterRegistrationBean.setName("TokenFilter");
-        filterRegistrationBean.addUrlPatterns("/business/*", "/certificate/*", "/localCA/*");
+//        filterRegistrationBean.addUrlPatterns("/user/*", "/certificate/*", "/localCA/*");
+        filterRegistrationBean.addUrlPatterns("/certificate/*", "/localCA/*");
         filterRegistrationBean.setOrder(7);
         return filterRegistrationBean;
     }

@@ -19,6 +19,8 @@ public class Result<T> {
 	private T data;
 
 	public Result() {
+		this.code = 0;
+		this.msg="success";
 	}
 
 	/**
@@ -27,6 +29,11 @@ public class Result<T> {
 	public static  <T> Result<T> success(T data){
 
 		return new Result<T>(data);
+	}
+
+	public static  <T> Result<T> success(){
+
+		return new Result();
 	}
 	
 	/**
@@ -41,6 +48,7 @@ public class Result<T> {
 		this.msg="success";
 		this.data = data;
 	}
+
 	
 	private Result(int code, String msg) {
 		this.code = code;
