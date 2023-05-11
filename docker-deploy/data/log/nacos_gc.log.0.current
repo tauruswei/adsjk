@@ -19,3 +19,7 @@ CommandLine flags: -XX:GCLogFileSize=104857600 -XX:InitialHeapSize=1073741824 -X
 2023-05-10T01:44:27.303+0800: 3317.188: [GC (Allocation Failure) [PSYoungGen: 440624K->31216K(471040K)] 511718K->116066K(995328K), 0.1390548 secs] [Times: user=0.75 sys=0.14, real=0.14 secs] 
 2023-05-10T09:11:07.815+0800: 8105.194: [GC (Allocation Failure) [PSYoungGen: 451056K->1968K(470528K)] 535906K->118954K(994816K), 0.0742620 secs] [Times: user=0.30 sys=0.19, real=0.07 secs] 
 2023-05-10T10:32:23.899+0800: 12981.302: [GC (Allocation Failure) [PSYoungGen: 421808K->3488K(423424K)] 538794K->120482K(947712K), 0.0622372 secs] [Times: user=0.37 sys=0.01, real=0.06 secs] 
+2023-05-10T11:57:58.990+0800: 18089.793: [GC (Allocation Failure) [PSYoungGen: 423328K->5113K(472064K)] 540322K->122115K(996352K), 0.0871370 secs] [Times: user=0.55 sys=0.00, real=0.09 secs] 
+2023-05-10T14:55:31.205+0800: 26292.454: [GC (Allocation Failure) [PSYoungGen: 424441K->5337K(471552K)] 541443K->122347K(995840K), 0.0761928 secs] [Times: user=0.38 sys=0.00, real=0.08 secs] 
+2023-05-10T16:43:38.445+0800: 32142.739: [GC (Allocation Failure) [PSYoungGen: 424665K->5633K(474112K)] 541675K->122652K(998400K), 0.0364308 secs] [Times: user=0.21 sys=0.00, real=0.04 secs] 
+2023-05-10T19:58:58.982+0800: 39431.505: [GC (Allocation Failure) [PSYoungGen: 428545K->6116K(473088K)] 545564K->123142K(997376K), 0.0687127 secs] [Times: user=0.42 sys=0.00, real=0.07 secs] 

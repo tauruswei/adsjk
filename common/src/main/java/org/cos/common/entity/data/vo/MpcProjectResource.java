@@ -3,7 +3,7 @@ package org.cos.common.entity.data.vo;
 
 import org.cos.common.entity.data.po.DataFileField;
 import lombok.Data;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;

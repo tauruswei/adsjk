@@ -9,7 +9,7 @@ import org.cos.common.entity.data.vo.DataProjectListVo;
 import org.cos.common.entity.data.vo.DataProjectOrganVo;
 import org.cos.common.entity.data.vo.DataProjectResourceVo;
 import org.cos.common.entity.sys.po.SysLocalOrganInfo;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

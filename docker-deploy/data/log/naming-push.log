@@ -102,3 +102,63 @@
 
 2023-05-10 11:03:38,221 INFO [PUSH-SUCC] 58ms, all delay time 653ms, SLA 112ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=9}, DataSize=1, target=192.168.2.150
 
+2023-05-10 14:56:57,176 INFO [PUSH-SUCC] 50ms, all delay time 614ms for subscriber 192.168.2.150, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=0}, DataSize=0
+
+2023-05-10 14:56:57,789 INFO [PUSH-SUCC] 52ms, all delay time 608ms, SLA 608ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=1}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:18:15,162 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=1}
+
+2023-05-10 16:18:15,252 INFO [PUSH-SUCC] 51ms, all delay time 617ms, SLA 90ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=1}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:18:41,077 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}
+
+2023-05-10 16:18:41,495 INFO [PUSH-SUCC] 37ms, all delay time 543ms, SLA 418ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:19:35,465 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=3}
+
+2023-05-10 16:19:35,590 INFO [PUSH-SUCC] 49ms, all delay time 606ms, SLA 126ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=3}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:41:29,653 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}
+
+2023-05-10 16:41:30,108 INFO [PUSH-SUCC] 31ms, all delay time 616ms, SLA 455ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:42:34,320 INFO [PUSH-SUCC] 83ms, all delay time 658ms for subscriber 192.168.2.150, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, DataSize=1
+
+2023-05-10 16:43:15,722 INFO [PUSH-SUCC] 66ms, all delay time 645ms for subscriber 192.168.2.150, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, DataSize=1
+
+2023-05-10 16:43:46,740 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}
+
+2023-05-10 16:43:47,218 INFO [PUSH-SUCC] 36ms, all delay time 603ms, SLA 478ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:44:45,327 INFO [PUSH-SUCC] 60ms, all delay time 637ms for subscriber 192.168.2.150, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}, DataSize=1
+
+2023-05-10 16:45:38,756 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=7}
+
+2023-05-10 16:45:39,215 INFO [PUSH-SUCC] 42ms, all delay time 591ms, SLA 459ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=7}, DataSize=1, target=192.168.2.150
+
+2023-05-10 16:47:36,261 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=9}
+
+2023-05-10 16:47:36,633 INFO [PUSH-SUCC] 36ms, all delay time 536ms, SLA 373ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=9}, DataSize=1, target=192.168.2.150
+
+2023-05-10 17:01:51,626 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}
+
+2023-05-10 17:01:52,116 INFO [PUSH-SUCC] 49ms, all delay time 634ms, SLA 4ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=2}, DataSize=1, target=192.168.2.150
+
+2023-05-10 17:03:40,344 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}
+
+2023-05-10 17:03:40,804 INFO [PUSH-SUCC] 47ms, all delay time 604ms, SLA 460ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}, DataSize=1, target=192.168.2.150
+
+2023-05-10 17:06:54,876 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}
+
+2023-05-10 17:06:55,373 INFO [PUSH-SUCC] 72ms, all delay time 647ms, SLA 497ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, DataSize=1, target=192.168.2.150
+
+2023-05-10 17:07:58,379 INFO [PUSH-SUCC] 74ms, all delay time 583ms for subscriber 192.168.2.150, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, DataSize=1
+
+2023-05-10 17:08:24,733 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}
+
+2023-05-10 17:08:25,178 INFO [PUSH-SUCC] 47ms, all delay time 559ms, SLA 446ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}, DataSize=1, target=192.168.2.150
+
+2023-05-10 17:09:26,305 INFO [PUSH] Task merge for Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=7}
+
+2023-05-10 17:09:26,722 INFO [PUSH-SUCC] 28ms, all delay time 574ms, SLA 418ms, Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=7}, DataSize=1, target=192.168.2.150
+

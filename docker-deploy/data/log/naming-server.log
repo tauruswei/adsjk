@@ -330,3 +330,363 @@
 
 2023-05-10 11:29:41,710 WARN namespace : 46b6b568-e6ae-45ca-baa1-819932fc8947, [DEFAULT_GROUP@@gateway] services are automatically cleaned
 
+2023-05-10 14:56:56,424 INFO Client connection 1683701816398_172.28.0.1_33830 connect
+
+2023-05-10 14:56:57,180 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=0}, 1683701816398_172.28.0.1_33830
+
+2023-05-10 15:33:33,571 INFO Client connection 1683701816141_172.28.0.1_33820 disconnect, remove instances and subscribers
+
+2023-05-10 15:59:10,591 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=1}, 1683701816398_172.28.0.1_33830
+
+2023-05-10 15:59:10,955 INFO Client connection 1683701816398_172.28.0.1_33830 disconnect, remove instances and subscribers
+
+2023-05-10 15:59:13,636 INFO Client connection 1683701810020_172.28.0.1_33818 disconnect, remove instances and subscribers
+
+2023-05-10 15:59:13,641 INFO Client connection 1683704013612_172.28.0.1_37434 disconnect, remove instances and subscribers
+
+2023-05-10 15:59:13,647 INFO Client connection 1683701805431_172.28.0.1_35530 disconnect, remove instances and subscribers
+
+2023-05-10 15:59:13,648 INFO Client connection 1683701803342_172.28.0.1_35524 disconnect, remove instances and subscribers
+
+2023-05-10 15:59:13,650 INFO Client connection 1683701809794_172.28.0.1_33812 disconnect, remove instances and subscribers
+
+2023-05-10 16:00:35,260 WARN namespace : 46b6b568-e6ae-45ca-baa1-819932fc8947, [DEFAULT_GROUP@@gateway] services are automatically cleaned
+
+2023-05-10 16:18:14,515 INFO Client connection 1683706694496_172.28.0.1_35374 connect
+
+2023-05-10 16:18:15,161 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=0}, 1683706694496_172.28.0.1_35374
+
+2023-05-10 16:18:38,096 INFO Client connection 1683706718061_172.28.0.1_35302 connect
+
+2023-05-10 16:18:41,076 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=0}, 1683706718061_172.28.0.1_35302
+
+2023-05-10 16:19:11,353 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=1}, 1683706694496_172.28.0.1_35374
+
+2023-05-10 16:19:11,727 INFO Client connection 1683706694496_172.28.0.1_35374 disconnect, remove instances and subscribers
+
+2023-05-10 16:19:13,918 INFO Client connection 1683706682828_172.28.0.1_39914 disconnect, remove instances and subscribers
+
+2023-05-10 16:19:14,395 INFO Client connection 1683706687409_172.28.0.1_35344 disconnect, remove instances and subscribers
+
+2023-05-10 16:19:14,397 INFO Client connection 1683706687664_172.28.0.1_35354 disconnect, remove instances and subscribers
+
+2023-05-10 16:19:14,401 INFO Client connection 1683706680682_172.28.0.1_39910 disconnect, remove instances and subscribers
+
+2023-05-10 16:19:14,408 INFO Client connection 1683706694169_172.28.0.1_35368 disconnect, remove instances and subscribers
+
+2023-05-10 16:19:34,839 INFO Client connection 1683706774819_172.28.0.1_40120 connect
+
+2023-05-10 16:19:35,464 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=2}, 1683706774819_172.28.0.1_40120
+
+2023-05-10 16:40:45,173 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='gateway', ephemeral=true, revision=3}, 1683706774819_172.28.0.1_40120
+
+2023-05-10 16:40:45,574 INFO Client connection 1683706774819_172.28.0.1_40120 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:47,697 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}, 1683706718061_172.28.0.1_35302
+
+2023-05-10 16:40:48,055 INFO Client connection 1683706718061_172.28.0.1_35302 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,208 INFO Client connection 1683706767968_172.28.0.1_40092 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,211 INFO Client connection 1683706761188_172.28.0.1_52306 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,214 INFO Client connection 1683706768160_172.28.0.1_40108 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,215 INFO Client connection 1683706763383_172.28.0.1_52322 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,217 INFO Client connection 1683706774561_172.28.0.1_40112 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,597 INFO Client connection 1683706713476_172.28.0.1_60030 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,609 INFO Client connection 1683706713748_172.28.0.1_60036 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,612 INFO Client connection 1683706706472_172.28.0.1_60022 disconnect, remove instances and subscribers
+
+2023-05-10 16:40:48,614 INFO Client connection 1683706709050_172.28.0.1_60028 disconnect, remove instances and subscribers
+
+2023-05-10 16:41:22,504 INFO Client connection 1683708082495_172.28.0.1_36944 connect
+
+2023-05-10 16:41:29,652 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=2}, 1683708082495_172.28.0.1_36944
+
+2023-05-10 16:42:27,018 INFO Client connection 1683708146996_172.28.0.1_57948 connect
+
+2023-05-10 16:42:34,441 INFO Client connection 1683708146996_172.28.0.1_57948 disconnect, remove instances and subscribers
+
+2023-05-10 16:42:34,465 INFO Client connection 1683708154447_172.28.0.1_57958 connect
+
+2023-05-10 16:42:34,656 INFO Client connection 1683708140500_172.28.0.1_59122 disconnect, remove instances and subscribers
+
+2023-05-10 16:42:35,233 INFO Client connection 1683708144652_172.28.0.1_59130 disconnect, remove instances and subscribers
+
+2023-05-10 16:42:35,235 INFO Client connection 1683708144915_172.28.0.1_59146 disconnect, remove instances and subscribers
+
+2023-05-10 16:42:35,236 INFO Client connection 1683708137886_172.28.0.1_59106 disconnect, remove instances and subscribers
+
+2023-05-10 16:42:35,238 INFO Client connection 1683708154447_172.28.0.1_57958 disconnect, remove instances and subscribers
+
+2023-05-10 16:42:35,286 WARN namespace : 46b6b568-e6ae-45ca-baa1-819932fc8947, [DEFAULT_GROUP@@gateway] services are automatically cleaned
+
+2023-05-10 16:43:08,640 INFO Client connection 1683708188624_172.28.0.1_49652 connect
+
+2023-05-10 16:43:15,824 INFO Client connection 1683708188624_172.28.0.1_49652 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:15,851 INFO Client connection 1683708195840_172.28.0.1_49662 connect
+
+2023-05-10 16:43:16,050 INFO Client connection 1683708182231_172.28.0.1_45684 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:16,652 INFO Client connection 1683708186388_172.28.0.1_49644 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:16,655 INFO Client connection 1683708195840_172.28.0.1_49662 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:16,657 INFO Client connection 1683708179597_172.28.0.1_45672 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:16,659 INFO Client connection 1683708186587_172.28.0.1_49648 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:18,876 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, 1683708082495_172.28.0.1_36944
+
+2023-05-10 16:43:19,257 INFO Client connection 1683708082495_172.28.0.1_36944 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:19,795 INFO Client connection 1683708080522_172.28.0.1_36936 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:19,801 INFO Client connection 1683708073191_172.28.0.1_42136 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:19,804 INFO Client connection 1683708075812_172.28.0.1_42148 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:19,807 INFO Client connection 1683708080290_172.28.0.1_36930 disconnect, remove instances and subscribers
+
+2023-05-10 16:43:40,061 INFO Client connection 1683708220046_172.28.0.1_46098 connect
+
+2023-05-10 16:43:46,740 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=4}, 1683708220046_172.28.0.1_46098
+
+2023-05-10 16:44:38,295 INFO Client connection 1683708278281_172.28.0.1_46748 connect
+
+2023-05-10 16:44:45,454 INFO Client connection 1683708278281_172.28.0.1_46748 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:45,485 INFO Client connection 1683708285469_172.28.0.1_46764 connect
+
+2023-05-10 16:44:45,713 INFO Client connection 1683708271627_172.28.0.1_58028 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:46,339 INFO Client connection 1683708285469_172.28.0.1_46764 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:46,344 INFO Client connection 1683708275911_172.28.0.1_58032 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:46,346 INFO Client connection 1683708276179_172.28.0.1_46736 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:46,348 INFO Client connection 1683708269074_172.28.0.1_58018 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:49,949 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}, 1683708220046_172.28.0.1_46098
+
+2023-05-10 16:44:50,318 INFO Client connection 1683708220046_172.28.0.1_46098 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:50,814 INFO Client connection 1683708217833_172.28.0.1_46078 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:50,815 INFO Client connection 1683708218275_172.28.0.1_46092 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:50,816 INFO Client connection 1683708213602_172.28.0.1_54402 disconnect, remove instances and subscribers
+
+2023-05-10 16:44:50,817 INFO Client connection 1683708211100_172.28.0.1_54390 disconnect, remove instances and subscribers
+
+2023-05-10 16:45:31,883 INFO Client connection 1683708331872_172.28.0.1_54644 connect
+
+2023-05-10 16:45:38,756 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=6}, 1683708331872_172.28.0.1_54644
+
+2023-05-10 16:47:20,697 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=7}, 1683708331872_172.28.0.1_54644
+
+2023-05-10 16:47:21,057 INFO Client connection 1683708331872_172.28.0.1_54644 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:21,600 INFO Client connection 1683708329634_172.28.0.1_54626 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:21,603 INFO Client connection 1683708322725_172.28.0.1_38952 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:21,610 INFO Client connection 1683708329829_172.28.0.1_54630 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:21,611 INFO Client connection 1683708325255_172.28.0.1_38956 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:29,735 INFO Client connection 1683708449721_172.28.0.1_53702 connect
+
+2023-05-10 16:47:36,260 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=8}, 1683708449721_172.28.0.1_53702
+
+2023-05-10 16:47:47,051 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=9}, 1683708449721_172.28.0.1_53702
+
+2023-05-10 16:47:47,421 INFO Client connection 1683708449721_172.28.0.1_53702 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:47,954 INFO Client connection 1683708447512_172.28.0.1_53682 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:47,956 INFO Client connection 1683708447917_172.28.0.1_53694 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:47,959 INFO Client connection 1683708443194_172.28.0.1_48468 disconnect, remove instances and subscribers
+
+2023-05-10 16:47:47,962 INFO Client connection 1683708440617_172.28.0.1_48466 disconnect, remove instances and subscribers
+
+2023-05-10 16:49:35,292 WARN namespace : 46b6b568-e6ae-45ca-baa1-819932fc8947, [DEFAULT_GROUP@@platform] services are automatically cleaned
+
+2023-05-10 16:58:18,899 INFO Client connection 1683709098889_172.28.0.1_54288 connect
+
+2023-05-10 16:58:37,781 INFO Client connection 1683709096550_172.28.0.1_54270 disconnect, remove instances and subscribers
+
+2023-05-10 16:58:41,807 INFO Client connection 1683709096789_172.28.0.1_54276 disconnect, remove instances and subscribers
+
+2023-05-10 16:58:45,822 INFO Client connection 1683709092228_172.28.0.1_58574 disconnect, remove instances and subscribers
+
+2023-05-10 16:58:45,824 INFO Client connection 1683709098889_172.28.0.1_54288 disconnect, remove instances and subscribers
+
+2023-05-10 16:58:49,865 INFO Client connection 1683709089569_172.28.0.1_58558 disconnect, remove instances and subscribers
+
+2023-05-10 17:01:51,318 INFO Client connection 1683709311286_172.28.0.1_59832 connect
+
+2023-05-10 17:01:51,626 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=0}, 1683709311286_172.28.0.1_59832
+
+2023-05-10 17:01:52,111 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}, 1683709311286_172.28.0.1_59832
+
+2023-05-10 17:01:52,365 INFO Client connection 1683709311286_172.28.0.1_59832 disconnect, remove instances and subscribers
+
+2023-05-10 17:01:52,874 INFO Client connection 1683709311286_172.28.0.1_59786 disconnect, remove instances and subscribers
+
+2023-05-10 17:01:52,879 INFO Client connection 1683709311286_172.28.0.1_59800 disconnect, remove instances and subscribers
+
+2023-05-10 17:01:52,881 INFO Client connection 1683709311286_172.28.0.1_59814 disconnect, remove instances and subscribers
+
+2023-05-10 17:01:52,883 INFO Client connection 1683709311286_172.28.0.1_59826 disconnect, remove instances and subscribers
+
+2023-05-10 17:03:26,889 INFO Client connection 1683709406875_172.28.0.1_36688 connect
+
+2023-05-10 17:03:35,323 WARN namespace : 46b6b568-e6ae-45ca-baa1-819932fc8947, [DEFAULT_GROUP@@platform] services are automatically cleaned
+
+2023-05-10 17:03:40,343 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=0}, 1683709406875_172.28.0.1_36688
+
+2023-05-10 17:06:04,904 INFO Client connection 1683709564890_172.28.0.1_52410 connect
+
+2023-05-10 17:06:19,363 INFO Client connection 1683709564890_172.28.0.1_52410 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:19,391 INFO Client connection 1683709579378_172.28.0.1_45368 connect
+
+2023-05-10 17:06:19,583 INFO Client connection 1683709558167_172.28.0.1_52374 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:20,511 INFO Client connection 1683709555590_172.28.0.1_46472 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:20,512 INFO Client connection 1683709579378_172.28.0.1_45368 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:20,514 INFO Client connection 1683709562509_172.28.0.1_52388 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:20,515 INFO Client connection 1683709562718_172.28.0.1_52394 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:32,686 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=1}, 1683709406875_172.28.0.1_36688
+
+2023-05-10 17:06:33,073 INFO Client connection 1683709406875_172.28.0.1_36688 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:33,111 INFO Client connection 1683709400343_172.28.0.1_58028 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:33,663 INFO Client connection 1683709404876_172.28.0.1_58032 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:33,665 INFO Client connection 1683709397859_172.28.0.1_58022 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:33,669 INFO Client connection 1683709405070_172.28.0.1_58034 disconnect, remove instances and subscribers
+
+2023-05-10 17:06:48,293 INFO Client connection 1683709608279_172.28.0.1_54626 connect
+
+2023-05-10 17:06:54,876 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=2}, 1683709608279_172.28.0.1_54626
+
+2023-05-10 17:07:51,070 INFO Client connection 1683709671056_172.28.0.1_39232 connect
+
+2023-05-10 17:07:58,586 INFO Client connection 1683709671056_172.28.0.1_39232 disconnect, remove instances and subscribers
+
+2023-05-10 17:07:58,614 INFO Client connection 1683709678596_172.28.0.1_42390 connect
+
+2023-05-10 17:07:58,820 INFO Client connection 1683709664703_172.28.0.1_47790 disconnect, remove instances and subscribers
+
+2023-05-10 17:07:59,505 INFO Client connection 1683709662168_172.28.0.1_47774 disconnect, remove instances and subscribers
+
+2023-05-10 17:07:59,508 INFO Client connection 1683709678596_172.28.0.1_42390 disconnect, remove instances and subscribers
+
+2023-05-10 17:07:59,511 INFO Client connection 1683709668974_172.28.0.1_39220 disconnect, remove instances and subscribers
+
+2023-05-10 17:07:59,513 INFO Client connection 1683709668700_172.28.0.1_39208 disconnect, remove instances and subscribers
+
+2023-05-10 17:08:03,098 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=3}, 1683709608279_172.28.0.1_54626
+
+2023-05-10 17:08:03,477 INFO Client connection 1683709608279_172.28.0.1_54626 disconnect, remove instances and subscribers
+
+2023-05-10 17:08:04,094 INFO Client connection 1683709605956_172.28.0.1_38206 disconnect, remove instances and subscribers
+
+2023-05-10 17:08:04,096 INFO Client connection 1683709599141_172.28.0.1_38180 disconnect, remove instances and subscribers
+
+2023-05-10 17:08:04,101 INFO Client connection 1683709601671_172.28.0.1_38196 disconnect, remove instances and subscribers
+
+2023-05-10 17:08:04,102 INFO Client connection 1683709606166_172.28.0.1_54624 disconnect, remove instances and subscribers
+
+2023-05-10 17:08:18,244 INFO Client connection 1683709698231_172.28.0.1_57960 connect
+
+2023-05-10 17:08:24,732 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=4}, 1683709698231_172.28.0.1_57960
+
+2023-05-10 17:09:03,068 INFO Client connection 1683709742237_172.28.0.1_56072 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:04,206 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=5}, 1683709698231_172.28.0.1_57960
+
+2023-05-10 17:09:04,548 INFO Client connection 1683709698231_172.28.0.1_57960 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:05,074 INFO Client connection 1683709695851_172.28.0.1_46248 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:05,080 INFO Client connection 1683709691822_172.28.0.1_46236 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:05,081 INFO Client connection 1683709696086_172.28.0.1_46250 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:05,082 INFO Client connection 1683709689345_172.28.0.1_46232 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:19,592 INFO Client connection 1683709759578_172.28.0.1_53924 connect
+
+2023-05-10 17:09:26,304 INFO Client change for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=6}, 1683709759578_172.28.0.1_53924
+
+2023-05-10 17:09:38,663 INFO Client remove for service Service{namespace='46b6b568-e6ae-45ca-baa1-819932fc8947', group='DEFAULT_GROUP', name='platform', ephemeral=true, revision=7}, 1683709759578_172.28.0.1_53924
+
+2023-05-10 17:09:39,021 INFO Client connection 1683709759578_172.28.0.1_53924 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:39,561 INFO Client connection 1683709757510_172.28.0.1_53922 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:39,563 INFO Client connection 1683709757283_172.28.0.1_53916 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:39,564 INFO Client connection 1683709750389_172.28.0.1_55760 disconnect, remove instances and subscribers
+
+2023-05-10 17:09:39,565 INFO Client connection 1683709752912_172.28.0.1_55766 disconnect, remove instances and subscribers
+
+2023-05-10 17:11:35,384 WARN namespace : 46b6b568-e6ae-45ca-baa1-819932fc8947, [DEFAULT_GROUP@@platform] services are automatically cleaned
+
+2023-05-10 17:44:27,527 INFO Client connection 1683711866237_172.28.0.1_54356 disconnect, remove instances and subscribers
+
+2023-05-10 17:44:27,528 INFO Client connection 1683711865540_172.28.0.1_54330 disconnect, remove instances and subscribers
+
+2023-05-10 17:44:27,530 INFO Client connection 1683711866017_172.28.0.1_54344 disconnect, remove instances and subscribers
+
+2023-05-10 17:44:27,531 INFO Client connection 1683711858952_172.28.0.1_58484 disconnect, remove instances and subscribers
+
+2023-05-10 17:45:18,551 INFO Client connection 1683711916990_172.28.0.1_53266 disconnect, remove instances and subscribers
+
+2023-05-10 17:45:18,552 INFO Client connection 1683711917274_172.28.0.1_53278 disconnect, remove instances and subscribers
+
+2023-05-10 17:45:18,553 INFO Client connection 1683711910934_172.28.0.1_47524 disconnect, remove instances and subscribers
+
+2023-05-10 17:45:55,987 INFO Client connection 1683711954744_172.28.0.1_39668 disconnect, remove instances and subscribers
+
+2023-05-10 17:45:55,992 INFO Client connection 1683711949291_172.28.0.1_39652 disconnect, remove instances and subscribers
+
+2023-05-10 17:45:55,995 INFO Client connection 1683711954974_172.28.0.1_59058 disconnect, remove instances and subscribers
+
+2023-05-10 17:46:46,082 INFO Client connection 1683712006069_172.28.0.1_47950 connect
+
+2023-05-10 17:46:47,546 INFO Client connection 1683711998263_172.28.0.1_37986 disconnect, remove instances and subscribers
+
+2023-05-10 17:46:47,549 INFO Client connection 1683712006069_172.28.0.1_47950 disconnect, remove instances and subscribers
+
+2023-05-10 17:46:47,551 INFO Client connection 1683712004247_172.28.0.1_38004 disconnect, remove instances and subscribers
+
+2023-05-10 17:46:47,552 INFO Client connection 1683712003943_172.28.0.1_38000 disconnect, remove instances and subscribers
+
+2023-05-10 17:47:49,726 INFO Client connection 1683712069695_172.28.0.1_44466 connect
+
+2023-05-10 17:47:56,359 INFO Client connection 1683712069695_172.28.0.1_44466 disconnect, remove instances and subscribers
+
+2023-05-10 17:47:57,919 INFO Client connection 1683712068219_172.28.0.1_44460 disconnect, remove instances and subscribers
+
+2023-05-10 17:47:57,923 INFO Client connection 1683712067684_172.28.0.1_44456 disconnect, remove instances and subscribers
+
+2023-05-10 17:47:57,934 INFO Client connection 1683712061730_172.28.0.1_57704 disconnect, remove instances and subscribers
+

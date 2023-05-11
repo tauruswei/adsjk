@@ -1,6 +1,5 @@
 package org.cos.common.util;
 
-import org.cos.common.constant.DataConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -9,6 +8,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.cos.common.constant.DataConstant;
 import org.junit.Test;
 
 import java.io.*;
@@ -298,7 +298,7 @@ public class FileUtil {
                 }
             }
             int firstRowIndex = sheet.getFirstRowNum() + 1;   //第一行是列名，所以不读
-            int lastRowIndex = sheet.getLastRowNum()> DataConstant.READ_DATA_ROW?DataConstant.READ_DATA_ROW: sheet.getLastRowNum();
+            int lastRowIndex = sheet.getLastRowNum()> DataConstant.READ_DATA_ROW? DataConstant.READ_DATA_ROW: sheet.getLastRowNum();
             for (int rIndex = firstRowIndex; rIndex <= lastRowIndex; rIndex++) {   //遍历行
                 Row row = sheet.getRow(rIndex);
                 if (row != null) {

@@ -13,53 +13,53 @@ services:
     networks:
       primihub_net:
         ipv4_address: 172.28.1.14
-  redis:
-    image: $REDIS_IMAGE
-    container_name: redis
-    restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - "./data:/data"
-      - "./config/redis.conf:/usr/local/etc/redis/redis.conf"
-    command:
-      "redis-server /usr/local/etc/redis/redis.conf"
-    depends_on:
-      - nacos
-    networks:
-      primihub_net:
-        ipv4_address: 172.28.1.15
-
-  nacos:
-    image: $NACOS_IMAGE
-    container_name: nacos-server
-    restart: always
-    env_file:
-      - ./config/env/nacos-mysql.env
-    volumes:
-      - ./data/log/:/home/nacos/logs
-      #- ./nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
-    environment:
-      - TZ=Asia/Shanghai
-    ports:
-      - "8848:8848"
-      - "9848:9848"
-      - "9555:9555"
-    depends_on:
-      - mysql
-    networks:
-      primihub_net:
-        ipv4_address: 172.28.1.16
-  sentinel:
-    image: $SENTINEL_IMAGE
-    container_name: sentinel-dashboard # 容器名称
-    ports:
-      - 8858:8080 # 控制台端口
-      - 8719:8719 # sentinel 服务端口
-    restart: always # 始终重启容器
-    networks:
-      primihub_net:
-        ipv4_address: 172.28.1.17
+#  redis:
+#    image: $REDIS_IMAGE
+#    container_name: redis
+#    restart: always
+#    ports:
+#      - "6379:6379"
+#    volumes:
+#      - "./data:/data"
+#      - "./config/redis.conf:/usr/local/etc/redis/redis.conf"
+#    command:
+#      "redis-server /usr/local/etc/redis/redis.conf"
+#    depends_on:
+#      - nacos
+#    networks:
+#      primihub_net:
+#        ipv4_address: 172.28.1.15
+#
+#  nacos:
+#    image: $NACOS_IMAGE
+#    container_name: nacos-server
+#    restart: always
+#    env_file:
+#      - ./config/env/nacos-mysql.env
+#    volumes:
+#      - ./data/log/:/home/nacos/logs
+#      #- ./nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
+#    environment:
+#      - TZ=Asia/Shanghai
+#    ports:
+#      - "8848:8848"
+#      - "9848:9848"
+#      - "9555:9555"
+#    depends_on:
+#      - mysql
+#    networks:
+#      primihub_net:
+#        ipv4_address: 172.28.1.16
+#  sentinel:
+#    image: $SENTINEL_IMAGE
+#    container_name: sentinel-dashboard # 容器名称
+#    ports:
+#      - 8858:8080 # 控制台端口
+#      - 8719:8719 # sentinel 服务端口
+#    restart: always # 始终重启容器
+#    networks:
+#      primihub_net:
+#        ipv4_address: 172.28.1.17
 networks:
   primihub_net:
     driver: bridge

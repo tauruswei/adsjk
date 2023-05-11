@@ -2,7 +2,7 @@ package org.cos.common.tool;
 
 import org.cos.common.util.crypt.DateUtil;
 import org.cos.common.util.crypt.SignUtil;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Date;
 

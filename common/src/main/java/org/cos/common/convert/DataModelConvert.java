@@ -11,7 +11,7 @@ import org.cos.common.entity.data.req.DataModelAndComponentReq;
 import org.cos.common.entity.data.req.DataModelReq;
 import org.cos.common.entity.data.vo.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.math.BigDecimal;

@@ -8,7 +8,7 @@ import org.cos.common.entity.data.req.DataResourceFieldReq;
 import org.cos.common.entity.data.req.DataResourceReq;
 import org.cos.common.entity.data.vo.*;
 import org.cos.common.entity.sys.po.SysFile;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
