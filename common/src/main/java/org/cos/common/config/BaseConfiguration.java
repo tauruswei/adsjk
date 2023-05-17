@@ -8,4 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "spring.myapp")
 public class BaseConfiguration {
     private String mailNickName;
+    private String tokenTimeOut;
+    private int slAmount;
+    private int coAmount;
 }

@@ -1,4 +1,4 @@
-package org.cos.common.entity;
+package org.cos.common.entity.data.po;
 
 import lombok.Data;
 
@@ -26,13 +26,18 @@ public class User {
      */
     private String email;
     /**
+     * 用户类型：0-渠道商；1-俱乐部老板；2-普通用户
+     */
+    private int userType;
+    /**
      * 钱包地址
      */
     private String walletAddress;
+
     /**
-     * 邀请人id
+     * 用户关系表主键
      */
-    private Integer inviterId;
+    private String userRelationId;
     /**
      * 创建时间
      */
@@ -41,4 +46,9 @@ public class User {
      * 修改时间
      */
     private Date updateTime;
+
+    /**
+     * 备注
+     */
+    private String remark;
 }

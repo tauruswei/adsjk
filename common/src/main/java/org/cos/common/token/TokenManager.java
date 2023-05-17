@@ -50,7 +50,7 @@ public final class TokenManager {
 				//主题
 				.setSubject(subject)
 				//颁发者
-				.setIssuer("SecKMS")
+				.setIssuer("COSD")
 				//自定义claim
 				.setClaims(map)
 				//签发时间

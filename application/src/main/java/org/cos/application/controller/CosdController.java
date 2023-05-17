@@ -3,123 +3,104 @@ package org.cos.application.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
-import org.cos.application.service.UserService;
-import org.cos.common.entity.data.req.*;
+import org.cos.application.service.CosdService;
+import org.cos.common.entity.data.req.CosdStakeForSLReq;
+import org.cos.common.entity.data.req.UserLoginReq;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.constraints.NotBlank;
-
-@Api(value = "用户controller",tags = "用户组模块", description = "用户组模块 Rest API")
-@RequestMapping("user")
+@Api(value = "COSD controller",tags = "COSD 模块", description = "COSD 模块 Rest API")
+@RequestMapping("cosd")
 @RestController
 @Slf4j
-public class UserController {
+public class CosdController {
     @Autowired
-    private UserService userService;
-
-    @ApiOperation("发送验证码")
+    CosdService cosdService;
+    @ApiOperation("用户质押 COSD 获得玩星光的资格")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("sendCode")
-    public Result sendCode(@Validated @RequestBody UserSendCodeReq req) {
+    @PostMapping("stakeForSL")
+    public Result stakeForSL(@Validated @RequestBody CosdStakeForSLReq req) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.sendCode(req);
+        return cosdService.stakeForSL(req);
     }
 
-    @ApiOperation("用户注册")
+    @ApiOperation("用户解押星光池中的 COSD")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("register")
-    public Result createUser(@Validated @RequestBody UserCreateReq req) {
+    @PostMapping("unStakeForSL")
+    public Result unStakeForSL(@Validated @RequestBody CosdStakeForSLReq req) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.createUser(req);
+        return cosdService.unStakeForSL(req);
     }
 
-    @ApiOperation("用户登录")
+    @ApiOperation("用户质押 COSD 到 DEFI")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("login")
-    public Result login(@Validated @RequestBody UserLoginReq req) {
+    @PostMapping("stakeForDefi")
+    public Result stakeForDefi(@Validated @RequestBody CosdStakeForSLReq req) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.login(req);
+        return cosdService.stakeForSL(req);
     }
 
-
-    @ApiOperation("根据用户id 查询用户信息")
+    @ApiOperation("用户解押 DEFI 池中的 COSD")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("queryUserById")
-    public Result queryUserById(@RequestParam(name = "userId") Long userId) {
+    @PostMapping("unStakeForDefi")
+    public Result unStakeForDefi(@Validated @RequestBody CosdStakeForSLReq req) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.queryUserById(userId);
-    }
-//
-//    @ApiOperation("根据 inviterId 分页查询用户")
-//    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="query")
-//    @PostMapping("queryUserByInviterId")
-//    public Result queryUserByInviterId(@Validated @RequestBody UserQueryByInviterIdReq req) {
-//        // 参数校验
-////        if (StringUtils.isBlank(req.getName()))
-////            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
-////        if (StringUtils.isBlank(req.getAttrs()))
-////            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-//        return userService.queryUserByInviterId(req);
-//    }
-
-    @ApiOperation("用户在游戏端登录")
-    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="query")
-    @PostMapping("getUserProfile")
-    public Result getUserProfile(@RequestParam(name="userName") @NotBlank(message = "user name cannot be blank") String userName,
-                                 @RequestParam(name="passswd") @NotBlank(message = "passwd cannot be blank") String passwd) {
-        // 参数校验
-//        if (StringUtils.isBlank(req.getName()))
-//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
-//        if (StringUtils.isBlank(req.getAttrs()))
-//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.getUserProfile(userName,passwd);
+        return cosdService.stakeForSL(req);
     }
 
-
-    @ApiOperation("更新用户")
+    @ApiOperation("俱乐部老板质押 COSD ")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("updateUser")
-    public Result updateUser(@Validated @RequestBody UserUpdateReq req) {
+    @PostMapping("stakeForClub")
+    public Result stakeForClub(@Validated @RequestBody CosdStakeForSLReq req) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.updateUser(req);
+        return cosdService.stakeForSL(req);
     }
-
-
-    @ApiOperation("渠道商注册")
+    @ApiOperation("俱乐部老板解押 COSD ")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("createChannelLeader")
-    public Result createChannelLeader(@RequestParam(name="walletAddress") @NotBlank(message = "wallet address cannot be blank") String walletAddress) {
+    @PostMapping("unstakeForClub")
+    public Result unStakeForClub(@Validated @RequestBody CosdStakeForSLReq req) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.createChannelLeader( walletAddress);
+        return cosdService.stakeForSL(req);
     }
-
+    @ApiOperation("用户购买 COSD ")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("purchaseCOSD")
+    public Result purchaseCOSD(@Validated @RequestBody CosdStakeForSLReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return cosdService.purchaseCOSD(req);
+    }
 }

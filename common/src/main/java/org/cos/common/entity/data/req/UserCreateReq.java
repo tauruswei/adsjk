@@ -25,8 +25,11 @@ public class UserCreateReq {
     @NotBlank(message="Code cannot be empty.")
     private String code;
     @ApiModelProperty(value = "邀请用户的id",name = "inviterId",example = "123" ,required = false)
-    @NotBlank(message="Code cannot be empty.")
-    private Integer inviterId;
+//    @NotBlank(message="Code cannot be empty.")
+    private Long inviterId;
 
+    @ApiModelProperty(value = "用户类型",name = "userType",example = "123" ,required = true)
+//    @NotBlank(message="Code cannot be empty.")
+    private Integer userType;
 }
 

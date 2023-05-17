@@ -19,7 +19,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cosd
-    url: jdbc:mysql://192.168.2.150:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&serverTimezone=GMT&useSSL=false
+    url: jdbc:mysql://192.168.2.150:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
     password: cosd@123.com
     connection-properties: config.decrypt=false;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJI/xqbyvpVttxfAKulKeSTIb7tZAGaFcPyTnE2r7AHTQ8kOnqKXDda4u59umt9XBFxi7db28KxeVooB138zuRUCAwEAAQ==
     druid:
@@ -84,6 +84,9 @@ spring:
   #########################################################
   myapp:
     mailNickName: COSD
+    tokenTimeOut: 18000000
+    slAmount: 400
+    coAmount: 4000
 
 ############################################################
 #
@@ -139,3 +142,15 @@ swagger:
   parameter-type: string
   parameter-description: token
   type: header
+
+# pagehelper 配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql    # 使用参数表达式查询总记录数
+
+
+web3j:
+  client-address: https://data-seed-prebsc-2-s1.binance.org:8545
+

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cos.common.repository.UserRelationRepository">
+    <resultMap type="org.cos.common.entity.data.po.UserRelation" id="UserRelationResult">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="level0" column="level0" jdbcType="BIGINT"/>
+        <result property="level1" column="level1" jdbcType="BIGINT"/>
+        <result property="level2" column="level2" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertUserRelation" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.UserRelation">
+        insert into user_relation(id,level0,level1,level2,create_time,update_time,remark)
+        values(#{id},#{level0},#{level1},#{level2},#{createTime},#{updateTime},#{remark})
+    </insert>
+
+    <select id="queryUserRelationById" resultMap="UserRelationResult" parameterType="String">
+        select
+        id,level0,level1,level2,create_time,update_time,remark
+        from user_relation
+        where id=#{id}
+    </select>
+<!--    <select id="queryUserByName" resultMap="UserResult" parameterType="string">-->
+<!--        select-->
+<!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
+<!--        from user-->
+<!--        where name=#{name}-->
+<!--    </select>-->
+
+<!--    <select id="queryUserById" resultMap="UserResult" parameterType="Long">-->
+<!--        select-->
+<!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
+<!--        from user-->
+<!--        where id=#{userId}-->
+<!--    </select>-->
+<!--    <select id="queryUserByInviterId" resultMap="UserResult" parameterType="Integer">-->
+<!--        select-->
+<!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
+<!--        from user-->
+<!--        where inviter_id=#{inviterId}-->
+<!--    </select>-->
+
+<!--    <update id="updateUser">-->
+<!--        update user-->
+<!--        <set>-->
+<!--            <if test="name!=null and name!=''">name = #{name},</if>-->
+<!--            <if test="passwd!=null and passwd!='' ">passwd = #{passwd},</if>-->
+<!--            <if test="email!=null and email!='' ">email = #{email},</if>-->
+<!--            <if test="walletAddress!=null and walletAddress!='' ">wallet_address = #{walletAddress},</if>-->
+<!--            <if test="updateTime!=null  ">update_time = #{updateTime},</if>-->
+<!--        </set>-->
+<!--        where user_id=#{userId}-->
+<!--    </update>-->
+
+<!--    <insert id="insertSysUrBatch">-->
+<!--        insert into sys_ur(user_id,role_id,is_del)-->
+<!--        values-->
+<!--        <foreach collection="urList" item="ur" separator=",">-->
+<!--            (#{ur.userId},#{ur.roleId},#{ur.isDel})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    <delete id="deleteSysUrBatch">-->
+<!--        delete from sys_ur-->
+<!--        WHERE user_id=#{userId}-->
+<!--        &lt;!&ndash;and role_id IN-->
+<!--        <foreach collection="roleArray" item="id" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>&ndash;&gt;-->
+<!--    </delete>-->
+
+<!--    <update id="updateSysUserDelStatus">-->
+<!--        update sys_user set is_del=1 where user_id=#{userId}-->
+<!--    </update>-->
+<!--    <update id="updateUserAccount">-->
+<!--        update sys_user set user_account=#{userAccount} where user_id=#{userId}-->
+<!--    </update>-->
+</mapper>

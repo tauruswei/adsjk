@@ -24,8 +24,6 @@ services:
       - "./config/redis.conf:/usr/local/etc/redis/redis.conf"
     command:
       "redis-server /usr/local/etc/redis/redis.conf"
-    depends_on:
-      - nacos
     networks:
       primihub_net:
         ipv4_address: 172.28.1.15

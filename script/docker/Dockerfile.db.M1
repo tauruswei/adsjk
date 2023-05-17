@@ -10,3 +10,4 @@ COPY script/db/dbinit.sql /docker-entrypoint-initdb.d/
 
 COPY script/db/ddl.sql /sql/
 COPY script/db/nacos_config.sql /sql/nacos_config.sql
+COPY script/db/cosd.sql /sql/cosd.sql

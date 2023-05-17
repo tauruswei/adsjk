@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cos.common.repository.AssetRepository">
+    <resultMap type="org.cos.common.entity.data.po.Asset" id="AssetResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="assetType" column="asset_type" jdbcType="TINYINT"/>
+        <result property="amount" column="amount" jdbcType="DECIMAL"/>
+        <result property="assetStatus" column="asset_status" jdbcType="TINYINT"/>
+        <result property="assetAttrs" column="asset_attrs" jdbcType="LONGVARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertAsset" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.Asset">
+        insert into asset(user_id,asset_type,amount,asset_status,asset_attrs,create_time,update_time,remark)
+        values(#{userId},#{assetType},#{amount},#{assetStatus},#{assetAttrs},#{createTime},#{updateTime},#{remark})
+    </insert>
+
+    <update id="updateAsset">
+        update asset
+        <set>
+            <if test="assetAttrs!=null and assetAttrs!='' ">asset_attrs = #{assetAttrs},</if>
+            <if test="amount!=null ">amount = #{amount},</if>
+            <if test="assetStatus!=null  ">asset_status = #{assetStatus},</if>
+            <if test="updateTime!=null  ">update_time = #{updateTime},</if>
+        </set>
+        where user_id=#{userId} and asset_type=#{assetType}
+    </update>
+
+    <select id="queryAssetByUserIdAndType" resultMap="AssetResult">
+        select id,user_id,asset_type,amount,asset_status,asset_attrs,create_time,update_time,remark
+        from asset
+        where user_id=#{userId} and asset_type = #{assetType}
+    </select>
+
+
+
+    <insert id="insertSysUrBatch">
+        insert into sys_ur(user_id,role_id,is_del)
+        values
+        <foreach collection="urList" item="ur" separator=",">
+            (#{ur.userId},#{ur.roleId},#{ur.isDel})
+        </foreach>
+    </insert>
+
+    <delete id="deleteSysUrBatch">
+        delete from sys_ur
+        WHERE user_id=#{userId}
+        <!--and role_id IN
+        <foreach collection="roleArray" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>-->
+    </delete>
+
+    <update id="updateSysUserDelStatus">
+        update sys_user set is_del=1 where user_id=#{userId}
+    </update>
+    <update id="updateUserAccount">
+        update sys_user set user_account=#{userAccount} where user_id=#{userId}
+    </update>
+</mapper>

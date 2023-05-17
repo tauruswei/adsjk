@@ -1,51 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.cos.common.repository.UserRepository">
-    <resultMap type="org.cos.common.entity.data.po.User" id="UserResult">
+<mapper namespace="org.cos.common.repository.TransWebsiteRepository">
+    <resultMap type="org.cos.common.entity.data.po.TransWebsite" id="TransWebsiteResult">
         <result property="id" column="id" jdbcType="BIGINT"/>
-        <result property="name" column="name" jdbcType="VARCHAR"/>
-        <result property="passwd" column="passwd" jdbcType="VARCHAR"/>
-        <result property="email" column="email" jdbcType="VARCHAR"/>
-        <result property="walletAddress" column="wallet_address" jdbcType="VARCHAR"/>
-        <result property="userType" column="user_type" jdbcType="TINYINT"/>
-        <result property="userRelationId" column="user_relation_id" jdbcType="VARCHAR"/>
+        <result property="txid" column="txid" jdbcType="VARCHAR"/>
+        <result property="transType" column="trans_type" jdbcType="TINYINT"/>
+        <result property="fromUserId" column="from_user_id" jdbcType="BIGINT"/>
+        <result property="fromAssetType" column="from_asset_type" jdbcType="TINYINT"/>
+        <result property="fromAmount" column="from_amount" jdbcType="DECIMAL"/>
+        <result property="toUserId" column="to_user_id" jdbcType="BIGINT"/>
+        <result property="toAssetType" column="to_asset_type" jdbcType="TINYINT"/>
+        <result property="toAmount" column="to_amount" jdbcType="DECIMAL"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.User">
-        insert into user(name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time,remark)
-        values(#{name},#{passwd},#{email},#{walletAddress},#{userType},#{userRelationId},#{createTime},#{updateTime},#{remark})
+    <insert id="insertTransWebsite" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.TransWebsite">
+        insert into trans_website(txid,trans_type,from_user_id,from_asset_type,from_amount,to_user_id,to_asset_type,to_amount,create_time,update_time,remark)
+        values(#{txid},#{transType},#{fromUserId},#{fromAssetType},#{fromAmount},#{toUserId},#{toAssetType},#{toAmount},#{createTime},#{updateTime},#{remark})
     </insert>
 
-    <select id="queryUserByEmail" resultMap="UserResult" parameterType="string">
+    <select id="queryTransWebsiteByTxId" resultMap="TransWebsiteResult" parameterType="String">
+        select
+        id,txid,trans_type,from_user_id,from_asset_type,from_amount,to_user_id,to_asset_type,to_amount,create_time,update_time,remark
+        from trans_website
+        where txid=#{txid}
+    </select>
+
+    <select id="queryUserByEmail" resultMap="TransWebsiteResult" parameterType="string">
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
         from user
         where email=#{email}
     </select>
-    <select id="queryUserByName" resultMap="UserResult" parameterType="string">
+    <select id="queryUserByName" resultMap="TransWebsiteResult" parameterType="string">
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
         from user
         where name=#{name}
     </select>
 
-    <select id="queryUserById" resultMap="UserResult" parameterType="Long">
+    <select id="queryUserById" resultMap="TransWebsiteResult" parameterType="Long">
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
         from user
         where id=#{userId}
     </select>
 
-    <select id="queryUserByWalletAddressAndUserType" resultMap="UserResult">
+    <select id="queryUserByWalletAddressAndUserType" resultMap="TransWebsiteResult">
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
         from user
         where wallet_address=#{walletAddress} and user_type=#{userType}
     </select>
-    <select id="queryUserByInviterId" resultMap="UserResult" parameterType="Integer">
+    <select id="queryUserByInviterId" resultMap="TransWebsiteResult" parameterType="Integer">
         select
         id,name,passwd,email,wallet_address,inviter_id,create_time,update_time
         from user

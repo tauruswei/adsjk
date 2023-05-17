@@ -24,12 +24,36 @@ public class CodeMsg {
 //====================================================
 	public static CodeMsg USER_SENDCODE_ERROR = new CodeMsg(500101,"发送邮箱验证码异常: %s");
 	public static CodeMsg USER_ADD_ERROR = new CodeMsg(500102,"添加用户异常: %s");
-	public static CodeMsg USER_EXIST_ERROR = new CodeMsg(500103,"用户已存在");
-	public static CodeMsg USER_QUERY_ERROR = new CodeMsg(500103,"查询用户失败：%s");
+	public static CodeMsg USER_EXIST_ERROR = new CodeMsg(500103,"用户已存在: %s");
+	public static CodeMsg USER_NOT_EXIST_ERROR = new CodeMsg(500104,"用户不存在");
 
+	public static CodeMsg USER_QUERY_ERROR = new CodeMsg(500105,"查询用户失败：%s");
+	public static CodeMsg USER_LOGIN_ERROR = new CodeMsg(500106,"用户登录失败：%s");
+	public static CodeMsg USER_UPDATE_ERROR = new CodeMsg(500107,"更新用户失败：%s");
+	public static CodeMsg USER_RELATION_ADD_ERROR = new CodeMsg(500108,"添加用户关系异常: %s");
+	public static CodeMsg USER_RELATION_NOT_EXIST_ERROR = new CodeMsg(500109,"用户关系不存在");
+
+//====================================================
+//                网站交易模块
+//====================================================
+	public static CodeMsg TRANS_WEBSITE_ADD_ERROR = new CodeMsg(500201,"添加交易异常: %s");
+	public static CodeMsg TRANS_WEBSITE_TYPE_ERROR = new CodeMsg(500202,"交易类型错误");
+	public static CodeMsg TRANS_WEBSITE_TX_EXIST_ERROR = new CodeMsg(500203,"交易已经存在,请检查 txid 是否正确");
 
 
 //====================================================
+//                网站交易模块
+//====================================================
+	public static CodeMsg ASSET_ADD_ERROR = new CodeMsg(500301,"添加资产异常: %s");
+	public static CodeMsg ASSET_WITHDRAW_ERROR = new CodeMsg(500302,"用户提现失败: %s");
+	public static CodeMsg ASSET_UPDATE_ERROR = new CodeMsg(500303,"更新用户资产异常: %s");
+
+
+
+
+
+
+	//====================================================
 //                token 模块
 //====================================================
 	public static CodeMsg TOKEN_NOT_EXIST = new CodeMsg(500201, "Token cannot be empty");
@@ -53,7 +77,7 @@ public class CodeMsg {
 	//用户管理模块
 	public static CodeMsg CREATE_USER_ERROR = new CodeMsg(520101, "创建用户失败");
 //	public static CodeMsg USER_EXIST_ERROR = new CodeMsg(520102, "用户已存在");
-	public static CodeMsg USER_NOT_EXIST_ERROR = new CodeMsg(520103, "用户不存在");
+//	public static CodeMsg USER_NOT_EXIST_ERROR = new CodeMsg(520103, "用户不存在");
 	public static CodeMsg DELETE_USER_ERROR = new CodeMsg(520104, "删除用户失败");
 	public static CodeMsg EDIT_USER_ERROR = new CodeMsg(520105, "编辑用户失败");
 	public static CodeMsg USER_ATTRIBUTE_EXIST_ERROR = new CodeMsg(520106, "用户属性已存在");
