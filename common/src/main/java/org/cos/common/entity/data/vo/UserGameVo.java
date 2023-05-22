@@ -9,7 +9,7 @@ public class UserGameVo {
     // token
     private String Authorization;
     // 在网站上的用户唯一标识
-    private Long open_id;
+    private Long user_id;
     // 在网站上的用户昵称
     private String playerName;
     // 用户类型：0-渠道商；1-俱乐部老板；2-普通用户
@@ -17,9 +17,9 @@ public class UserGameVo {
     // 在网站上的用户头像图片地址
     private String face_url;
     // 艾瑞克结晶
-    private double money1;
+    private int money1;
     // 星光币
-    private double money2;
+    private int money2;
     // 星光通行证状态，true为有通行证，false为没有通行证
     private boolean money2PassFlag;
     // 游客标记

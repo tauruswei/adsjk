@@ -47,6 +47,8 @@ public class CodeMsg {
 	public static CodeMsg ASSET_ADD_ERROR = new CodeMsg(500301,"添加资产异常: %s");
 	public static CodeMsg ASSET_WITHDRAW_ERROR = new CodeMsg(500302,"用户提现失败: %s");
 	public static CodeMsg ASSET_UPDATE_ERROR = new CodeMsg(500303,"更新用户资产异常: %s");
+	public static CodeMsg ASSET_NOT_EXIST_ERROR = new CodeMsg(500304,"用户资产不存在");
+
 
 
 

@@ -4,10 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 import org.cos.application.service.CosdService;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.entity.data.req.UserLoginReq;
 import org.cos.common.result.Result;
+import org.cos.common.result.Result1;
+import org.cos.common.result.TestResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,4 +106,6 @@ public class CosdController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return cosdService.purchaseCOSD(req);
     }
+
+
 }

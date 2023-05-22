@@ -17,6 +17,18 @@
         insert into asset(user_id,asset_type,amount,asset_status,asset_attrs,create_time,update_time,remark)
         values(#{userId},#{assetType},#{amount},#{assetStatus},#{assetAttrs},#{createTime},#{updateTime},#{remark})
     </insert>
+    <select id="queryAssetsByUserId" resultMap="AssetResult">
+        select *
+        from asset
+        <where>
+            <if test="userId != null and userId !=0">
+                AND user_id = #{userId}
+            </if>
+            <if test="assetType != null and assetType !=0">
+                AND asset_type = #{assetType}
+            </if>
+        </where>
+    </select>
 
     <update id="updateAsset">
         update asset

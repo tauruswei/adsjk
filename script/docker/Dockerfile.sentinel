@@ -1,5 +1,0 @@
-FROM openjdk:8-jre
-ADD script/lib/sentinel-dashboard-1.8.0.jar /applications/sentinel-dashboard-1.8.0.jar
-
-ENTRYPOINT ["/bin/sh","-c","java -jar -Dfile.encoding=UTF-8 /applications/sentinel-dashboard-1.8.0.jar "]
-

@@ -61,7 +61,7 @@
             <if test="walletAddress!=null and walletAddress!='' ">wallet_address = #{walletAddress},</if>
             <if test="updateTime!=null  ">update_time = #{updateTime},</if>
         </set>
-        where user_id=#{userId}
+        where id=#{id}
     </update>
 
     <insert id="insertSysUrBatch">

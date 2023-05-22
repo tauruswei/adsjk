@@ -138,14 +138,14 @@
             <artifactId>JustAuth</artifactId>
             <version>1.16.5</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-stream</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.cloud</groupId>-->
-<!--            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-stream</artifactId>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.cloud</groupId>-->
+        <!--            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -184,8 +184,8 @@
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
             <version>0.9.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/localLib/jjwt-0.9.0.jar</systemPath>
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/src/localLib/jjwt-0.9.0.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -194,21 +194,29 @@
         <dependency>
             <groupId>org.web3j</groupId>
             <artifactId>core</artifactId>
-            <version>4.8.4</version>
+            <version>4.9.7</version>
         </dependency>
-
-
-
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>codegen</artifactId>
+            <version>4.9.7</version>
+        </dependency>
+        <!--  Needed to avoid conflict with OkHttp being used in auth0-java and okhttp3 being used by spring -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.0</version>
+        </dependency>
     </dependencies>
 
-<!--    <build>-->
-<!--        <extensions>-->
-<!--            <extension>-->
-<!--                <groupId>kr.motd.maven</groupId>-->
-<!--                <artifactId>os-maven-plugin</artifactId>-->
-<!--                <version>1.6.0</version>-->
-<!--            </extension>-->
-<!--        </extensions>-->
-<!--    </build>-->
+    <!--    <build>-->
+    <!--        <extensions>-->
+    <!--            <extension>-->
+    <!--                <groupId>kr.motd.maven</groupId>-->
+    <!--                <artifactId>os-maven-plugin</artifactId>-->
+    <!--                <version>1.6.0</version>-->
+    <!--            </extension>-->
+    <!--        </extensions>-->
+    <!--    </build>-->
 
 </project>

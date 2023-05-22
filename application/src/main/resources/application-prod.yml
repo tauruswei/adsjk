@@ -1,6 +1,8 @@
 server:
-  port: 8091
+  port: 8090
 spring:
+#  profiles:
+#    active: dev
   application:
     name: application
   servlet:
@@ -17,7 +19,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cosd
-    url: jdbc:mysql://127.0.0.1:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://mysql:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
     password: cosd@123.com
     connection-properties: config.decrypt=false;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJI/xqbyvpVttxfAKulKeSTIb7tZAGaFcPyTnE2r7AHTQ8kOnqKXDda4u59umt9XBFxi7db28KxeVooB138zuRUCAwEAAQ==
     druid:
@@ -33,30 +35,22 @@ spring:
   #
   ############################################################
   mail:
-    host: smtp.office365.com  # SMTP 服务器地址
-    port: 587
-    username: wbt@chessofstars.io  # 发送方邮箱地址
-    password: Cum97913
-    # 发送方邮箱登录密码或者授权码
+    host: smtp.163.com  # SMTP 服务器地址
+    port: 25
+    username: 13156050650@163.com  # 发送方邮箱地址
+    password: GGXCXQBLVCHJULTQ # 发送方邮箱登录密码或者授权码
     subject: verify your email
     properties:
       mail:
         smtp:
+          ssl:
+            trust: smtp.163.com
           auth: true  # 开启 SMTP 验证
           starttls:
             enable: true  # 开启 Transport Layer Security (TLS) 加密
-#            required: true
-#          port: 587
-#          socketFactory:
-#            port: 587
-#            fallback: false
-##            class: javax.net.ssl.SSLSocketFactory
-#          connectiontimeout: 30000
-#          timeout: 30000
-#          writetimeout: 30000
-#        debug: false
-
-
+            required: true
+          timeout: 5000  # 连接超时时间
+          connectiontimeout: 5000  # 连接超时时间
 
   ############################################################
   #
@@ -64,7 +58,7 @@ spring:
   #
   ############################################################
   redis:
-    host: 127.0.0.1
+    host: redis
     port: 6379
     timeout: 1000
     password: platform
@@ -122,8 +116,8 @@ rest:
 logging:
   level:
     root: INFO
-    org.apache.ibatis.mapping: DEBUG
-  config: classpath:logback-dev.xml
+    org.apache.ibatis.mapping: INFO
+  config: classpath:logback-prod.xml
 
 
 #########################################################

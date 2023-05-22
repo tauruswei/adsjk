@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 13/05/2023 11:33:59
+ Date: 18/05/2023 11:33:40
 */
 
 SET NAMES utf8mb4;
@@ -24,27 +24,44 @@ DROP TABLE IF EXISTS `asset`;
 CREATE TABLE `asset` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '资产主键id',
   `user_id` bigint(20) DEFAULT NULL COMMENT '用户主键id',
-  `asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC',
-  `asset_status` tinyint(255) DEFAULT NULL COMMENT '资产状态：0-盲盒NFT已购买；1-盲盒NFT已使用',
+  `asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC; 4-SL',
+  `asset_status` tinyint(255) DEFAULT NULL COMMENT '资产状态：0-盲盒NFT已购买；1-盲盒NFT已使用; 2-用户具有玩星光的资格',
+  `amount` decimal(25,0) DEFAULT NULL COMMENT '资产数量',
   `asset_attrs` text COLLATE utf8_bin COMMENT '资产属性：NFT的基本属性，数据以json字符串存放',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
--- Table structure for transaction
+-- Table structure for trans_game
 -- ----------------------------
-DROP TABLE IF EXISTS `transaction`;
-CREATE TABLE `transaction` (
+DROP TABLE IF EXISTS `trans_game`;
+CREATE TABLE `trans_game` (
+  `id` int(11) NOT NULL COMMENT '主键id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- ----------------------------
+-- Table structure for trans_website
+-- ----------------------------
+DROP TABLE IF EXISTS `trans_website`;
+CREATE TABLE `trans_website` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '交易id 主键',
   `txid` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '交易id',
-  `trans_type` tinyint(2) DEFAULT NULL COMMENT 'trans_type：0-用户使用 USDT 购买 COSD、1-用户质押COSD 到 DEFI、2-用户质押 COSD到星光、3-用户提现 COSD、4-用户使用USDT 购买 EVIC、5-用户提现EVIC、6-用户使用USDT 购买 NFT 盲盒、7-NFT交易\n',
+  `trans_type` tinyint(2) DEFAULT NULL COMMENT '0-用户使用 USDT 购买 COSD、1-用户质押COSD 到 DEFI、2-用户质押 COSD到星光、3-质押 COSD 到俱乐部老板质押池、4-用户从 defi 提现 COSD、5-用户从 星光池中 提现 COSD、6-用户从 俱乐部老板质押池中 提现 COSD、7-用户使用USDT 购买 EVIC、8-用户提现EVIC、9-用户使用USDT 购买 NFT 盲盒、10-NFT交易\n',
   `from_user_id` int(11) DEFAULT NULL COMMENT '用户主键id',
-  `from_asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC',
+  `from_asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC；4-SL',
   `from_amout` decimal(15,5) DEFAULT NULL COMMENT '用户用 100 USDT 购买 COSD，from_amout 就是100',
-  `to_asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC',
+  `to_asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC；4-SL',
   `to_user_id` int(11) DEFAULT NULL COMMENT '用户主键id',
   `to_amout` decimal(15,5) DEFAULT NULL COMMENT '用户用 100 USDT 购买 COSD，COSD 单价 0.05USDT，to_amout 就是2000\n\n\n',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -63,8 +80,9 @@ CREATE TABLE `user` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `user_relation_id` bigint(20) DEFAULT NULL COMMENT '用户关系表主键id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for user_relation
@@ -75,6 +93,8 @@ CREATE TABLE `user_relation` (
   `level0` bigint(20) DEFAULT NULL COMMENT '用户主键id，level0 代表渠道商',
   `level1` bigint(20) DEFAULT NULL COMMENT '用户主键id，level1 代表俱乐部老板',
   `level2` bigint(20) DEFAULT NULL COMMENT '用户主键id，level2 代表普通用户',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

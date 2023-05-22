@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cos.common.repository.NFTRepository">
+    <resultMap type="org.cos.common.entity.data.po.NFT" id="NFTResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="tokenId" column="token_id" jdbcType="VARCHAR"/>
+        <result property="txid" column="txid" jdbcType="VARCHAR"/>
+        <result property="gameType" column="game_type" jdbcType="TINYINT"/>
+        <result property="status" column="satus" jdbcType="TINYINT"/>
+        <result property="attr1" column="attr1" jdbcType="VARCHAR"/>
+        <result property="attr2" column="attr2" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertNFT" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.NFT">
+        insert into nft(user_id,txid,token_id,game_type,status,attr1,attr2,create_time,update_time,remark)
+        values(#{userId},#{txid},#{tokenId},#{gameType},#{status},#{attr1},#{attr2},#{createTime},#{updateTime},#{remark})
+    </insert>
+
+    <select id="queryNFTsByUserIdAndStatus" resultMap="NFTResult" parameterType="org.cos.common.entity.data.po.NFT">
+        select
+        *
+        from nft
+        <where>
+            <if test="userId != null and userId !=0">
+                AND user_id = #{userId}
+            </if>
+            <if test="status != null and status !=0">
+                AND status = #{status}
+            </if>
+        </where>
+        order by attr1
+    </select>
+
+    <select id="queryNFTByUserIdAndAtrr1"  resultMap="NFTResult" parameterType="org.cos.common.entity.data.po.NFT">
+        select
+        *
+        from nft
+        <where>
+            <if test="userId != null and userId !=0">
+                AND user_id = #{userId}
+            </if>
+            <if test="status != null and status !=0">
+                AND status = #{status}
+            </if>
+            <if test="attr1 != null and attr1 !=''">
+                AND attr1 = #{attr1}
+                order by attr1
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <update id="updateNFTStatus">
+        update nft
+        <set>
+            <if test="status!=null and status!=0">status = #{status},</if>
+            <if test="attr2!=null and attr2!='' ">attr2 = #{attr2},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+<!--    <insert id="insertSysUrBatch">-->
+<!--        insert into sys_ur(user_id,role_id,is_del)-->
+<!--        values-->
+<!--        <foreach collection="urList" item="ur" separator=",">-->
+<!--            (#{ur.userId},#{ur.roleId},#{ur.isDel})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    <delete id="deleteSysUrBatch">-->
+<!--        delete from sys_ur-->
+<!--        WHERE user_id=#{userId}-->
+<!--        &lt;!&ndash;and role_id IN-->
+<!--        <foreach collection="roleArray" item="id" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>&ndash;&gt;-->
+<!--    </delete>-->
+
+
+</mapper>

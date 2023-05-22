@@ -44,7 +44,7 @@ public class TokenFilter implements Filter {
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String auth = httpServletRequest.getHeader("authorization");
+        String auth = httpServletRequest.getHeader("Authorization");
 
         if (StringUtils.isBlank(auth)) {
             //不存在token

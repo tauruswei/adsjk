@@ -1,26 +1,12 @@
 package org.cos.application.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cos.common.result.Result;
 import org.springframework.stereotype.Service;
-import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.crypto.Credentials;
-import org.web3j.protocol.Web3j;
-//import org.web3j.con
-import org.web3j.protocol.core.methods.response.EthGasPrice;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.gas.StaticGasProvider;
-
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.concurrent.ExecutionException;
+import org.springframework.transaction.annotation.Transactional;
 @Service
 @Slf4j
+@Transactional
+
 public class BlockChainService {
 //    public Result call() throws ExecutionException, InterruptedException {
 //
