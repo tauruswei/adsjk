@@ -15,7 +15,7 @@ public interface TransWebsiteRepository {
     TransWebsite queryUserByEmail(String email);
     User queryUserByName(String name);
     List<User> queryUserByInviterId(Integer inviterId);
-    TransWebsite queryTransWebsiteByTxId(String txid);
+    TransWebsite queryTransWebsiteByTxId(@Param("txId") String txId);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);

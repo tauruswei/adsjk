@@ -14,6 +14,6 @@ public class AssetQueryReq {
     private Long userId;
     @ApiModelProperty(value = "资产类型",name = "assetType",example = "1" ,required = false)
 //    @NotBlank(message="Code cannot be empty.")
-    private Integer assetType;
+    private int assetType;
 }
 

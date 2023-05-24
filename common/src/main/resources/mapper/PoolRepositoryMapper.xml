@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cos.common.repository.PoolRepository">
+    <resultMap type="org.cos.common.entity.data.po.Pool" id="PoolResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="term" column="term" jdbcType="TINYINT"/>
+        <result property="start_time" column="startTime" jdbcType="BIGINT"/>
+        <result property="lock_time" column="lockTime" jdbcType="BIGINT"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insertPool" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.Pool">
+        insert into pool(type,term,start_time,lock_time,remark)
+        values(#{type},#{term},#{startTime},#{lockTime},#{remark})
+    </insert>
+
+    <select id="queryPoolsByTypeAndTerm" resultMap="PoolResult" parameterType="org.cos.common.entity.data.po.Pool">
+        select
+        *
+        from pool
+        <where>
+            <if test="type != null and type !=0">
+                AND type = #{type}
+            </if>
+            <if test="term != null and term !=0">
+                AND term = #{term}
+            </if>
+        </where>
+    </select>
+
+<!--    <select id="queryNFTByUserIdAndAtrr1"  resultMap="NFTResult" parameterType="org.cos.common.entity.data.po.NFT">-->
+<!--        select-->
+<!--        *-->
+<!--        from nft-->
+<!--        <where>-->
+<!--            <if test="userId != null and userId !=0">-->
+<!--                AND user_id = #{userId}-->
+<!--            </if>-->
+<!--            <if test="status != null and status !=0">-->
+<!--                AND status = #{status}-->
+<!--            </if>-->
+<!--            <if test="attr1 != null and attr1 !=''">-->
+<!--                AND attr1 = #{attr1}-->
+<!--                order by attr1-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        limit 1-->
+<!--    </select>-->
+
+<!--    <update id="updateNFTStatus">-->
+<!--        update nft-->
+<!--        <set>-->
+<!--            <if test="status!=null and status!=0">status = #{status},</if>-->
+<!--            <if test="attr2!=null and attr2!='' ">attr2 = #{attr2},</if>-->
+<!--        </set>-->
+<!--        where id=#{id}-->
+<!--    </update>-->
+
+<!--    <insert id="insertSysUrBatch">-->
+<!--        insert into sys_ur(user_id,role_id,is_del)-->
+<!--        values-->
+<!--        <foreach collection="urList" item="ur" separator=",">-->
+<!--            (#{ur.userId},#{ur.roleId},#{ur.isDel})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    <delete id="deleteSysUrBatch">-->
+<!--        delete from sys_ur-->
+<!--        WHERE user_id=#{userId}-->
+<!--        &lt;!&ndash;and role_id IN-->
+<!--        <foreach collection="roleArray" item="id" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>&ndash;&gt;-->
+<!--    </delete>-->
+
+
+</mapper>

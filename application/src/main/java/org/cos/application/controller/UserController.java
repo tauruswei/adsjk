@@ -126,6 +126,17 @@ public class UserController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return userService.createChannelLeader( walletAddress);
     }
+    @ApiOperation("查询俱乐部老板和渠道商的地址")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "Long",paramType="header")
+    @PostMapping("queryClubAndChannelAddress")
+    public Result queryClubAndChannelAddress(@RequestParam(name="userId") Long userId) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.queryClubAndChannelAddress(userId);
+    }
     @ApiOperation("test1 ")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("test1")

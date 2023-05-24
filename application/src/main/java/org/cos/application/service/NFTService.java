@@ -46,7 +46,7 @@ public class NFTService {
         if(!Objects.isNull(nftRepository.queryTransWebsiteByTxId(req.getTxId()))){
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_TX_EXIST_ERROR);
         }
-        transWebsite.setTxid(req.getTxId());
+        transWebsite.setTxId(req.getTxId());
         transWebsite.setTransType(req.getTransType());
         transWebsite.setFromUserId(req.getFromUserId());
         transWebsite.setFromAssetType(req.getFromAssetType());

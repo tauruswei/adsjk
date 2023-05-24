@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.cos.common.repository.NFTRepository">
+<mapper namespace="org.cos.common.repository.TransWebsiteRepository">
     <resultMap type="org.cos.common.entity.data.po.TransWebsite" id="TransWebsiteResult">
         <result property="id" column="id" jdbcType="BIGINT"/>
-        <result property="txid" column="txid" jdbcType="VARCHAR"/>
+        <result property="txId" column="txid" jdbcType="VARCHAR"/>
         <result property="transType" column="trans_type" jdbcType="TINYINT"/>
         <result property="fromUserId" column="from_user_id" jdbcType="BIGINT"/>
         <result property="fromAssetType" column="from_asset_type" jdbcType="TINYINT"/>
@@ -11,21 +11,22 @@
         <result property="toUserId" column="to_user_id" jdbcType="BIGINT"/>
         <result property="toAssetType" column="to_asset_type" jdbcType="TINYINT"/>
         <result property="toAmount" column="to_amount" jdbcType="DECIMAL"/>
+        <result property="nftTokenId" column="nft_token_id" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insertTransWebsite" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.TransWebsite">
-        insert into trans_website(txid,trans_type,from_user_id,from_asset_type,from_amount,to_user_id,to_asset_type,to_amount,create_time,update_time,remark)
-        values(#{txid},#{transType},#{fromUserId},#{fromAssetType},#{fromAmount},#{toUserId},#{toAssetType},#{toAmount},#{createTime},#{updateTime},#{remark})
+        insert into trans_website(txid,trans_type,from_user_id,from_asset_type,from_amount,to_user_id,to_asset_type,to_amount,nft_token_id,create_time,update_time,remark)
+        values(#{txId},#{transType},#{fromUserId},#{fromAssetType},#{fromAmount},#{toUserId},#{toAssetType},#{toAmount},#{nftTokenId},#{createTime},#{updateTime},#{remark})
     </insert>
 
     <select id="queryTransWebsiteByTxId" resultMap="TransWebsiteResult" parameterType="String">
         select
-        id,txid,trans_type,from_user_id,from_asset_type,from_amount,to_user_id,to_asset_type,to_amount,create_time,update_time,remark
+        *
         from trans_website
-        where txid=#{txid}
+        where txid=#{txId}
     </select>
 
     <select id="queryUserByEmail" resultMap="TransWebsiteResult" parameterType="string">

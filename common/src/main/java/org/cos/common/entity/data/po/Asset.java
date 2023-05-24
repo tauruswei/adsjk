@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class Asset {
     /**
-     * 用户id
+     * 主键id
      */
     private Long id;
     /**

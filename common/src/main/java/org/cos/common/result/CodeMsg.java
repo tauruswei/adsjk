@@ -42,12 +42,28 @@ public class CodeMsg {
 
 
 //====================================================
-//                网站交易模块
+//                资产模块
 //====================================================
 	public static CodeMsg ASSET_ADD_ERROR = new CodeMsg(500301,"添加资产异常: %s");
 	public static CodeMsg ASSET_WITHDRAW_ERROR = new CodeMsg(500302,"用户提现失败: %s");
 	public static CodeMsg ASSET_UPDATE_ERROR = new CodeMsg(500303,"更新用户资产异常: %s");
 	public static CodeMsg ASSET_NOT_EXIST_ERROR = new CodeMsg(500304,"用户资产不存在");
+	public static CodeMsg ASSET_TYPE_ERROR = new CodeMsg(500305,"用户资产类型错误");
+	public static CodeMsg ASSET_ACOUNT_ERROR = new CodeMsg(500306,"用户资产不能为负数");
+
+//====================================================
+//                质押池模块
+//====================================================
+	public static CodeMsg POOL_USER_ADD_ERROR = new CodeMsg(500401,"用户质押失败: %s");
+	public static CodeMsg POOL_USER_UPDATE_ERROR = new CodeMsg(500402,"更新用户质押异常: %s");
+	public static CodeMsg POOL_USER_BALANCE_ERROR = new CodeMsg(500403,"用户质押余额不能为负: %s");
+
+//====================================================
+//                NFT 模块
+//====================================================
+	public static CodeMsg NFT_EXIST_ERROR = new CodeMsg(500401,"NFT 已存在");
+	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500402,"NFT 不存在: %s");
+	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500403,"NFT 添加失败: %s");
 
 
 

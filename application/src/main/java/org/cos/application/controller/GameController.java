@@ -26,7 +26,7 @@ public class GameController {
     GameService gameService;
     @Autowired
     UserService userService;
-
+    @ApiOperation("用户棋手数量的加减")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String", paramType = "query")
     @PostMapping("increaseUserChesserPts")
     public Result increaseUserChesserPts(@RequestParam(name = "userId") Long userId,

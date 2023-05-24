@@ -92,7 +92,7 @@ spring:
     mailNickName: COSD
     tokenTimeOut: 18000000
     slAmount: 400
-    coAmount: 4000
+    clubAmount: 4000
 
 ############################################################
 #

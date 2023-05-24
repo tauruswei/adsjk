@@ -10,8 +10,23 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap id="UserRelationDTO" type="org.cos.common.entity.data.dto.UserRelationDTO">
+        <association property="level0" javaType="org.cos.common.entity.data.po.User">
+            <id column="level0_id" property="id"/>
+            <result column="level0_name" property="name"/>
+            <result column="level0_email" property="email"/>
+            <result column="level0_wallet_address" property="walletAddress"/>
+        </association>
+        <association property="level1" javaType="org.cos.common.entity.data.po.User">
+            <id column="level1_id" property="id"/>
+            <result column="level1_name" property="name"/>
+            <result column="level1_email" property="email"/>
+            <result column="level1_wallet_address" property="walletAddress"/>
+        </association>
+    </resultMap>
 
-    <insert id="insertUserRelation" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.UserRelation">
+    <insert id="insertUserRelation" useGeneratedKeys="true" keyProperty="id"
+            parameterType="org.cos.common.entity.data.po.UserRelation">
         insert into user_relation(id,level0,level1,level2,create_time,update_time,remark)
         values(#{id},#{level0},#{level1},#{level2},#{createTime},#{updateTime},#{remark})
     </insert>
@@ -22,59 +37,71 @@
         from user_relation
         where id=#{id}
     </select>
-<!--    <select id="queryUserByName" resultMap="UserResult" parameterType="string">-->
-<!--        select-->
-<!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
-<!--        from user-->
-<!--        where name=#{name}-->
-<!--    </select>-->
+    <select id="queryUserByRelationId" resultMap="UserRelationDTO" parameterType="String">
+        SELECT u0.id AS level0_id, u0.name AS level0_name, u0.email AS level0_email, u0.wallet_address AS
+        level0_wallet_address,
+        u1.id AS level1_id, u1.name AS level1_name, u1.email AS level1_email, u1.wallet_address AS
+        level1_wallet_address
+        from user_relation r
+        LEFT JOIN user u0 ON r.level0 = u0.id
+        LEFT JOIN user u1 ON r.level1 = u1.id
+        WHERE r.id = #{id};
+    </select>
 
-<!--    <select id="queryUserById" resultMap="UserResult" parameterType="Long">-->
-<!--        select-->
-<!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
-<!--        from user-->
-<!--        where id=#{userId}-->
-<!--    </select>-->
-<!--    <select id="queryUserByInviterId" resultMap="UserResult" parameterType="Integer">-->
-<!--        select-->
-<!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
-<!--        from user-->
-<!--        where inviter_id=#{inviterId}-->
-<!--    </select>-->
 
-<!--    <update id="updateUser">-->
-<!--        update user-->
-<!--        <set>-->
-<!--            <if test="name!=null and name!=''">name = #{name},</if>-->
-<!--            <if test="passwd!=null and passwd!='' ">passwd = #{passwd},</if>-->
-<!--            <if test="email!=null and email!='' ">email = #{email},</if>-->
-<!--            <if test="walletAddress!=null and walletAddress!='' ">wallet_address = #{walletAddress},</if>-->
-<!--            <if test="updateTime!=null  ">update_time = #{updateTime},</if>-->
-<!--        </set>-->
-<!--        where user_id=#{userId}-->
-<!--    </update>-->
+    <!--    <select id="queryUserByName" resultMap="UserResult" parameterType="string">-->
+    <!--        select-->
+    <!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
+    <!--        from user-->
+    <!--        where name=#{name}-->
+    <!--    </select>-->
 
-<!--    <insert id="insertSysUrBatch">-->
-<!--        insert into sys_ur(user_id,role_id,is_del)-->
-<!--        values-->
-<!--        <foreach collection="urList" item="ur" separator=",">-->
-<!--            (#{ur.userId},#{ur.roleId},#{ur.isDel})-->
-<!--        </foreach>-->
-<!--    </insert>-->
+    <!--    <select id="queryUserById" resultMap="UserResult" parameterType="Long">-->
+    <!--        select-->
+    <!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
+    <!--        from user-->
+    <!--        where id=#{userId}-->
+    <!--    </select>-->
+    <!--    <select id="queryUserByInviterId" resultMap="UserResult" parameterType="Integer">-->
+    <!--        select-->
+    <!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
+    <!--        from user-->
+    <!--        where inviter_id=#{inviterId}-->
+    <!--    </select>-->
 
-<!--    <delete id="deleteSysUrBatch">-->
-<!--        delete from sys_ur-->
-<!--        WHERE user_id=#{userId}-->
-<!--        &lt;!&ndash;and role_id IN-->
-<!--        <foreach collection="roleArray" item="id" open="(" separator="," close=")">-->
-<!--            #{id}-->
-<!--        </foreach>&ndash;&gt;-->
-<!--    </delete>-->
+    <!--    <update id="updateUser">-->
+    <!--        update user-->
+    <!--        <set>-->
+    <!--            <if test="name!=null and name!=''">name = #{name},</if>-->
+    <!--            <if test="passwd!=null and passwd!='' ">passwd = #{passwd},</if>-->
+    <!--            <if test="email!=null and email!='' ">email = #{email},</if>-->
+    <!--            <if test="walletAddress!=null and walletAddress!='' ">wallet_address = #{walletAddress},</if>-->
+    <!--            <if test="updateTime!=null  ">update_time = #{updateTime},</if>-->
+    <!--        </set>-->
+    <!--        where user_id=#{userId}-->
+    <!--    </update>-->
 
-<!--    <update id="updateSysUserDelStatus">-->
-<!--        update sys_user set is_del=1 where user_id=#{userId}-->
-<!--    </update>-->
-<!--    <update id="updateUserAccount">-->
-<!--        update sys_user set user_account=#{userAccount} where user_id=#{userId}-->
-<!--    </update>-->
+    <!--    <insert id="insertSysUrBatch">-->
+    <!--        insert into sys_ur(user_id,role_id,is_del)-->
+    <!--        values-->
+    <!--        <foreach collection="urList" item="ur" separator=",">-->
+    <!--            (#{ur.userId},#{ur.roleId},#{ur.isDel})-->
+    <!--        </foreach>-->
+    <!--    </insert>-->
+
+    <!--    <delete id="deleteSysUrBatch">-->
+    <!--        delete from sys_ur-->
+    <!--        WHERE user_id=#{userId}-->
+    <!--        &lt;!&ndash;and role_id IN-->
+    <!--        <foreach collection="roleArray" item="id" open="(" separator="," close=")">-->
+    <!--            #{id}-->
+    <!--        </foreach>&ndash;&gt;-->
+    <!--    </delete>-->
+
+    <!--    <update id="updateSysUserDelStatus">-->
+    <!--        update sys_user set is_del=1 where user_id=#{userId}-->
+    <!--    </update>-->
+    <!--    <update id="updateUserAccount">-->
+    <!--        update sys_user set user_account=#{userAccount} where user_id=#{userId}-->
+    <!--    </update>-->
 </mapper>

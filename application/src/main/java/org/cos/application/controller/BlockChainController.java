@@ -5,12 +5,14 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.BlockChainService;
-import org.cos.application.service.UserService;
 import org.cos.common.entity.data.req.UserSendCodeReq;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthBlockNumber;
 
@@ -37,6 +39,8 @@ public class BlockChainController {
 //        return blockChainService.call();
         return Result.success();
     }
+
+
 
 
 

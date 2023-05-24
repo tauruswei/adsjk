@@ -63,6 +63,13 @@
         where id=#{id}
     </update>
 
+    <select id="queryNFTByTokenId" resultMap="NFTResult" parameterType="String">
+        select
+        *
+        from nft
+        where token_id=#{tokenId}
+    </select>
+
 <!--    <insert id="insertSysUrBatch">-->
 <!--        insert into sys_ur(user_id,role_id,is_del)-->
 <!--        values-->

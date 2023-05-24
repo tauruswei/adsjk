@@ -17,6 +17,7 @@ public interface NFTRepository {
     void updateNFTStatus(NFT nft);
     TransWebsite queryTransWebsiteByTxId(String txid);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
+    NFT queryNFTByTokenId(@Param("tokenId")String tokenId);
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
 //    void deleteSysUrBatch(/*@Param("roleArray") Long[] roleArray,*/ @Param("userId")Long userId);

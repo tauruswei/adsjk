@@ -9,13 +9,13 @@ public class UserGameVo {
     // token
     private String Authorization;
     // 在网站上的用户唯一标识
-    private Long user_id;
+    private Long userId;
     // 在网站上的用户昵称
     private String playerName;
     // 用户类型：0-渠道商；1-俱乐部老板；2-普通用户
     private int userType;
     // 在网站上的用户头像图片地址
-    private String face_url;
+    private String faceUrl;
     // 艾瑞克结晶
     private int money1;
     // 星光币

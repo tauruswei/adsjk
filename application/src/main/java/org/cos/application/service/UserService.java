@@ -1,19 +1,23 @@
 package org.cos.application.service;
 
+import com.alibaba.druid.sql.ast.statement.SQLIfStatement;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cos.common.config.BaseConfiguration;
+import org.cos.common.constant.CommonConstant;
 import org.cos.common.convert.GameVoConvert;
-import org.cos.common.entity.data.po.Asset;
-import org.cos.common.entity.data.po.NFT;
-import org.cos.common.entity.data.po.User;
-import org.cos.common.entity.data.po.UserRelation;
+import org.cos.common.entity.data.dto.UserRelationDTO;
+import org.cos.common.entity.data.po.*;
 import org.cos.common.entity.data.req.*;
+import org.cos.common.entity.data.vo.UserRelationAddressVo;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.redis.RedisService;
 import org.cos.common.redis.UserKey;
+import org.cos.common.repository.PoolRepository;
+import org.cos.common.repository.PoolUserRepository;
 import org.cos.common.repository.UserRelationRepository;
 import org.cos.common.repository.UserRepository;
 import org.cos.common.result.CodeMsg;
@@ -54,6 +58,9 @@ public class UserService {
     private AssetService assetService;
     @Autowired
     private NFTService nftService;
+
+    @Autowired
+    private PoolUserRepository poolUserRepository;
 
     public Result sendCode(UserSendCodeReq req) {
         User user;
@@ -264,20 +271,23 @@ public class UserService {
         // 获取用户资产
         AssetQueryReq assetQueryReq = new AssetQueryReq();
         assetQueryReq.setUserId(user.getId());
-        assetQueryReq.setAssetType(0);
+//        assetQueryReq.setAssetType(CommonConstant.EVIC);
         Result<List<Asset>> assets = assetService.queryUserAssets(assetQueryReq);
+
+        // 获取用户是否具有玩星光的资格
+        PoolUser poolUser = poolUserRepository.queryPoolUserByUserIdAndPoolId((long) CommonConstant.POOL_SL, user.getId());
 
         // 获取用户的NFT
         NFTListReq nftListReq = new NFTListReq();
         nftListReq.setUserId(user.getId());
         // 查找已使用的 NFT
-        nftListReq.setStatus(1);
+        nftListReq.setStatus(CommonConstant.NFT_USED);
 
         Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatus(nftListReq);
 
 //        List<NFT> list = nfts.getData().getList();
 
-        return Result.success( GameVoConvert.UserGameVoConvert(jwt,user,assets.getData(),nfts.getData().getList()));
+        return Result.success( GameVoConvert.UserGameVoConvert(jwt,user,assets.getData(),nfts.getData().getList(),poolUser.getAmount()>=baseConfiguration.getSlAmount()?true:false));
     }
 
     public Result createChannelLeader(String walletAddress) {
@@ -289,7 +299,7 @@ public class UserService {
         //先创建用户，存库
         user.setWalletAddress(walletAddress);
         user.setUserType(0);
-        user.setUserRelationId(UUID.randomUUID().toString());
+//        user.setUserRelationId(UUID.randomUUID().toString());
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
 
@@ -298,20 +308,46 @@ public class UserService {
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs(e.getMessage()));
         }
-        // 创建用户关系
-        UserRelation userRelation = new UserRelation();
-        userRelation.setId(user.getUserRelationId());
-        userRelation.setLevel0(user.getId());
-        userRelation.setCreateTime(new Date());
-        userRelation.setUpdateTime(new Date());
-        try {
-            userRelationRepository.insertUserRelation(userRelation);
-        } catch (Exception e) {
-            throw new GlobalException(CodeMsg.USER_RELATION_ADD_ERROR.fillArgs(e.getMessage()));
-        }
+//        // 创建用户关系
+//        UserRelation userRelation = new UserRelation();
+//        userRelation.setId(user.getUserRelationId());
+//        userRelation.setLevel0(user.getId());
+//        userRelation.setCreateTime(new Date());
+//        userRelation.setUpdateTime(new Date());
+//        try {
+//            userRelationRepository.insertUserRelation(userRelation);
+//        } catch (Exception e) {
+//            throw new GlobalException(CodeMsg.USER_RELATION_ADD_ERROR.fillArgs(e.getMessage()));
+//        }
 
 
         return Result.success();
+    }
+
+    public Result queryClubAndChannelAddress(Long userId){
+        UserRelationAddressVo userRelationAddressVo = new UserRelationAddressVo();
+        User user = userRepository.queryUserById(userId);
+        if(ObjectUtils.isEmpty(user)){
+            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+        }
+        userRelationAddressVo.setUserAddress(user.getWalletAddress());
+
+        UserRelationDTO userRelationDTO = userRelationRepository.queryUserByRelationId(user.getUserRelationId());
+        if(ObjectUtils.isEmpty(userRelationDTO)){
+            return Result.success(userRelationAddressVo);
+        }
+        User level0= userRelationDTO.getLevel0();
+        User level1 = userRelationDTO.getLevel1();
+        if((!ObjectUtils.isEmpty(level0))&&(!ObjectUtils.isEmpty(level1))){
+            userRelationAddressVo.setChannelAddress(level0.getWalletAddress());
+            userRelationAddressVo.setClubAddress(level1.getWalletAddress());
+        }else if((ObjectUtils.isEmpty(level0))&&(!ObjectUtils.isEmpty(level1))){
+            userRelationAddressVo.setClubAddress(level1.getWalletAddress());
+        }else if((!ObjectUtils.isEmpty(level0))&&(ObjectUtils.isEmpty(level1))) {
+            userRelationAddressVo.setClubAddress(level0.getWalletAddress());
+        }
+        userRelationAddressVo.setUserAddress(user.getWalletAddress());
+        return Result.success(userRelationAddressVo);
     }
 
 

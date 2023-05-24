@@ -10,5 +10,5 @@ public class BaseConfiguration {
     private String mailNickName;
     private String tokenTimeOut;
     private int slAmount;
-    private int coAmount;
+    private int clubAmount;
 }

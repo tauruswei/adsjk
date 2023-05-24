@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cos.common.repository.PoolUserRepository">
+    <resultMap type="org.cos.common.entity.data.po.PoolUser" id="PoolUserResult">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="poolId" column="pool_id" jdbcType="BIGINT"/>
+        <result property="amount" column="amount" jdbcType="DECIMAL"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="PoolUserTime" type="org.cos.common.entity.data.dto.PoolUserTimeDTO">
+        <result column="user_id" property="userId"/>
+        <result column="pool_id" property="poolId"/>
+        <result column="pool_type" property="poolType"/>
+        <result column="amount" property="amount"/>
+        <result column="create_time" property="poolUserCreateTime"/>
+        <result column="start_time" property="poolStartTime"/>
+        <result column="lock_time" property="lockTime"/>
+
+    </resultMap>
+    <select id="queryPoolUserByUserIdForTime" resultMap="PoolUserTime" parameterType="Long">
+        SELECT pu.user_id AS user_id, pu.pool_id AS pool_id, pu.amount AS amount, UNIX_TIMESTAMP(pu.create_time) AS
+        create_time,p.lock_time AS lock_time,p.type AS pool_type,p.start_time AS start_time
+        from pool_user pu
+        LEFT JOIN pool p ON pu.pool_id = p.id
+        WHERE pu.user_id = #{userId};
+    </select>
+
+    <insert id="insertPoolUser" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.PoolUser">
+        insert into pool_user(user_id,pool_id,amount,create_time,update_time,remark)
+        values(#{userId},#{poolId},#{amount},#{createTime},#{updateTime},#{remark})
+    </insert>
+    <update id="updatePoolUser">
+        update pool_user
+        <set>
+            <if test="amount!=null and amount!=0">amount = #{amount},</if>
+        </set>
+        where user_id=#{userId} and pool_id=#{poolId}
+    </update>
+
+
+
+    <select id="queryPoolUserByUserIdAndPoolId" resultMap="PoolUserResult" parameterType="org.cos.common.entity.data.po.PoolUser">
+        select
+        *
+        from pool_user
+        <where>
+            <if test="userId != null and userId !=0">
+                AND user_id = #{userId}
+            </if>
+            <if test="poolId != null and poolId !=0">
+                AND pool_id = #{poolId}
+            </if>
+        </where>
+    </select>
+
+    <select id="queryPoolUserByUserId" resultMap="PoolUserResult" parameterType="org.cos.common.entity.data.po.PoolUser">
+        select
+        *
+        from pool_user
+        <where>
+            <if test="userId != null and userId !=0">
+                AND user_id = #{userId}
+            </if>
+        </where>
+
+    </select>
+
+
+
+<!--    <select id="queryNFTByUserIdAndAtrr1"  resultMap="NFTResult" parameterType="org.cos.common.entity.data.po.NFT">-->
+<!--        select-->
+<!--        *-->
+<!--        from nft-->
+<!--        <where>-->
+<!--            <if test="userId != null and userId !=0">-->
+<!--                AND user_id = #{userId}-->
+<!--            </if>-->
+<!--            <if test="status != null and status !=0">-->
+<!--                AND status = #{status}-->
+<!--            </if>-->
+<!--            <if test="attr1 != null and attr1 !=''">-->
+<!--                AND attr1 = #{attr1}-->
+<!--                order by attr1-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        limit 1-->
+<!--    </select>-->
+
+
+
+<!--    <insert id="insertSysUrBatch">-->
+<!--        insert into sys_ur(user_id,role_id,is_del)-->
+<!--        values-->
+<!--        <foreach collection="urList" item="ur" separator=",">-->
+<!--            (#{ur.userId},#{ur.roleId},#{ur.isDel})-->
+<!--        </foreach>-->
+<!--    </insert>-->
+
+<!--    <delete id="deleteSysUrBatch">-->
+<!--        delete from sys_ur-->
+<!--        WHERE user_id=#{userId}-->
+<!--        &lt;!&ndash;and role_id IN-->
+<!--        <foreach collection="roleArray" item="id" open="(" separator="," close=")">-->
+<!--            #{id}-->
+<!--        </foreach>&ndash;&gt;-->
+<!--    </delete>-->
+
+
+</mapper>
