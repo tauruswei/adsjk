@@ -35,12 +35,16 @@ spring:
   mail:
     host: smtp.office365.com  # SMTP 服务器地址
     port: 587
-    username: wbt@chessofstars.io  # 发送方邮箱地址
-    password: Cum97913
+    username: wbt@chessofstars.io # 发送方邮箱地址
+    password: Xiao120315!
+#    username: 13156050650@163.com
+#    password: Xiao120315!
     # 发送方邮箱登录密码或者授权码
     subject: verify your email
     properties:
       mail:
+#        store:
+#          protocol: pop3
         smtp:
           auth: true  # 开启 SMTP 验证
           starttls:
@@ -76,12 +80,12 @@ spring:
   #
   # 配置 thymeleaf 信息
   #
-  ############################################################
-  thymeleaf:
-    cache: false
-    enabled: true
-    prefix: file:src/main/resources/templates/
-    suffix: .html
+#  ############################################################
+#  thymeleaf:
+#    cache: false
+#    enabled: true
+#    prefix: file:src/main/resources/templates/
+#    suffix: .html
 
   ############################################################
   #

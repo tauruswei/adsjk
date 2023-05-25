@@ -11,6 +11,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -107,7 +108,7 @@ BaseConfiguration baseConfiguration;
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
         //3. 针对工具类，配置邮件发送的基本信息
         helper.setSubject(subject);
-        helper.setFrom(from);
+        helper.setFrom(baseConfiguration.getMailNickName());
         helper.setTo(to);
         if (cc != null) {
             helper.setCc(cc);
@@ -135,7 +136,7 @@ BaseConfiguration baseConfiguration;
      * @param templatePath 模板路径 路径在src/main/resources/templates/下
      * @throws MessagingException
      */
-    public void sendThymeleafMail(String subject, String from, String to, Map<String, Object> data, String templatePath) throws MessagingException {
+    public void sendThymeleafMail(String subject, String from, String to, Map<String, Object> data, String templatePath) throws MessagingException, UnsupportedEncodingException {
         this.sendThymeleafMail(subject, from, to, null, null, data, templatePath);
     }
 
@@ -151,14 +152,14 @@ BaseConfiguration baseConfiguration;
      * @param templatePath 模板路径 路径在src/main/resources/templates/下
      * @throws MessagingException
      */
-    public void sendThymeleafMail(String subject, String from, String to, String[] cc, String[] bcc, Map<String, Object> data, String templatePath) throws MessagingException {
+    public void sendThymeleafMail(String subject, String from, String to, String[] cc, String[] bcc, Map<String, Object> data, String templatePath) throws MessagingException, UnsupportedEncodingException {
         //1. 构建邮件对象，注意，这里要通过 javaMailSender 来获取一个复杂邮件对象
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         //2. MimeMessageHelper 是一个邮件配置的辅助工具类，true 表示构建一个 multipart message 类型的邮件
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
         //3. 针对工具类，配置邮件发送的基本信息
         helper.setSubject(subject);
-        helper.setFrom(from);
+        helper.setFrom(new InternetAddress(from, "COSD"));
         helper.setTo(to);
         if (cc != null) {
             helper.setCc(cc);

@@ -8,7 +8,7 @@ package org.cos.common.redis;
  */
 public class UserKey extends BasePrefix{
     private UserKey(String prefix){
-        super(600,prefix);
+        super(300,prefix);
     }
     public static UserKey getEmail= new UserKey("email");
 }

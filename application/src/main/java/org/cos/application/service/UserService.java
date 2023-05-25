@@ -1,6 +1,5 @@
 package org.cos.application.service;
 
-import com.alibaba.druid.sql.ast.statement.SQLIfStatement;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.cos.common.entity.data.vo.UserRelationAddressVo;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.redis.RedisService;
 import org.cos.common.redis.UserKey;
-import org.cos.common.repository.PoolRepository;
 import org.cos.common.repository.PoolUserRepository;
 import org.cos.common.repository.UserRelationRepository;
 import org.cos.common.repository.UserRepository;
@@ -63,13 +61,16 @@ public class UserService {
     private PoolUserRepository poolUserRepository;
 
     public Result sendCode(UserSendCodeReq req) {
+        if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
+            throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("验证码还在有效期内"));
+        }
         User user;
         try {
             user = userRepository.queryUserByEmail(req.getEmail());
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.USER_QUERY_ERROR.fillArgs(e.getMessage()));
         }
-        if (null != user) {
+        if (ObjectUtils.isNotEmpty(user)) {
             throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
         }
         // 生成验证码
@@ -80,7 +81,11 @@ public class UserService {
         System.out.println(code);
         // 发送邮件
         try {
-            mailUtil.sendTextMail(subject, mail, req.getEmail(), code + "");
+//            mailUtil.sendTextMail(subject, mail, req.getEmail(), code + "");
+            Map<String, Object> myMap = new HashMap<String, Object>() {{
+                put("code", String.valueOf(code).chars().map(Character::getNumericValue).toArray());
+            }};
+            mailUtil.sendThymeleafMail(subject,mail,req.getEmail(),myMap,"email1");
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs(e.getMessage()));
         }
@@ -115,9 +120,21 @@ public class UserService {
     public Result createUser(UserCreateReq req) {
         // 判断 redis 中的邮箱验证码是否存在
         String code = redisService.get(UserKey.getEmail, req.getUserSendCodeReq().getEmail(), String.class);
-        if (!StringUtils.endsWithIgnoreCase(req.getCode(), code)) {
+        if (StringUtils.isBlank(code)) {
             throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("验证码失效，请重新获取"));
         }
+        if (!StringUtils.equalsIgnoreCase(req.getCode(), code)) {
+            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("验证码无效，请重新输入"));
+        }
+        // 判断用户名的唯一性
+        if(ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))){
+            throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+        }
+        // 判断用户邮箱的唯一性
+        if(ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getUserSendCodeReq().getEmail()))){
+            throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+        }
+
         // 先创建用户，直接存库
         User user = new User();
         user.setName(req.getName());
@@ -125,7 +142,7 @@ public class UserService {
         user.setEmail(req.getUserSendCodeReq().getEmail());
         user.setWalletAddress(req.getWalletAddress());
         // 默认都是普通用户，质押一定量的 cosd 后，会更新 user_type 变成 1
-        user.setUserType(2);
+        user.setUserType(CommonConstant.USER_PLAYER);
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
         user.setUserRelationId(UUID.randomUUID().toString());
@@ -218,7 +235,7 @@ public class UserService {
 
     public Result login(UserLoginReq req) {
         User user;
-        if (StringUtils.isNotEmpty(req.getEmail())) {
+        if (StringUtils.isNotBlank(req.getEmail())) {
             user = userRepository.queryUserByEmail(req.getEmail());
             if (null == user) {
                 throw new GlobalException(CodeMsg.USER_QUERY_ERROR);
