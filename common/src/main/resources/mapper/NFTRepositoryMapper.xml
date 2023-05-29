@@ -10,14 +10,15 @@
         <result property="status" column="satus" jdbcType="TINYINT"/>
         <result property="attr1" column="attr1" jdbcType="VARCHAR"/>
         <result property="attr2" column="attr2" jdbcType="VARCHAR"/>
+        <result property="upchainTime" column="upchain_time" jdbcType="BIGINT"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
     <insert id="insertNFT" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.NFT">
-        insert into nft(user_id,txid,token_id,game_type,status,attr1,attr2,create_time,update_time,remark)
-        values(#{userId},#{txid},#{tokenId},#{gameType},#{status},#{attr1},#{attr2},#{createTime},#{updateTime},#{remark})
+        insert into nft(user_id,txid,token_id,game_type,status,attr1,attr2,upchain_time,create_time,update_time,remark)
+        values(#{userId},#{txid},#{tokenId},#{gameType},#{status},#{attr1},#{attr2},#{upchainTime},#{createTime},#{updateTime},#{remark})
     </insert>
 
     <select id="queryNFTsByUserIdAndStatus" resultMap="NFTResult" parameterType="org.cos.common.entity.data.po.NFT">

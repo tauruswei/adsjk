@@ -223,6 +223,7 @@ public class RedisMessageSubscriber implements MessageListener {
                 nft.setAttr2(req.getNftVo().getAttr2());
                 nft.setTxid(req.getTxId());
                 nft.setGameType(req.getNftVo().getGameType());
+                nft.setUpchainTime(req.getUpChainTime());
                 nft.setCreateTime(new Date());
                 nft.setUpdateTime(new Date());
                 try {

@@ -42,6 +42,8 @@ public class NFT {
      * 属性2
      */
     private String attr2;
+
+    private long upchainTime;
     /**
      * 创建时间
      */
