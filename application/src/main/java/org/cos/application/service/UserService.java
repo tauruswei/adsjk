@@ -11,6 +11,7 @@ import org.cos.common.convert.GameVoConvert;
 import org.cos.common.entity.data.dto.UserRelationDTO;
 import org.cos.common.entity.data.po.*;
 import org.cos.common.entity.data.req.*;
+import org.cos.common.entity.data.vo.UserLoginVo;
 import org.cos.common.entity.data.vo.UserRelationAddressVo;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.redis.RedisService;
@@ -340,6 +341,7 @@ public class UserService {
 
 
     public Result login(UserLoginReq req) {
+        UserLoginVo userLoginVo = new UserLoginVo();
         User user;
         if (StringUtils.isNotBlank(req.getEmail())) {
             user = userRepository.queryUserByEmail(req.getEmail());
@@ -350,8 +352,9 @@ public class UserService {
                 throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("密码不正确"));
             }
             String jwt = TokenManager.createJWT(user.getName(), Integer.parseInt(baseConfiguration.getTokenTimeOut()), "", new HashMap<>());
-
-            return Result.success(jwt);
+            userLoginVo.setToken(jwt);
+            userLoginVo.setWalletAddress(user.getWalletAddress());
+            return Result.success(userLoginVo);
         }
 
         user = userRepository.queryUserByName(req.getName());
@@ -363,7 +366,9 @@ public class UserService {
         }
         String jwt = TokenManager.createJWT(user.getName(), Integer.parseInt(baseConfiguration.getTokenTimeOut()), "", new HashMap<>());
 
-        return Result.success(jwt);
+        userLoginVo.setToken(jwt);
+        userLoginVo.setWalletAddress(user.getWalletAddress());
+        return Result.success(userLoginVo);
     }
 
     public Result queryUserByInviterId(UserQueryByInviterIdReq req) {

@@ -85,7 +85,7 @@ public class RedisMessageSubscriber implements MessageListener {
 //            BigInteger blockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
 
             while (blockNumber.compareTo(BigInteger.valueOf(cosdStakeForSLReq.getBlockNumber()+bscBlockNumber)) < 0) {
-                Thread.sleep(9000);
+                Thread.sleep(6000);
                 blockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
             }
 
@@ -99,10 +99,10 @@ public class RedisMessageSubscriber implements MessageListener {
             cosdStakeForSLReq.setUpChainTime(blockTime.longValue());
 
         } catch (Exception e) {
-            transWebsiteRepository.updateTransWebsiteStatus(cosdStakeForSLReq.getTransWebsiteId(),CommonConstant.FAIL);
+            transWebsiteRepository.updateTransWebsiteStatus(cosdStakeForSLReq.getTransWebsiteId(),CommonConstant.FAIL,0);
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs("监听链上事件异常：" + e.getMessage()));
         }
-        transWebsiteRepository.updateTransWebsiteStatus(cosdStakeForSLReq.getTransWebsiteId(),CommonConstant.SUCCESS);
+        transWebsiteRepository.updateTransWebsiteStatus(cosdStakeForSLReq.getTransWebsiteId(),CommonConstant.SUCCESS,cosdStakeForSLReq.getUpChainTime());
 
         Result result = transaction(cosdStakeForSLReq);
         if (result.getCode() != 0) {

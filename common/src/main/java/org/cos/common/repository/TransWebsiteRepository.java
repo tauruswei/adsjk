@@ -17,7 +17,7 @@ public interface TransWebsiteRepository {
     List<User> queryUserByInviterId(Integer inviterId);
     TransWebsite queryTransWebsiteByTxId(@Param("txId") String txId);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
-    void updateTransWebsiteStatus(@Param("id") Long id, @Param("status") int status);
+    void updateTransWebsiteStatus(@Param("id") Long id, @Param("status") int status,@Param("upchainTime") long time);
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
 //    void deleteSysUrBatch(/*@Param("roleArray") Long[] roleArray,*/ @Param("userId")Long userId);

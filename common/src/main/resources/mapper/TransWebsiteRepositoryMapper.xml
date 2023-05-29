@@ -13,7 +13,7 @@
         <result property="toAmount" column="to_amount" jdbcType="DECIMAL"/>
         <result property="nftTokenId" column="nft_token_id" jdbcType="VARCHAR"/>
         <result property="status" column="status" jdbcType="TINYINT"/>
-
+        <result property="upchainTime" column="upchain_time" jdbcType="BIGINT"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
@@ -32,7 +32,11 @@
     </select>
 
     <update id="updateTransWebsiteStatus">
-        update trans_website set status = #{status} where id=#{id}
+        update trans_website
+        <set>
+            <if test="status!=null and status != 0 ">status = #{status},</if>
+            <if test="upchainTime!=null and upchainTime!=0 ">upchain_time = #{upchainTime},</if>
+        </set> where id=#{id}
     </update>
 
 
