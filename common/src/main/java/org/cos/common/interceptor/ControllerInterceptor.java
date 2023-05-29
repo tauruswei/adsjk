@@ -31,7 +31,7 @@ public class ControllerInterceptor {
 
         Object resultData = null;
         Object[] args = joinPoint.getArgs();
-        Object apiName = args[0];
+//        Object apiName = args[0];
         String methodName = joinPoint.getSignature().getName();
 //        try {
             log.info("======>请求--{}--接口开始,参数:{}", methodName, args);

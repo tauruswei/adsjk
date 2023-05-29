@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.ScanParams;
-import redis.clients.jedis.ScanResult;
 
 import java.util.*;
 
@@ -383,6 +381,21 @@ public class RedisService {
 		try{
 			jedis =  jedisPool.getResource();
 			return jedis.hgetAll(key);
+		}finally {
+			returnToPool(jedis);
+		}
+	}
+
+	/**
+	 * 获取指定键的所有属性（哈希）
+	 * @param key
+	 * @return
+	 */
+	public Long publish(String channel, String message){
+		Jedis jedis = null;
+		try{
+			jedis =  jedisPool.getResource();
+			return jedis.publish(channel,message);
 		}finally {
 			returnToPool(jedis);
 		}

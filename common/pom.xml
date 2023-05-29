@@ -191,23 +191,18 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>core</artifactId>
-            <version>4.9.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>codegen</artifactId>
-            <version>4.9.7</version>
-        </dependency>
-        <!--  Needed to avoid conflict with OkHttp being used in auth0-java and okhttp3 being used by spring -->
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.9.0</version>
-        </dependency>
+
     </dependencies>
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            &lt;!&ndash;  Needed to avoid conflict with OkHttp being used in auth0-java and okhttp3 being used by spring &ndash;&gt;-->
+<!--            <dependency>-->
+<!--                <groupId>com.squareup.okhttp3</groupId>-->
+<!--                <artifactId>okhttp</artifactId>-->
+<!--                <version>4.9.0</version>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
     <!--    <build>-->
     <!--        <extensions>-->

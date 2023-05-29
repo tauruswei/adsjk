@@ -1,4 +1,5 @@
 package org.cos.common.blockchain;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +13,9 @@ import java.io.IOException;
 
 @Configuration
 public class Web3jConfig {
-    @Value("${web3j.client-address}")
+    @Value("${web3j.bsc.client-address}")
     private String clientAddress;
-    @Value("${web3j.contractAddress}")
+    @Value("${web3j.bsc.contractAddress}")
     private String contractAddress;
     @Bean
     public Web3j web3j() {

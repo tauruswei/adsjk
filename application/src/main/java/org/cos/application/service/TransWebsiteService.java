@@ -1,24 +1,43 @@
 package org.cos.application.service;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cos.common.config.BaseConfiguration;
 import org.cos.common.constant.CommonConstant;
 import org.cos.common.entity.data.dto.PoolUserTimeDTO;
-import org.cos.common.entity.data.po.*;
+import org.cos.common.entity.data.po.Asset;
+import org.cos.common.entity.data.po.TransWebsite;
+import org.cos.common.entity.data.po.User;
+import org.cos.common.entity.data.req.AssetQueryReq;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.exception.GlobalException;
+import org.cos.common.redis.RedisService;
 import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.datatypes.Address;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.generated.Uint256;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.utils.Numeric;
 
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -29,6 +48,8 @@ public class TransWebsiteService {
     @Autowired
     private TransWebsiteRepository transWebsiteRepository;
     @Autowired
+    private AssetService assetService;
+    @Autowired
     private AssetRepository assetRepository;
     @Autowired
     private PoolUserRepository poolUserRepository;
@@ -36,183 +57,139 @@ public class TransWebsiteService {
     private NFTRepository nftRepository;
     @Autowired
     UserRepository userRepository;
-
-    public Result transaction(CosdStakeForSLReq req) {
-        if (ObjectUtils.isEmpty(userRepository.queryUserById(req.getFromUserId()))) {
-            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
-        }
-        if (ObjectUtils.isEmpty(userRepository.queryUserById(req.getToUserId()))) {
-            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
-        }
-        TransWebsite transWebsite = new TransWebsite();
-        if (!Objects.isNull(transWebsiteRepository.queryTransWebsiteByTxId(req.getTxId()))) {
-            throw new GlobalException(CodeMsg.TRANS_WEBSITE_TX_EXIST_ERROR);
-        }
-        transWebsite.setTxId(req.getTxId());
-        transWebsite.setTransType(req.getTransType());
-        transWebsite.setFromUserId(req.getFromUserId());
-        transWebsite.setFromAssetType(req.getFromAssetType());
-        transWebsite.setFromAmount(req.getFromAmount());
-        transWebsite.setToUserId(req.getToUserId());
-        transWebsite.setToAssetType(req.getToAssetType());
-        transWebsite.setToAmount(req.getToAmount());
-        transWebsite.setNftTokenId(req.getNftVo().getTokenId());
-        transWebsite.setCreateTime(new Date());
-        transWebsite.setUpdateTime(new Date());
-        transWebsite.setRemark(req.getRemark());
+    @Autowired
+    RedisService redisService;
+    @Value("${web3j.bsc.privateKey}")
+    private String privateKey;
+    @Value("${web3j.bsc.usdtContractAddress}")
+    private String usdtContractAddress;
+    @Autowired
+    private Web3j web3j;
+    public Result transactionAsync(CosdStakeForSLReq req){
         try {
-            transWebsiteRepository.insertTransWebsite(transWebsite);
-        } catch (Exception e) {
+
+            if (org.springframework.util.ObjectUtils.isEmpty(userRepository.queryUserById(req.getFromUserId()))) {
+                throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+            }
+            if (org.springframework.util.ObjectUtils.isEmpty(userRepository.queryUserById(req.getToUserId()))) {
+                throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+            }
+            TransWebsite transWebsite = new TransWebsite();
+            if (!Objects.isNull(transWebsiteRepository.queryTransWebsiteByTxId(req.getTxId()))) {
+                throw new GlobalException(CodeMsg.TRANS_WEBSITE_TX_EXIST_ERROR);
+            }
+            transWebsite.setTxId(req.getTxId());
+            transWebsite.setTransType(req.getTransType());
+            transWebsite.setFromUserId(req.getFromUserId());
+            transWebsite.setFromAssetType(req.getFromAssetType());
+            transWebsite.setFromAmount(req.getFromAmount());
+            transWebsite.setToUserId(req.getToUserId());
+            transWebsite.setToAssetType(req.getToAssetType());
+            transWebsite.setToAmount(req.getToAmount());
+            transWebsite.setNftTokenId(req.getNftVo().getTokenId());
+            transWebsite.setCreateTime(new Date());
+            transWebsite.setUpdateTime(new Date());
+            transWebsite.setRemark(req.getRemark());
+            try {
+                transWebsiteRepository.insertTransWebsite(transWebsite);
+            } catch (Exception e) {
+                throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
+            }
+            req.setTransWebsiteId(transWebsite.getId());
+            redisService.publish(baseConfiguration.getRedisChannel(),JSON.toJSON(req).toString());
+        }catch (Exception e){
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
         }
-        switch (req.getTransType()) {
-            // 用户质押 COSD 到DEFI
-            case 1:
-                // 用户质押 COSD 到星光
-            case 2:
-                // 用户质押 COSD 到 club
-            case 3:
-                // 用户从 defi 解押 COSD
-            case 4:
-                // 用户从 星光 解押 COSD
-            case 5:
-                // 用户从 club 解押 COSD
-            case 6:
-                PoolUser poolUser1 = poolUserRepository.queryPoolUserByUserIdAndPoolId(req.getPoolId(), req.getFromUserId());
-                if (ObjectUtils.isEmpty(poolUser1)) {
-                    PoolUser poolUser = new PoolUser();
-                    poolUser.setUserId(req.getFromUserId());
-                    poolUser.setPoolId(req.getPoolId());
-                    poolUser.setUpdateTime(new Date());
-                    poolUser.setCreateTime(new Date());
-                    try {
-                        poolUser.setAmount(req.getFromAmount());
-                        poolUserRepository.insertPoolUser(poolUser);
-                    } catch (Exception e) {
-                        throw new GlobalException(CodeMsg.POOL_USER_ADD_ERROR.fillArgs(e.getMessage()));
-                    }
-                } else {
-                    //todo
-                    poolUser1.setUpdateTime(new Date());
-                    poolUser1.setAmount(poolUser1.getAmount() + req.getFromAmount());
-                    if (poolUser1.getAmount() < 0) {
-                        throw new GlobalException(CodeMsg.POOL_USER_BALANCE_ERROR);
-                    }
-                    poolUserRepository.updatePoolUser(poolUser1);
-                }
-                if ((req.getPoolId() == CommonConstant.POOL_CLUB)) {
-                    User user = new User();
-                    user.setId(req.getFromUserId());
-                    user.setUserType(poolUser1.getAmount() >= baseConfiguration.getClubAmount() ? 2 : 1);
-                    user.setUpdateTime(new Date());
-                    userRepository.updateUser(user);
-                }
-                break;
-            // 用户充值购买 EVIC 积分、提现 EVIC 积分、用户购买 COSD
-            case 0:
-                // 用户购买 EVIC 积分
-            case 7:
-                Asset asset = new Asset();
-                // 查询当前用户的资产
-                Asset asset1 = assetRepository.queryAssetByUserIdAndType(req.getFromUserId(), req.getToAssetType());
-                if (ObjectUtils.isEmpty(asset1)) {
-//                    throw new GlobalException(CodeMsg.ASSET_NOT_EXIST_ERROR);
-                    asset.setUserId(req.getFromUserId());
-                    if (req.getFromAssetType() != CommonConstant.USDT) {
-                        throw new GlobalException(CodeMsg.ASSET_TYPE_ERROR);
-                    }
-                    if ((req.getToAssetType() != CommonConstant.COSD) && (req.getToAssetType() != CommonConstant.EVIC)) {
-                        throw new GlobalException(CodeMsg.ASSET_TYPE_ERROR);
-                    }
-                    asset.setAssetType(req.getToAssetType());
-                    asset.setAmount(req.getToAmount());
-                    asset.setCreateTime(new Date());
-                    asset.setUpdateTime(new Date());
-                    asset.setRemark(req.getRemark());
-                    try {
-                        assetRepository.insertAsset(asset);
-                    } catch (Exception e) {
-                        throw new GlobalException(CodeMsg.ASSET_ADD_ERROR.fillArgs(e.getMessage()));
-                    }
-                } else {
-                    asset1.setAmount(asset1.getAmount() + req.getToAmount());
-                    if (asset1.getAmount() < 0) {
-                        throw new GlobalException(CodeMsg.ASSET_ACOUNT_ERROR);
-                    }
-                    asset1.setUpdateTime(new Date());
-                    if ((req.getToAssetType() != CommonConstant.COSD) && (req.getToAssetType() != CommonConstant.EVIC)) {
-                        throw new GlobalException(CodeMsg.ASSET_TYPE_ERROR);
-                    }
-                    asset1.setAssetType(req.getToAssetType());
-                    assetRepository.updateAsset(asset1);
-                }
-                break;
-            // 用户提现 EVIC
-            case 8:
-                Asset asset2 = new Asset();
-                // 查询当前用户的资产
-                Asset asset3 = assetRepository.queryAssetByUserIdAndType(req.getFromUserId(), req.getFromAssetType());
-                if (ObjectUtils.isEmpty(asset3)) {
-//                    throw new GlobalException(CodeMsg.ASSET_NOT_EXIST_ERROR);
-                    asset2.setUserId(req.getFromUserId());
-                    if (req.getFromAssetType() != CommonConstant.USDT) {
-                        throw new GlobalException(CodeMsg.ASSET_TYPE_ERROR);
-                    }
-                    if ((req.getToAssetType() != CommonConstant.COSD) && (req.getToAssetType() != CommonConstant.EVIC)) {
-                        throw new GlobalException(CodeMsg.ASSET_TYPE_ERROR);
-                    }
-                    asset2.setAssetType(req.getToAssetType());
-                    asset2.setAmount(req.getToAmount());
-                    asset2.setCreateTime(new Date());
-                    asset2.setUpdateTime(new Date());
-                    asset2.setRemark(req.getRemark());
-                    try {
-                        assetRepository.insertAsset(asset2);
-                    } catch (Exception e) {
-                        throw new GlobalException(CodeMsg.ASSET_ADD_ERROR.fillArgs(e.getMessage()));
-                    }
-                } else {
-                    asset3.setAmount(asset3.getAmount() + req.getFromAmount());
-                    if (asset3.getAmount() < 0) {
-                        throw new GlobalException(CodeMsg.ASSET_ACOUNT_ERROR);
-                    }
-                    asset3.setUpdateTime(new Date());
-                    try {
-                        assetRepository.updateAsset(asset3);
-                    } catch (Exception e) {
-                        throw new GlobalException(CodeMsg.ASSET_UPDATE_ERROR.fillArgs(e.getMessage()));
-                    }
-                }
-                break;
-            // 用户购买 NFT 盲盒
-            case 9:
-                NFT nft = new NFT();
-                if (ObjectUtils.isNotEmpty(nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId()))) {
-                    throw new GlobalException(CodeMsg.NFT_EXIST_ERROR);
-                }
-                nft.setUserId(req.getFromUserId());
-                nft.setStatus(CommonConstant.NFT_PURCHASED);
-                nft.setTokenId(req.getNftVo().getTokenId());
-                nft.setAttr1(req.getNftVo().getAttr1());
-                nft.setAttr2(req.getNftVo().getAttr2());
-                nft.setTxid(req.getTxId());
-                nft.setGameType(req.getNftVo().getGameType());
-                nft.setCreateTime(new Date());
-                nft.setUpdateTime(new Date());
-                try {
-                    nftRepository.insertNFT(nft);
-                } catch (Exception e) {
-                    throw new GlobalException(CodeMsg.NFT_ADD_ERROR.fillArgs(e.getMessage()));
-                }
-                break;
-            case 10:
-                // todo 用户交易 NFT
-                break;
-            default:
-                // 交易类型错误
-                throw new GlobalException(CodeMsg.TRANS_WEBSITE_TYPE_ERROR);
-        }
         return Result.success();
+    }
+
+    public Result withdrawEvic(CosdStakeForSLReq req) {
+
+        User user1 = userRepository.queryUserById(req.getFromUserId());
+        if (ObjectUtils.isEmpty(user1)){
+            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+        }
+        AssetQueryReq assetQueryReq = new AssetQueryReq();
+        assetQueryReq.setUserId(req.getFromUserId());
+        assetQueryReq.setAssetType(CommonConstant.EVIC);
+        Result<Asset> result = assetService.queryUserAsset(assetQueryReq);
+
+        if(result.getData().getAmount()+req.getFromAmount()<0){
+            throw new GlobalException(CodeMsg.ASSET_WITHDRAW_ERROR.fillArgs("用户没有足够的 EVIC 用于提现"));
+        }
+
+        try {
+            Credentials credentials = Credentials.create(privateKey);
+
+            // 创建一个值为 1e18 的 uint256 变量
+            BigInteger uint256 = BigInteger.valueOf(10).pow(18);
+
+            // 创建一个小数
+            BigDecimal decimal = new BigDecimal(Math.abs(req.getFromAmount())/CommonConstant.USDT_EVIC_EXCHANGE_RATE);
+
+            // 将小数乘以 uint256
+            BigDecimal result1 = decimal.multiply(new BigDecimal(uint256));
+
+            // 四舍五入到 3 位小数
+            BigDecimal roundedResult = result1.setScale(3, RoundingMode.HALF_UP);
+
+            // 创建函数调用的参数列表
+            List<Type> inputParameters = Arrays.asList(
+                    new Address(user1.getWalletAddress()),
+//                new Uint256(BigInteger.valueOf(10).pow(18).multiply(10.8))
+                    new Uint256(roundedResult.toBigInteger())
+            );
+
+            Function function = new Function(
+                    "transfer",  // function we're calling
+                    inputParameters,  // Parameters to pass as Solidity Types
+                    Collections.emptyList());
+
+            String encodedFunction = FunctionEncoder.encode(function);
+
+            // 获取nonce
+            BigInteger nonce = web3j.ethGetTransactionCount(credentials.getAddress(), DefaultBlockParameterName.LATEST)
+                    .send().getTransactionCount();
+
+            BigInteger gasPrice = BigInteger.valueOf(20_000_000_000L);
+            BigInteger gasLimit = BigInteger.valueOf(4_300_000);
+
+            RawTransaction rawTransaction = RawTransaction.createTransaction(
+                    nonce,
+                    gasPrice,
+                    gasLimit,
+                    usdtContractAddress,
+                    encodedFunction
+            );
+            // 使用 TransactionEncoder 将原始交易对象进行签名
+            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 97L, credentials);
+
+            // 将签名后的交易对象发布到区块链上
+            String hexValue = Numeric.toHexString(signedMessage);
+            EthSendTransaction response = web3j.ethSendRawTransaction(hexValue).send();
+            if (StringUtils.isBlank(response.getTransactionHash())){
+                throw new GlobalException(CodeMsg.TRANS_WEBSITE_WITHDRAW_ERROR.fillArgs("提交交易失败"));
+            }
+
+            String transactionHash = response.getTransactionHash();
+            req.setTxId(transactionHash);
+
+//            EthTransaction ethTx = web3j.ethGetTransactionByHash(transactionHash).send();
+//
+//            Transaction tx = ethTx.getTransaction().orElse(null);
+//
+//            if (tx != null) {
+//                System.out.println("Transaction block number: " + tx.getBlockNumber());
+//                req.setBlockNumber(tx.getBlockNumber().longValue());
+//                req.setTxId(transactionHash);
+//            } else {
+//                System.out.println("Transaction not found.");
+//                throw new GlobalException(CodeMsg.TRANS_WEBSITE_WITHDRAW_ERROR.fillArgs("交易上链失败"));
+//            }
+        }catch (Exception e){
+            throw new GlobalException(CodeMsg.TRANS_WEBSITE_WITHDRAW_ERROR.fillArgs(e.getMessage()));
+        }
+        return transactionAsync(req);
     }
 
     // 查看用户是否可以解押

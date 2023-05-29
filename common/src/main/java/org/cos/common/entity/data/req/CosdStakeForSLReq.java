@@ -35,6 +35,14 @@ public class CosdStakeForSLReq {
 //    @ApiModelProperty(value = "nft ",name = "nft",example = "1xxxxx",dataType = "Struct",required = false)
     private NFTVo nftVo;
     @ApiModelProperty(value = "备注",name = "remark",example = "备注",dataType = "String",required = false)
+
+    // 上链时间
+    private Long upChainTime;
+    // 区块号
+    private Long blockNumber;
+
     private String remark;
+
+    private long transWebsiteId;
 }
 

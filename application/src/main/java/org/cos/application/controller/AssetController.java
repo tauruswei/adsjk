@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AssetController {
     @Autowired
-    private AssetService evicService;
+    private AssetService assetService;
     @ApiOperation("查询用户的同质化资产")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping ("queryUserAssets")
     public Result queryUserAssets(@Validated @RequestBody AssetQueryReq req) {
-        return evicService.queryUserAssets(req);
+        return assetService.queryUserAssets(req);
     }
 }

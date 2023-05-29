@@ -44,6 +44,7 @@ public class ContractListener {
     @Qualifier("inviteFilter") // 你自己创建的过滤器
     EthFilter inviteFilter;
 
+
     @Async
     @EventListener(ApplicationReadyEvent.class)
     public void registerEthFilters() {

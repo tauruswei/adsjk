@@ -64,15 +64,15 @@ public class UserService {
         if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("验证码还在有效期内"));
         }
-        User user;
-        try {
-            user = userRepository.queryUserByEmail(req.getEmail());
-        } catch (Exception e) {
-            throw new GlobalException(CodeMsg.USER_QUERY_ERROR.fillArgs(e.getMessage()));
-        }
-        if (ObjectUtils.isNotEmpty(user)) {
-            throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
-        }
+//        User user;
+//        try {
+//            user = userRepository.queryUserByEmail(req.getEmail());
+//        } catch (Exception e) {
+//            throw new GlobalException(CodeMsg.USER_QUERY_ERROR.fillArgs(e.getMessage()));
+//        }
+//        if (ObjectUtils.isNotEmpty(user)) {
+//            throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+//        }
         // 生成验证码
         int max = (int) Math.pow(10, 6) - 1;
         int min = (int) Math.pow(10, 6 - 1);
@@ -120,10 +120,10 @@ public class UserService {
     public Result createUser(UserCreateReq req) {
         // 判断 redis 中的邮箱验证码是否存在
         String code = redisService.get(UserKey.getEmail, req.getUserSendCodeReq().getEmail(), String.class);
-        if (StringUtils.isBlank(code)) {
-            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("验证码失效，请重新获取"));
+        if(StringUtils.isBlank(req.getCode())){
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
         }
-        if (!StringUtils.equalsIgnoreCase(req.getCode(), code)) {
+        if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
             throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("验证码无效，请重新输入"));
         }
         // 判断用户名的唯一性
@@ -200,27 +200,102 @@ public class UserService {
         }
         // 判断 redis 中的邮箱验证码是否存在
         if (StringUtils.isNotBlank(req.getCode())) {
-            if (StringUtils.isNotBlank(req.getEmail())) {
+            if (StringUtils.isBlank(req.getEmail())) {
                 throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户邮箱不能为空"));
             }
+
+            // 判断用户邮箱的唯一性
+            if(ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getEmail()))){
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+            }
+
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
             if (!StringUtils.endsWithIgnoreCase(req.getCode(), code)) {
-                throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("验证码失效，请重新获取"));
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("验证码失效，请重新获取"));
             }
             user.setEmail(req.getEmail());
         }
+
         if (StringUtils.isNotBlank(req.getName())) {
+            // 判断用户名的唯一性
+            if(ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))){
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+            }
             user.setName(req.getName());
         }
         if (StringUtils.isNotBlank(req.getWalletAddress())) {
             user.setWalletAddress(req.getWalletAddress());
         }
 
-        if (StringUtils.isNotBlank(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()))) {
+        if (StringUtils.isNotBlank(req.getOldPasswd())) {
             if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
                 throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
             }
-            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getPasswd()));
+            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
+        }
+        user.setUpdateTime(new Date());
+
+        try {
+            userRepository.updateUser(user);
+        } catch (Exception e) {
+            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs(e.getMessage()));
+        }
+        return Result.success();
+    }
+
+    public Result resetPasswd(UserUpdateReq req) {
+        User user = userRepository.queryUserByEmail(req.getEmail());
+        if (null == user) {
+            throw new GlobalException(CodeMsg.USER_EMAIL_NOT_EXIST_ERROR);
+        }
+        // 判断 redis 中的邮箱验证码是否存在
+        if (StringUtils.isNotBlank(req.getCode())) {
+            if (StringUtils.isBlank(req.getEmail())) {
+                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户邮箱不能为空"));
+            }
+            String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
+            if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("验证码无效，请重新输入"));
+            }
+            user.setEmail(req.getEmail());
+        }else{
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
+        }
+
+//        if (StringUtils.isNotBlank(req.getOldPasswd())) {
+//            if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
+//                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
+//            }
+            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
+//        }
+
+        user.setUpdateTime(new Date());
+
+        try {
+            userRepository.updateUser(user);
+        } catch (Exception e) {
+            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs(e.getMessage()));
+        }
+        return Result.success();
+    }
+
+    public Result modifyEmail(UserUpdateReq req) {
+        User user = userRepository.queryUserById(req.getUserId());
+        if (null == user) {
+            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+        }
+        // 判断 redis 中的邮箱验证码是否存在
+        if (StringUtils.isNotBlank(req.getCode())) {
+            if (StringUtils.isBlank(req.getEmail())) {
+                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户邮箱不能为空"));
+            }
+            String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
+            if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("验证码无效，请重新输入"));
+            }
+            user.setEmail(req.getEmail());
+        }else{
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
         }
 
         user.setUpdateTime(new Date());
@@ -232,6 +307,37 @@ public class UserService {
         }
         return Result.success();
     }
+
+    public Result modifyPasswd(UserUpdateReq req) {
+        User user = userRepository.queryUserById(req.getUserId());
+        if (null == user) {
+            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+        }
+
+        if(StringUtils.isBlank(req.getOldPasswd())){
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户旧密码不能为空"));
+        }
+        if(StringUtils.isBlank(req.getNewPasswd())){
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户新密码不能为空"));
+        }
+
+        if (StringUtils.isNotBlank(req.getOldPasswd())) {
+            if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
+            }
+            user.setPasswd(req.getNewPasswd());
+        }
+
+        user.setUpdateTime(new Date());
+
+        try {
+            userRepository.updateUser(user);
+        } catch (Exception e) {
+            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs(e.getMessage()));
+        }
+        return Result.success();
+    }
+
 
     public Result login(UserLoginReq req) {
         User user;

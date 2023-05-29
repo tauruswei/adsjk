@@ -27,7 +27,7 @@ public class TransWebsiteController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return webTranService.transaction(req);
+        return webTranService.transactionAsync(req);
     }
     @ApiOperation("查询用户是否可以提现")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
@@ -39,6 +39,18 @@ public class TransWebsiteController {
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return webTranService.queryUserIsAbleForUnStake(userId);
+    }
+
+    @ApiOperation("用户提现evic")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("withdrawEvic")
+    public Result withdrawEvic(@Validated @RequestBody CosdStakeForSLReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return webTranService.withdrawEvic(req);
     }
 
 //    @ApiOperation("用户解押星光池中的 COSD")

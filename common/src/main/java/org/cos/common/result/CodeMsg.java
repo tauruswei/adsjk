@@ -26,6 +26,7 @@ public class CodeMsg {
 	public static CodeMsg USER_ADD_ERROR = new CodeMsg(500102,"添加用户异常: %s");
 	public static CodeMsg USER_EXIST_ERROR = new CodeMsg(500103,"用户已存在: %s");
 	public static CodeMsg USER_NOT_EXIST_ERROR = new CodeMsg(500104,"用户不存在");
+	public static CodeMsg USER_EMAIL_NOT_EXIST_ERROR = new CodeMsg(500104,"该邮箱没有注册，请输入正确的邮箱");
 
 	public static CodeMsg USER_QUERY_ERROR = new CodeMsg(500105,"查询用户失败：%s");
 	public static CodeMsg USER_LOGIN_ERROR = new CodeMsg(500106,"用户登录失败：%s");
@@ -39,6 +40,7 @@ public class CodeMsg {
 	public static CodeMsg TRANS_WEBSITE_ADD_ERROR = new CodeMsg(500201,"添加交易异常: %s");
 	public static CodeMsg TRANS_WEBSITE_TYPE_ERROR = new CodeMsg(500202,"交易类型错误");
 	public static CodeMsg TRANS_WEBSITE_TX_EXIST_ERROR = new CodeMsg(500203,"交易已经存在,请检查 txid 是否正确");
+	public static CodeMsg TRANS_WEBSITE_WITHDRAW_ERROR = new CodeMsg(500204,"用户提现失败：%s");
 
 
 //====================================================

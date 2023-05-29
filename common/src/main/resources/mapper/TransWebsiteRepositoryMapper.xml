@@ -12,6 +12,8 @@
         <result property="toAssetType" column="to_asset_type" jdbcType="TINYINT"/>
         <result property="toAmount" column="to_amount" jdbcType="DECIMAL"/>
         <result property="nftTokenId" column="nft_token_id" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
@@ -28,6 +30,12 @@
         from trans_website
         where txid=#{txId}
     </select>
+
+    <update id="updateTransWebsiteStatus">
+        update trans_website set status = #{status} where id=#{id}
+    </update>
+
+
 
     <select id="queryUserByEmail" resultMap="TransWebsiteResult" parameterType="string">
         select

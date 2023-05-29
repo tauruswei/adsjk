@@ -1,5 +1,6 @@
 package org.cos.common.redis;
 
+import org.cos.common.config.BaseConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,12 @@ public class RedisContainerConfig {
     @Autowired
     private RedisKeyExpirationListener redisExpiredListener;
 
+    @Autowired
+    private RedisMessageSubscriber redisMessageSubscriber;
+
+    @Autowired
+    private BaseConfiguration baseConfiguration;
+
     @Bean
     public RedisMessageListenerContainer listenerContainer(RedisConnectionFactory redisConnection){
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
@@ -26,6 +33,9 @@ public class RedisContainerConfig {
         // 设置监听使用的线程池
         // 设置监听器
         container.addMessageListener(redisExpiredListener, new PatternTopic("__keyevent@0__:expired"));
+        // 设置消费者监听器
+        container.addMessageListener(redisMessageSubscriber, new PatternTopic(baseConfiguration.getRedisChannel()));
         return container;
     }
+
 }

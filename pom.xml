@@ -14,6 +14,7 @@
     </modules>
 
     <properties>
+        <skipTests>true</skipTests>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,6 +56,27 @@
 <!--            <artifactId>contracts</artifactId>-->
 <!--            <version>4.8.4</version>-->
 <!--        </dependency>-->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>logging-interceptor</artifactId>
+            <version>4.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>core</artifactId>
+            <version>4.9.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.web3j</groupId>
+            <artifactId>codegen</artifactId>
+            <version>4.9.7</version>
+        </dependency>
+        <!--  Needed to avoid conflict with OkHttp being used in auth0-java and okhttp3 being used by spring -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.0</version>
+        </dependency>
 
     </dependencies>
 

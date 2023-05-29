@@ -18,12 +18,22 @@ public class CommonConstant {
     public static final String CM_INVOKE = "<address>/gateway/api/v1/transaction/invoke";
     public static final String CM_QUERY = "<address>/gateway/api/v1/transaction/query";
 
+    // 成功/失败 状态
+
+    public static final int SUCCESS=1;
+    public static final int FAIL=2;
+
+
     // 用户资产类型
     public static final int USDT=0;
     public static final int COSD=1;
     public static final int NFT=2;
     public static final int EVIC=3;
     public static final int SL=4;
+
+    // evic 和 usdt的兑换比例
+
+    public static final  int USDT_EVIC_EXCHANGE_RATE=100;
 
     // nft 的状态
     public static final int NFT_PURCHASED=0;

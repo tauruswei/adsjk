@@ -115,6 +115,43 @@ public class UserController {
     }
 
 
+    @ApiOperation("重置密码")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "String",paramType="header")
+    @PostMapping("resetPasswd")
+    public Result resetPasswd(@Validated @RequestBody UserUpdateReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.resetPasswd(req);
+    }
+
+    @ApiOperation("修改邮箱")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "String",paramType="header")
+    @PostMapping("modifyEmail")
+    public Result modifyEmail(@Validated @RequestBody UserUpdateReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.modifyEmail(req);
+    }
+
+    @ApiOperation("修改密码")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = true, dataType = "String",paramType="header")
+    @PostMapping("modifyPasswd")
+    public Result modifyPasswd(@Validated @RequestBody UserUpdateReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.modifyPasswd(req);
+    }
+
+
     @ApiOperation("渠道商注册")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("createChannelLeader")

@@ -11,4 +11,6 @@ public class BaseConfiguration {
     private String tokenTimeOut;
     private int slAmount;
     private int clubAmount;
+    private String redisChannel;
+//    private  Long blockNumber;
 }

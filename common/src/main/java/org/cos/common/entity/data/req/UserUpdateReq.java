@@ -22,7 +22,7 @@ public class UserUpdateReq {
     private String oldPasswd;
     @ApiModelProperty(value = "用户新密码",name = "passwd",example = "cosd@123.com" ,required = false)
 //    @NotBlank(message="Password cannot be empty.")
-    private String passwd;
+    private String newPasswd;
     @ApiModelProperty(value = "邮箱", dataType = "string",name = "emailAddress",example = "13156050650@163.com",required = false)
     private String email;
     @ApiModelProperty(value = "钱包地址",name = "walletAddress",example = "0xccb233A8269726c51265cff07fDC84110F5F3F4c" ,required =false)
