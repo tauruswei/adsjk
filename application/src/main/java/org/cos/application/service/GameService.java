@@ -101,8 +101,8 @@ public class GameService {
             throw new GlobalException(CodeMsg.ASSET_NOT_EXIST_ERROR);
         }
         nft1.setAttr2(Integer.parseInt(nft1.getAttr2())-ptsInc+"");
-        if ((Integer.parseInt(nft1.getAttr2())-ptsInc)==0){
-            nft1.setStatus(2);
+        if (Integer.parseInt(nft1.getAttr2())==0){
+            nft1.setStatus(CommonConstant.NFT_INEFFECTIVE);
         }
         nftRepository.updateNFTStatus(nft1);
 

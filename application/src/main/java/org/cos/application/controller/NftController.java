@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.NFTService;
 import org.cos.common.entity.data.req.NFTListReq;
 import org.cos.common.entity.data.req.NFTPurchaseReq;
+import org.cos.common.entity.data.req.NFTUpdateReq;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -44,5 +45,17 @@ public class NftController {
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return nftService.queryNFTsByUserIdAndStatus(req);
+    }
+
+    @ApiOperation("更新 nft 状态")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("updateNFTStatus")
+    public Result updateNFTStatus(@Validated @RequestBody NFTUpdateReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return nftService.updateNFTStatus(req);
     }
 }

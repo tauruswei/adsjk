@@ -49,7 +49,7 @@
             </if>
             <if test="attr1 != null and attr1 !=''">
                 AND attr1 = #{attr1}
-                order by attr1
+                order by CAST(attr2 AS UNSIGNED) ASC
             </if>
         </where>
         limit 1

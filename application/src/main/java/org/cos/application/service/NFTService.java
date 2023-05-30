@@ -108,15 +108,13 @@ public class NFTService {
     }
 
     public Result updateNFTStatus(NFTUpdateReq req){
-        NFT nft = new NFT();
-        nft.setUserId(req.getUserId());
+        NFT nft = nftRepository.queryNFTByTokenId(req.getTokenId());
+        if(ObjectUtils.isEmpty(nft)){
+            throw new GlobalException(CodeMsg.NFT_NOT_EXIST_ERROR);
+        }
         nft.setStatus(req.getStatus());
-        nft.setAttr1(req.getAttr1());
-        nft.setAttr1(req.getAttr2());
-        NFT nft1 = nftRepository.queryNFTByUserIdAndAtrr1(nft);
-        nft.setId(nft1.getId());
         nftRepository.updateNFTStatus(nft);
-        return Result.success(nft1);
+        return Result.success(nft);
     }
 
     public Result queryNFTByUserIdAndAtrr1(NFTListReq req){
