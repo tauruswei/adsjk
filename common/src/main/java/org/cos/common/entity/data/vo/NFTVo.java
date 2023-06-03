@@ -12,4 +12,5 @@ public class NFTVo {
     private int gameType;
     private String attr1;
     private String attr2;
+    private int status;
 }

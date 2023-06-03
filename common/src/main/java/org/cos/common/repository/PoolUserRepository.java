@@ -13,7 +13,7 @@ public interface PoolUserRepository {
     void insertPoolUser(PoolUser poolUser);
     void updatePoolUser(PoolUser poolUser);
     PoolUser queryPoolUserByUserIdAndPoolId(@Param("poolId") Long poolId,@Param("userId") Long userId);
-    List<PoolUserTimeDTO> queryPoolUserByUserIdForTime(@Param("userId") Long userId);
+    PoolUserTimeDTO queryPoolUserByUserIdForTime(@Param("poolId") Long poolId,@Param("userId") Long userId);
 //    public Pool queryUserAmount
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
 //    void deleteSysUrBatch(/*@Param("roleArray") Long[] roleArray,*/ @Param("userId")Long userId);

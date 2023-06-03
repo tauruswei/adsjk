@@ -20,12 +20,12 @@
         <result column="lock_time" property="lockTime"/>
 
     </resultMap>
-    <select id="queryPoolUserByUserIdForTime" resultMap="PoolUserTime" parameterType="Long">
+    <select id="queryPoolUserByUserIdForTime" resultMap="PoolUserTime">
         SELECT pu.user_id AS user_id, pu.pool_id AS pool_id, pu.amount AS amount, UNIX_TIMESTAMP(pu.create_time) AS
         create_time,p.lock_time AS lock_time,p.type AS pool_type,p.start_time AS start_time
         from pool_user pu
         LEFT JOIN pool p ON pu.pool_id = p.id
-        WHERE pu.user_id = #{userId};
+        WHERE pu.user_id = #{userId} and pu.pool_id = #{poolId};
     </select>
 
     <insert id="insertPoolUser" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.PoolUser">
@@ -35,14 +35,15 @@
     <update id="updatePoolUser">
         update pool_user
         <set>
-            <if test="amount!=null and amount!=0">amount = #{amount},</if>
+            <if test="amount!=null ">amount = #{amount},</if>
+            update_time=CURRENT_TIMESTAMP
         </set>
         where user_id=#{userId} and pool_id=#{poolId}
     </update>
 
 
 
-    <select id="queryPoolUserByUserIdAndPoolId" resultMap="PoolUserResult" parameterType="org.cos.common.entity.data.po.PoolUser">
+    <select id="queryPoolUserByUserIdAndPoolId" resultMap="PoolUserResult" >
         select
         *
         from pool_user

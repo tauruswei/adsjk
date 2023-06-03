@@ -13,6 +13,9 @@ public class NFTListReq {
     private Long userId;
     @ApiModelProperty(value = "类型",name = "status",example = " 0，状态 0-已购买；1-已使用；2-已失效",dataType = "Integer",required = true)
     private Integer status;
-    private PageReq pageReq;
+    @ApiModelProperty(value = "页码",name = "pageNo",example = "1" ,dataType = "Integer",required = false)
+    private Integer pageNo = 1;
+    @ApiModelProperty(value = "每页显示多少条数据",name = "pageSize",example = "5" ,dataType = "Integer",required = false)
+    private Integer pageSize = 5;
 }
 

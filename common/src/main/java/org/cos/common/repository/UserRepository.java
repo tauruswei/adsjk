@@ -15,6 +15,8 @@ public interface UserRepository {
     List<User> queryUserByInviterId(Integer inviterId);
     User queryUserById(Long userId);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
+    User queryUserByWalletAddress(@Param("walletAddress") String walletAddress);
+
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
 //    void deleteSysUrBatch(/*@Param("roleArray") Long[] roleArray,*/ @Param("userId")Long userId);

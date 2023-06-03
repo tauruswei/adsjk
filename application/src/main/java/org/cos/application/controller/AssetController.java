@@ -24,4 +24,10 @@ public class AssetController {
     public Result queryUserAssets(@Validated @RequestBody AssetQueryReq req) {
         return assetService.queryUserAssets(req);
     }
+    @ApiOperation("查询用户的同质化资产")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping ("queryUserAsset")
+    public Result queryUserAsset(@Validated @RequestBody AssetQueryReq req) {
+        return assetService.queryUserAsset(req);
+    }
 }

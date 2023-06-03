@@ -49,6 +49,8 @@
     </select>
 
 
+
+
     <!--    <select id="queryUserByName" resultMap="UserResult" parameterType="string">-->
     <!--        select-->
     <!--        id,name,passwd,email,wallet_address,inviter_id,create_time,update_time-->
@@ -69,17 +71,9 @@
     <!--        where inviter_id=#{inviterId}-->
     <!--    </select>-->
 
-    <!--    <update id="updateUser">-->
-    <!--        update user-->
-    <!--        <set>-->
-    <!--            <if test="name!=null and name!=''">name = #{name},</if>-->
-    <!--            <if test="passwd!=null and passwd!='' ">passwd = #{passwd},</if>-->
-    <!--            <if test="email!=null and email!='' ">email = #{email},</if>-->
-    <!--            <if test="walletAddress!=null and walletAddress!='' ">wallet_address = #{walletAddress},</if>-->
-    <!--            <if test="updateTime!=null  ">update_time = #{updateTime},</if>-->
-    <!--        </set>-->
-    <!--        where user_id=#{userId}-->
-    <!--    </update>-->
+        <update id="batchUpdateUserRelationClub">
+            update user_relation set level0 = null, level1 = null , update_time = #{updateTime} where level1 = #{userId}
+        </update>
 
     <!--    <insert id="insertSysUrBatch">-->
     <!--        insert into sys_ur(user_id,role_id,is_del)-->

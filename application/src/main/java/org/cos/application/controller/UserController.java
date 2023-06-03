@@ -4,11 +4,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.cos.application.service.UserService;
 import org.cos.common.entity.data.req.UserCreateReq;
 import org.cos.common.entity.data.req.UserLoginReq;
 import org.cos.common.entity.data.req.UserSendCodeReq;
 import org.cos.common.entity.data.req.UserUpdateReq;
+import org.cos.common.exception.GlobalException;
+import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
 import org.cos.common.result.Result1;
 import org.cos.common.result.TestResult;
@@ -61,6 +64,17 @@ public class UserController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return userService.login(req);
     }
+    @ApiOperation("用户退出登录")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("logout")
+    public Result logout(@Validated @RequestBody UserLoginReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.login(req);
+    }
 
 
     @ApiOperation("根据用户id 查询用户信息")
@@ -85,6 +99,30 @@ public class UserController {
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return userService.queryUserByName(name);
+    }
+
+    @ApiOperation("根据邮箱 查询用户信息")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("queryUserByEmail")
+    public Result queryUserByEmail(@RequestParam(name = "email") String email) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.queryUserByEmail(email);
+    }
+
+    @ApiOperation("根据邮箱 查询用户是否注册")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("validateEmailIsAvaliable")
+    public Result validateEmailIsAvaliable(@RequestParam(name = "email") String email) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.validateEmailIsAvaliable(email);
     }
 //
 //    @ApiOperation("根据 inviterId 分页查询用户")
@@ -155,13 +193,31 @@ public class UserController {
     @ApiOperation("渠道商注册")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("createChannelLeader")
-    public Result createChannelLeader(@RequestParam(name="walletAddress") @NotBlank(message = "wallet address cannot be blank") String walletAddress) {
+    public Result createChannelLeader(@RequestBody UserUpdateReq req) {
+        if (StringUtils.isBlank(req.getWalletAddress())){
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("钱包地址不能为空"));
+        }
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.createChannelLeader( walletAddress);
+        return userService.createChannelLeader(req.getWalletAddress());
+    }
+
+    @ApiOperation("根据钱包地址查询渠道商")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("queryChannelLeaderByWalletAddress")
+    public Result queryChannelLeaderByWalletAddress(@RequestBody UserUpdateReq req) {
+        if (StringUtils.isBlank(req.getWalletAddress())){
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("钱包地址不能为空"));
+        }
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.queryChannelLeaderByWalletAddress(req.getWalletAddress());
     }
     @ApiOperation("查询俱乐部老板和渠道商的地址")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "Long",paramType="header")

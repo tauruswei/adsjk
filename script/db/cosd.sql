@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 25/05/2023 17:37:25
+ Date: 03/06/2023 23:13:30
 */
 
 SET NAMES utf8mb4;
@@ -32,7 +32,7 @@ CREATE TABLE `asset` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for nft
@@ -50,8 +50,9 @@ CREATE TABLE `nft` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `upchain_time` bigint(20) DEFAULT NULL COMMENT '上链时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for pool
@@ -80,7 +81,7 @@ CREATE TABLE `pool_user` (
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for trans_game
@@ -100,7 +101,7 @@ CREATE TABLE `trans_game` (
 DROP TABLE IF EXISTS `trans_website`;
 CREATE TABLE `trans_website` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '交易id 主键',
-  `txid` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '交易id',
+  `txid` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT '交易id',
   `trans_type` tinyint(2) DEFAULT NULL COMMENT '0-用户使用 USDT 购买 COSD、1-用户质押COSD 到 DEFI、2-用户质押 COSD到星光、3-质押 COSD 到俱乐部老板质押池、4-用户从 defi 提现 COSD、5-用户从 星光池中 提现 COSD、6-用户从 俱乐部老板质押池中 提现 COSD、7-用户使用USDT 购买 EVIC、8-用户提现EVIC、9-用户使用USDT 购买 NFT 盲盒、10-NFT交易\n',
   `from_user_id` int(11) DEFAULT NULL COMMENT '用户主键id',
   `from_asset_type` tinyint(2) DEFAULT NULL COMMENT '资产类型 0-USDT；1-COSD；2-NFT；3-EVIC；4-SL',
@@ -112,8 +113,10 @@ CREATE TABLE `trans_website` (
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `status` tinyint(1) unsigned zerofill DEFAULT '0' COMMENT '状态：0-交易已上链；1-success；2-fail；3-用户取消',
+  `upchain_time` bigint(20) DEFAULT NULL COMMENT '上链时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=325 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for user
@@ -122,7 +125,7 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户id',
   `name` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '用户名',
-  `wallet_address` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '用户钱包地址',
+  `wallet_address` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '用户钱包地址',
   `email` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '用户邮箱',
   `passwd` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '密码',
   `user_type` tinyint(2) DEFAULT NULL COMMENT '用户类型：0-渠道商；1-俱乐部老板；2-普通用户',
@@ -133,7 +136,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- ----------------------------
 -- Table structure for user_relation

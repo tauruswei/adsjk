@@ -6,12 +6,14 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.cos.common.config.BaseConfiguration;
+import org.cos.common.convert.WebNFTVoConvert;
 import org.cos.common.entity.data.po.Asset;
 import org.cos.common.entity.data.po.NFT;
 import org.cos.common.entity.data.po.TransWebsite;
 import org.cos.common.entity.data.req.NFTListReq;
 import org.cos.common.entity.data.req.NFTPurchaseReq;
 import org.cos.common.entity.data.req.NFTUpdateReq;
+import org.cos.common.entity.data.vo.WebNFTVo;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.repository.AssetRepository;
 import org.cos.common.repository.NFTRepository;
@@ -92,8 +94,32 @@ public class NFTService {
 
     public Result queryNFTsByUserIdAndStatus(NFTListReq req){
 
-        if((ObjectUtils.allNotNull(req.getPageReq()))&&(null!=req.getPageReq().getPageNo())&&(null!=req.getPageReq().getPageSize())){
-            PageHelper.startPage(req.getPageReq().getPageNo(),req.getPageReq().getPageSize());
+        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
+            PageHelper.startPage(req.getPageNo(),req.getPageSize());
+        }else{
+            PageHelper.startPage(0,0);
+        }
+        NFT nft = new NFT();
+        nft.setUserId(req.getUserId());
+        nft.setStatus(req.getStatus());
+        List<NFT> nfts = nftRepository.queryNFTsByUserIdAndStatus(nft);
+
+        PageInfo<NFT> pageInfo = new PageInfo<>(nfts);
+
+//        pageInfo.setList(WebNFTVoConvert.WebNFTVoListConvert(pageInfo.getList()));
+
+        PageInfo<WebNFTVo> pageInfo1 = new PageInfo<>();
+        pageInfo1.setList(WebNFTVoConvert.WebNFTVoListConvert(pageInfo.getList()));
+        pageInfo1.setTotal(pageInfo.getTotal());
+
+
+        return Result.success(pageInfo1);
+    }
+
+    public Result queryNFTsByUserIdAndStatusGame(NFTListReq req){
+
+        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
+            PageHelper.startPage(req.getPageNo(),req.getPageSize());
         }else{
             PageHelper.startPage(0,0);
         }

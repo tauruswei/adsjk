@@ -23,7 +23,13 @@
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
         from user
-        where email=#{email}
+        where lower(email)=lower(#{email})
+    </select>
+    <select id="queryUserByWalletAddress" resultMap="UserResult" parameterType="string">
+        select
+        id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
+        from user
+        where lower(wallet_address)=lower(#{walletAddress})
     </select>
     <select id="queryUserByName" resultMap="UserResult" parameterType="string">
         select
@@ -43,7 +49,7 @@
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
         from user
-        where wallet_address=#{walletAddress} and user_type=#{userType}
+        where lower(wallet_address)=lower(#{walletAddress}) and user_type=#{userType}
     </select>
     <select id="queryUserByInviterId" resultMap="UserResult" parameterType="Integer">
         select

@@ -5,8 +5,8 @@
         <result property="id" column="id" jdbcType="BIGINT"/>
         <result property="type" column="type" jdbcType="TINYINT"/>
         <result property="term" column="term" jdbcType="TINYINT"/>
-        <result property="start_time" column="startTime" jdbcType="BIGINT"/>
-        <result property="lock_time" column="lockTime" jdbcType="BIGINT"/>
+        <result property="startTime" column="start_time" jdbcType="BIGINT"/>
+        <result property="lockTime" column="lock_time" jdbcType="BIGINT"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -14,6 +14,20 @@
         insert into pool(type,term,start_time,lock_time,remark)
         values(#{type},#{term},#{startTime},#{lockTime},#{remark})
     </insert>
+
+    <select id="queryPoolList" resultMap="PoolResult" >
+        select
+        *
+        from pool
+        <where>
+            <if test="startTime != null and startTime !=0">
+                AND start_time = #{startTime}
+            </if>
+            <if test="lockTime != null and lockTime !=0">
+                AND lock_time = #{lockTime}
+            </if>
+        </where>
+    </select>
 
     <select id="queryPoolsByTypeAndTerm" resultMap="PoolResult" parameterType="org.cos.common.entity.data.po.Pool">
         select
@@ -26,6 +40,15 @@
             <if test="term != null and term !=0">
                 AND term = #{term}
             </if>
+        </where>
+    </select>
+
+    <select id="queryPoolById" resultMap="PoolResult" parameterType="Long">
+        select
+        *
+        from pool
+        <where>
+            id = #{poolId}
         </where>
     </select>
 

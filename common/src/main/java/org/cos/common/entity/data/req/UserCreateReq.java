@@ -17,7 +17,9 @@ public class UserCreateReq {
     @ApiModelProperty(value = "用户密码",name = "passwd",example = "cosd@123.com" ,required = true)
     @NotBlank(message="Password cannot be empty.")
     private String passwd;
-    UserSendCodeReq userSendCodeReq;
+    @ApiModelProperty(value = "邮箱", dataType = "string",name = "emailAddress",example = "13156050650@163.com",required = true)
+    @Email(message = "Email format is incorrect,please change the email")
+    private String email;
     @ApiModelProperty(value = "钱包地址",name = "walletAddress",example = "0xccb233A8269726c51265cff07fDC84110F5F3F4c" ,required = true)
     @NotBlank(message="Wallet address cannot be empty.")
     private String walletAddress;

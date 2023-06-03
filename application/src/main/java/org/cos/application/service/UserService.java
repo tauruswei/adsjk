@@ -2,6 +2,7 @@ package org.cos.application.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -93,10 +94,11 @@ public class UserService {
         // 验证码 存 redis
         boolean success = redisService.set(UserKey.getEmail, req.getEmail(), code);
 
+
         if (!success) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR);
         }
-        return Result.success();
+        return Result.success(UserKey.getEmail.expireSeconds());
     }
 
     public Result queryUserById(Long userId) {
@@ -118,9 +120,29 @@ public class UserService {
         return Result.success(user);
     }
 
+    public Result queryUserByEmail(String email) {
+
+        User user = userRepository.queryUserByEmail(email);
+
+        if(ObjectUtils.isEmpty(user)){
+            throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+        }
+        return Result.success(user);
+    }
+
+    public Result validateEmailIsAvaliable(String email) {
+
+        User user = userRepository.queryUserByEmail(email);
+
+        if(!ObjectUtils.isEmpty(user)){
+            return Result.success(false);
+        }
+        return Result.success(true);
+    }
+
     public Result createUser(UserCreateReq req) {
         // 判断 redis 中的邮箱验证码是否存在
-        String code = redisService.get(UserKey.getEmail, req.getUserSendCodeReq().getEmail(), String.class);
+        String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
         if(StringUtils.isBlank(req.getCode())){
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
         }
@@ -132,7 +154,7 @@ public class UserService {
             throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
         }
         // 判断用户邮箱的唯一性
-        if(ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getUserSendCodeReq().getEmail()))){
+        if(ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getEmail()))){
             throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
         }
 
@@ -140,7 +162,7 @@ public class UserService {
         User user = new User();
         user.setName(req.getName());
         user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getPasswd()));
-        user.setEmail(req.getUserSendCodeReq().getEmail());
+        user.setEmail(req.getEmail());
         user.setWalletAddress(req.getWalletAddress());
         // 默认都是普通用户，质押一定量的 cosd 后，会更新 user_type 变成 1
         user.setUserType(CommonConstant.USER_PLAYER);
@@ -165,19 +187,21 @@ public class UserService {
             }
             // 查询邀请人的用户关系，
             userRelation = userRelationRepository.queryUserRelationById(inviter.getUserRelationId());
-            if (null == userRelation) {
-                throw new GlobalException(CodeMsg.USER_RELATION_NOT_EXIST_ERROR);
-            }
-            // 俱乐部老板邀请
-            if (2 == inviter.getUserType()) {
-                userRelation.setLevel1(inviter.getId());
-                userRelation.setLevel0(userRelation.getLevel0());
-                // 渠道商邀请
-            } else if (0 == inviter.getUserType()) {
+            // 说明这是渠道商邀请
+            if(ObjectUtils.isEmpty(userRelation)){
+                userRelation = new UserRelation();
                 userRelation.setLevel0(inviter.getId());
-                // 普通用户邀请
-            } else {
-                userRelation.setLevel0(userRelation.getLevel0());
+//            俱乐部老板/普通用户的邀请
+            }else{
+                // 俱乐部老板邀请
+                if (CommonConstant.USER_CLUB == inviter.getUserType()) {
+                    userRelation.setLevel1(inviter.getId());
+                    userRelation.setLevel0(userRelation.getLevel0());
+//                // 普通用户邀请
+//                } else {
+//                    userRelation.setLevel0(userRelation.getLevel0());
+                }
+
             }
             userRelation.setLevel2(user.getId());
             // 不存在邀请人
@@ -186,6 +210,8 @@ public class UserService {
             userRelation.setLevel2(user.getId());
         }
         userRelation.setId(user.getUserRelationId());
+        userRelation.setCreateTime(new Date());
+        userRelation.setUpdateTime(new Date());
         try {
             userRelationRepository.insertUserRelation(userRelation);
         } catch (Exception e) {
@@ -195,45 +221,25 @@ public class UserService {
     }
 
     public Result updateUser(UserUpdateReq req) {
+        if(StringUtils.isNotBlank(req.getWalletAddress())){
+            User user = userRepository.queryUserByWalletAddress(req.getWalletAddress());
+            if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+            }
+        }
+        if (StringUtils.isNotBlank(req.getName())){
+            User user = userRepository.queryUserByName(req.getName());
+            if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+            }
+        }
+
         User user = userRepository.queryUserById(req.getUserId());
         if (null == user) {
             throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
         }
-        // 判断 redis 中的邮箱验证码是否存在
-        if (StringUtils.isNotBlank(req.getCode())) {
-            if (StringUtils.isBlank(req.getEmail())) {
-                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户邮箱不能为空"));
-            }
-
-            // 判断用户邮箱的唯一性
-            if(ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getEmail()))){
-                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
-            }
-
-            String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
-            if (!StringUtils.endsWithIgnoreCase(req.getCode(), code)) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("验证码失效，请重新获取"));
-            }
-            user.setEmail(req.getEmail());
-        }
-
-        if (StringUtils.isNotBlank(req.getName())) {
-            // 判断用户名的唯一性
-            if(ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))){
-                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
-            }
-            user.setName(req.getName());
-        }
-        if (StringUtils.isNotBlank(req.getWalletAddress())) {
-            user.setWalletAddress(req.getWalletAddress());
-        }
-
-        if (StringUtils.isNotBlank(req.getOldPasswd())) {
-            if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
-            }
-            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
-        }
+        user.setName(req.getName());
+        user.setWalletAddress(req.getWalletAddress());
         user.setUpdateTime(new Date());
 
         try {
@@ -326,7 +332,8 @@ public class UserService {
             if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
                 throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
             }
-            user.setPasswd(req.getNewPasswd());
+            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
+
         }
 
         user.setUpdateTime(new Date());
@@ -354,6 +361,9 @@ public class UserService {
             String jwt = TokenManager.createJWT(user.getName(), Integer.parseInt(baseConfiguration.getTokenTimeOut()), "", new HashMap<>());
             userLoginVo.setToken(jwt);
             userLoginVo.setWalletAddress(user.getWalletAddress());
+            userLoginVo.setUserName(user.getName());
+            userLoginVo.setUserId(user.getId());
+            userLoginVo.setUserType(user.getUserType());
             return Result.success(userLoginVo);
         }
 
@@ -368,6 +378,9 @@ public class UserService {
 
         userLoginVo.setToken(jwt);
         userLoginVo.setWalletAddress(user.getWalletAddress());
+        userLoginVo.setUserName(user.getName());
+        userLoginVo.setUserId(user.getId());
+        userLoginVo.setUserType(user.getUserType());
         return Result.success(userLoginVo);
     }
 
@@ -411,7 +424,7 @@ public class UserService {
         // 查找已使用的 NFT
         nftListReq.setStatus(CommonConstant.NFT_USED);
 
-        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatus(nftListReq);
+        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
 
 //        List<NFT> list = nfts.getData().getList();
 
@@ -450,6 +463,18 @@ public class UserService {
 
 
         return Result.success();
+    }
+
+    public Result queryChannelLeaderByWalletAddress (String walletAddress) {
+
+        User user = userRepository.queryUserByWalletAddress(walletAddress);
+        if (ObjectUtils.isEmpty(user)){
+            createChannelLeader(walletAddress);
+            User user1 = userRepository.queryUserByWalletAddress(walletAddress);
+            return Result.success(user1);
+        }
+
+        return Result.success(user.getId());
     }
 
     public Result queryClubAndChannelAddress(Long userId){

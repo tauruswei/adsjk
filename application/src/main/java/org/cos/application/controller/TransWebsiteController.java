@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.TransWebsiteService;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
+import org.cos.common.entity.data.req.PoolListReq;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -32,13 +33,24 @@ public class TransWebsiteController {
     @ApiOperation("查询用户是否可以提现")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("queryUserIsAbleForUnStake")
-    public Result queryUserIsAbleForUnStake(@RequestParam(name="userId") Long userId) {
+    public Result queryUserIsAbleForUnStake(@RequestParam(name="userId") Long userId,@RequestParam(name="poolId") Long poolId) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return webTranService.queryUserIsAbleForUnStake(userId);
+        return webTranService.queryUserIsAbleForUnStake(userId,poolId);
+    }
+    @ApiOperation("查询用户是否可以质押")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("queryUserIsAbleForStake")
+    public Result queryUserIsAbleForStake(@RequestParam(name="poolId") Long poolId) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return webTranService.queryUserIsAbleForStake(poolId);
     }
 
     @ApiOperation("用户提现evic")

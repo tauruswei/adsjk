@@ -84,7 +84,7 @@ public class GameService {
         // 查找已使用的 NFT
         nftListReq.setStatus(1);
 
-        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatus(nftListReq);
+        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
 
         UserGameVo userGameVo = GameVoConvert.UserGameVoConvert(jwt, user, assets1.getData(), nfts.getData().getList(),poolUser.getAmount()>baseConfiguration.getSlAmount()?true:false);
 
@@ -127,7 +127,7 @@ public class GameService {
         // 查找已使用的 NFT
         nftListReq.setStatus(1);
 
-        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatus(nftListReq);
+        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
 
         UserGameVo userGameVo = GameVoConvert.UserGameVoConvert(jwt, user, assets1.getData(), nfts.getData().getList(),poolUser.getAmount()>baseConfiguration.getSlAmount()?true:false);
         return Result.success(userGameVo);

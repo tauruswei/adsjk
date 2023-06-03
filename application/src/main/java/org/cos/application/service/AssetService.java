@@ -29,8 +29,13 @@ public class AssetService {
     public Result queryUserAsset(AssetQueryReq req) {
         List<Asset> assets = assetRepository.queryAssetsByUserId(req.getUserId(), req.getAssetType());
         if(assets.isEmpty()){
-            throw  new GlobalException(CodeMsg.ASSET_NOT_EXIST_ERROR);
+            Asset asset = new Asset();
+            asset.setUserId(req.getUserId());
+            asset.setAssetType(req.getAssetType());
+            asset.setAmount(0);
+           return Result.success(asset);
         }
+
 
         return Result.success(assets.get(0));
     }

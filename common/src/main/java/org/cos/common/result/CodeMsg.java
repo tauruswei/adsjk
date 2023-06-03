@@ -41,6 +41,7 @@ public class CodeMsg {
 	public static CodeMsg TRANS_WEBSITE_TYPE_ERROR = new CodeMsg(500202,"交易类型错误");
 	public static CodeMsg TRANS_WEBSITE_TX_EXIST_ERROR = new CodeMsg(500203,"交易已经存在,请检查 txid 是否正确");
 	public static CodeMsg TRANS_WEBSITE_WITHDRAW_ERROR = new CodeMsg(500204,"用户提现失败：%s");
+	public static CodeMsg TRANS_WEBSITE_UPCHAIN_ERROR = new CodeMsg(500205,"用户交易上链失败：%s");
 
 
 //====================================================
@@ -59,6 +60,11 @@ public class CodeMsg {
 	public static CodeMsg POOL_USER_ADD_ERROR = new CodeMsg(500401,"用户质押失败: %s");
 	public static CodeMsg POOL_USER_UPDATE_ERROR = new CodeMsg(500402,"更新用户质押异常: %s");
 	public static CodeMsg POOL_USER_BALANCE_ERROR = new CodeMsg(500403,"用户质押余额不能为负: %s");
+	public static CodeMsg POOL_NOT_EXIST_ERROR = new CodeMsg(500404,"质押池不存在");
+	public static CodeMsg POOL_TYPE_ERROR = new CodeMsg(500405,"质押池类型错误");
+	public static CodeMsg POOL_USER_NOT_EXIST_ERROR = new CodeMsg(500406,"用户没有在质押池中质押");
+
+
 
 //====================================================
 //                NFT 模块
