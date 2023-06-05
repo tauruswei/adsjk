@@ -1,16 +1,32 @@
 server:
   port: 8090
 spring:
-  profiles:
-    active: dev
+#  profiles:
+#    active: dev
   application:
-    name: application
+    name: cosd-application
   servlet:
     multipart:
       enabled: true
       max-file-size: 20MB
       max-request-size: 20MB
       file-size-threshold: 1MB
+
+  ############################################################
+  #
+  # 跨域配置
+  #
+  ############################################################
+  # 允许所有来源跨域请求
+
+  mvc:
+    cors:
+      allowed-origins: "*"
+      # 允许所有请求方式
+      allowed-methods: "GET, POST, PUT, DELETE, OPTIONS"
+      # 允许所有请求头
+      allowed-headers: "*"
+
   ############################################################
   #
   # 配置数据源	使用阿里巴巴的durid数据源
@@ -19,7 +35,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cosd
-    url: jdbc:mysql://192.168.2.150:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://cosd-mysql:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
     password: cosd@123.com
     connection-properties: config.decrypt=false;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJI/xqbyvpVttxfAKulKeSTIb7tZAGaFcPyTnE2r7AHTQ8kOnqKXDda4u59umt9XBFxi7db28KxeVooB138zuRUCAwEAAQ==
     druid:
@@ -35,22 +51,32 @@ spring:
   #
   ############################################################
   mail:
-    host: smtp.163.com  # SMTP 服务器地址
-    port: 25
-    username: 13156050650@163.com  # 发送方邮箱地址
-    password: GGXCXQBLVCHJULTQ # 发送方邮箱登录密码或者授权码
+    host: smtp.office365.com  # SMTP 服务器地址
+    port: 587
+    username: wbt@chessofstars.io # 发送方邮箱地址
+    password: Xiao120315!
+    #    username: 13156050650@163.com
+    #    password: Xiao120315!
+    # 发送方邮箱登录密码或者授权码
     subject: verify your email
     properties:
       mail:
+        #        store:
+        #          protocol: pop3
         smtp:
-          ssl:
-            trust: smtp.163.com
           auth: true  # 开启 SMTP 验证
           starttls:
             enable: true  # 开启 Transport Layer Security (TLS) 加密
-            required: true
-          timeout: 5000  # 连接超时时间
-          connectiontimeout: 5000  # 连接超时时间
+  #            required: true
+  #          port: 587
+  #          socketFactory:
+  #            port: 587
+  #            fallback: false
+  ##            class: javax.net.ssl.SSLSocketFactory
+  #          connectiontimeout: 30000
+  #          timeout: 30000
+  #          writetimeout: 30000
+  #        debug: false
 
   ############################################################
   #
@@ -58,7 +84,7 @@ spring:
   #
   ############################################################
   redis:
-    host: 192.168.2.150
+    host: cosd-redis
     port: 6379
     timeout: 1000
     password: platform
@@ -66,16 +92,6 @@ spring:
     poolMaxIdle: 200
     poolMinIdle: 100
     poolMaxWait: 3
-  ############################################################
-  #
-  # 配置 thymeleaf 信息
-  #
-  ############################################################
-  thymeleaf:
-    cache: false
-    enabled: true
-    prefix: file:src/main/resources/templates/
-    suffix: .html
 
   ############################################################
   #
@@ -86,7 +102,8 @@ spring:
     mailNickName: COSD
     tokenTimeOut: 18000000
     slAmount: 400
-    coAmount: 4000
+    clubAmount: 4000
+    redisChannel: COSD-Transaction
 
 ############################################################
 #
@@ -115,9 +132,9 @@ rest:
   ############################################################
 logging:
   level:
-    root: DEBUG
-    org.apache.ibatis.mapping: DEBUG
-  config: classpath:logback.xml
+    root: INFO
+    org.apache.ibatis.mapping: INFO
+  config: classpath:logback-prod.xml
 
 
 #########################################################
@@ -152,5 +169,11 @@ pagehelper:
 
 
 web3j:
-  client-address: https://data-seed-prebsc-2-s1.binance.org:8545
-
+  bsc:
+    client-address: https://endpoints.omniatech.io/v1/bsc/testnet/public
+    browserUrl: https://testnet.bscscan.com/
+    contractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
+    usdtContractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
+    #    12 个块才能确定一笔交易，3秒出一个块
+    blockNumber: 12
+    privateKey: 93abdcd7328576f4b477bfef78b30fcfb0c755fb01b8f3ea00804b7d57fb640a

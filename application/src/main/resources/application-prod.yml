@@ -4,7 +4,7 @@ spring:
 #  profiles:
 #    active: dev
   application:
-    name: application
+    name: cosd-application
   servlet:
     multipart:
       enabled: true
@@ -35,7 +35,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cosd
-    url: jdbc:mysql://mysql:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://cosd-mysql:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
     password: cosd@123.com
     connection-properties: config.decrypt=false;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJI/xqbyvpVttxfAKulKeSTIb7tZAGaFcPyTnE2r7AHTQ8kOnqKXDda4u59umt9XBFxi7db28KxeVooB138zuRUCAwEAAQ==
     druid:
@@ -84,7 +84,7 @@ spring:
   #
   ############################################################
   redis:
-    host: redis
+    host: cosd-redis
     port: 6379
     timeout: 1000
     password: platform
