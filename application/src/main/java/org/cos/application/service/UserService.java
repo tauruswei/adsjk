@@ -417,6 +417,9 @@ public class UserService {
 
         // 获取用户是否具有玩星光的资格
         PoolUser poolUser = poolUserRepository.queryPoolUserByUserIdAndPoolId((long) CommonConstant.POOL_SL, user.getId());
+        if(ObjectUtils.isEmpty(poolUser)){
+            poolUser = new PoolUser();
+        }
 
         // 获取用户的NFT
         NFTListReq nftListReq = new NFTListReq();

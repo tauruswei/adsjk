@@ -1,9 +1,11 @@
 DOCKER_TAG=cosd/application:1.0
+DOCKER_TAG_DB=cosd/db:1.0
 OS=${shell arch | sed s/arm64/aarch_64/ | sed s/aarch64/aarch_64/ | sed s/amd64/x86_64/ }
 DOCKER_FILE=script/docker/Dockerfile
-
 DOCKER_FILE_DB=script/docker/Dockerfile.db
-DOCKER_TAG_DB=cosd/db:1.0
+
+
+
 
 
 ifeq ($(OS),aarch_64)
