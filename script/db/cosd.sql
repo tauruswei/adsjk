@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS cosd DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+use cosd;
 /*
  Navicat Premium Data Transfer
 
