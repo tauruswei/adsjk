@@ -6,7 +6,7 @@ ADD . /opt/
 
 RUN mvn clean install -DskipTests
 
-FROM java:8-jre
+FROM openjdk:8-jre
 
 COPY --from=build /opt/application/target/*-SNAPSHOT.jar /applications/application.jar
 
