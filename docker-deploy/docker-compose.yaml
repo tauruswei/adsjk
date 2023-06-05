@@ -2,7 +2,7 @@ version: '3'
 services:
   cosd-mysql:
     image: $MYSQL_IMAGE
-    container_name: mysql
+    container_name: cosd-mysql
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -16,7 +16,7 @@ services:
         ipv4_address: 172.30.1.14
   cosd-redis:
     image: $REDIS_IMAGE
-    container_name: redis
+    container_name: cosd-redis
     restart: always
 #    ports:
 #      - "6379:6379"
@@ -30,7 +30,7 @@ services:
         ipv4_address: 172.30.1.15
   cosd-application:
     image: $APPLICATION_IMAGE
-    container_name: application
+    container_name: cosd-application
     restart: always
     environment:
       - TZ=Asia/Shanghai
