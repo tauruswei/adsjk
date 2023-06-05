@@ -45,7 +45,7 @@ services:
       - cosd-mysql
       - cosd-redis
     ports:
-      - "8090:8090"
+      - "8091:8090"
     networks:
       cosd_net:
         ipv4_address: 172.30.1.16
