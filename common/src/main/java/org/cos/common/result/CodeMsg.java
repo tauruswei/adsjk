@@ -72,6 +72,7 @@ public class CodeMsg {
 	public static CodeMsg NFT_EXIST_ERROR = new CodeMsg(500401,"NFT 已存在");
 	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500402,"NFT 不存在: %s");
 	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500403,"NFT 添加失败: %s");
+	public static CodeMsg NFT_CHANCE_NOT_BE_NEGATIVE = new CodeMsg(500404,"NFT 次数不能为负数");
 
 
 

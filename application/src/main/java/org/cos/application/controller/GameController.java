@@ -41,7 +41,7 @@ public class GameController {
     @PostMapping("increaseUserMoney")
     public Result increaseUserMoney(@RequestParam(name = "userId") Long userId,
                                     @RequestParam(name = "moneyId") Integer moneyId,
-                                    @RequestParam(name = "moneyAmount") double moneyAmount) {
+                                    @RequestParam(name = "moneyAmountInc") double moneyAmount) {
 
         return gameService.increaseUserMoney(userId, moneyId, moneyAmount);
     }

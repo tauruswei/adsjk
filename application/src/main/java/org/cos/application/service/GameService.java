@@ -60,6 +60,9 @@ public class GameService {
         }else{
             Asset asset = assets.get(0);
             asset.setAmount(asset.getAmount()+moneyAmount);
+            if(asset.getAmount()<0){
+                throw new GlobalException(CodeMsg.ASSET_ACOUNT_ERROR);
+            }
             assetRepository.updateAsset(asset);
         }
 
@@ -102,9 +105,12 @@ public class GameService {
         if (ObjectUtils.isEmpty(nft1)){
             throw new GlobalException(CodeMsg.ASSET_NOT_EXIST_ERROR);
         }
-        nft1.setAttr2(Integer.parseInt(nft1.getAttr2())-ptsInc+"");
+        nft1.setAttr2(Integer.parseInt(nft1.getAttr2())+ptsInc+"");
         if (Integer.parseInt(nft1.getAttr2())==0){
             nft1.setStatus(CommonConstant.NFT_INEFFECTIVE);
+        }
+        if (Integer.parseInt(nft1.getAttr2())<0){
+            throw new GlobalException(CodeMsg.NFT_CHANCE_NOT_BE_NEGATIVE);
         }
         nftRepository.updateNFTStatus(nft1);
 
