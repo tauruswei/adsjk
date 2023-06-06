@@ -12,5 +12,5 @@ public class BaseConfiguration {
     private int slAmount;
     private int clubAmount;
     private String redisChannel;
-//    private  Long blockNumber;
+    private String cipherKey;
 }

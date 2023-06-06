@@ -230,6 +230,18 @@ public class UserController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return userService.queryClubAndChannelAddress(userId);
     }
+
+    @ApiOperation("查询区块链浏览器的地址")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "Long",paramType="header")
+    @PostMapping("queryBlockChainExplorer")
+    public Result queryBlockChainExplorer(@RequestParam(name="blockChainType") int blockChainType) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.queryBlockChainExplorer(blockChainType);
+    }
     @ApiOperation("test1 ")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("test1")

@@ -33,6 +33,9 @@ public class CodeMsg {
 	public static CodeMsg USER_UPDATE_ERROR = new CodeMsg(500107,"更新用户失败：%s");
 	public static CodeMsg USER_RELATION_ADD_ERROR = new CodeMsg(500108,"添加用户关系异常: %s");
 	public static CodeMsg USER_RELATION_NOT_EXIST_ERROR = new CodeMsg(500109,"用户关系不存在");
+	public static CodeMsg USER_ENCRYPT_ERROR = new CodeMsg(500110,"用户加密失败：%s");
+	public static CodeMsg USER_DECRYPT_ERROR = new CodeMsg(500111,"用户解密失败：%s");
+
 
 //====================================================
 //                网站交易模块

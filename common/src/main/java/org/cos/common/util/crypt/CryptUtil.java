@@ -1,12 +1,11 @@
 package org.cos.common.util.crypt;
 
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.util.Base64Utils;
 
-import javax.crypto.Cipher;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.SecureRandom;
+import javax.crypto.*;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -45,5 +44,34 @@ public class CryptUtil {
         cipher.init(Cipher.DECRYPT_MODE, priKey);
         String outStr = new String(cipher.doFinal(inputByte));
         return outStr;
+    }
+    // 加密:
+    public static byte[] encrypt(byte[] secret, byte[] input) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        MessageDigest sha = MessageDigest.getInstance("SHA-256");
+        byte[] byteKey = sha.digest(secret);
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey keySpec = new SecretKeySpec(byteKey, "AES");
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        return cipher.doFinal(input);
+    }
+
+    // 解密:
+    public static byte[] decrypt(byte[] secret, byte[] input) throws GeneralSecurityException {
+        MessageDigest sha = MessageDigest.getInstance("SHA-256");
+        byte[] byteKey = sha.digest(secret);
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey keySpec = new SecretKeySpec(byteKey, "AES");
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+        return cipher.doFinal(input);
+    }
+
+    // 加密:
+    public static String encryptToString(byte[] secret, byte[] input) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        MessageDigest sha = MessageDigest.getInstance("SHA-256");
+        byte[] byteKey = sha.digest(secret);
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        SecretKey keySpec = new SecretKeySpec(byteKey, "AES");
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+        return Base64Utils.encodeToString(cipher.doFinal(input));
     }
 }

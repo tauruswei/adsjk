@@ -2,7 +2,6 @@ package org.cos.application.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOptsException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,14 +23,17 @@ import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
 import org.cos.common.token.TokenManager;
 import org.cos.common.util.MailUtil;
+import org.cos.common.util.crypt.CryptUtil;
 import org.cos.common.util.crypt.SignUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import javax.annotation.Resource;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
@@ -58,6 +60,8 @@ public class UserService {
     private AssetService assetService;
     @Autowired
     private NFTService nftService;
+    @Value("${web3j.bsc.explorer}")
+    private String explorer;
 
     @Autowired
     private PoolUserRepository poolUserRepository;
@@ -179,9 +183,20 @@ public class UserService {
         User inviter;
         UserRelation userRelation;
         // 存在邀请人
-        if (req.getInviterId() != null && req.getInviterId() > 0) {
+//        if (req.getInviterId() != null && req.getInviterId() > 0) {
+        if(StringUtils.isNotBlank(req.getInviterId())){
+
+           Long inviterId;
+
+            try {
+                byte[] decrypt = CryptUtil.decrypt(baseConfiguration.getCipherKey().getBytes(StandardCharsets.UTF_8), Base64Utils.decodeFromString(req.getInviterId()));
+                inviterId = Long.parseLong(new String(decrypt));
+            } catch (Exception e) {
+                throw new GlobalException(CodeMsg.USER_DECRYPT_ERROR.fillArgs(e.getMessage()));
+            }
+
             // 查询邀请人的 基本信息
-            inviter = userRepository.queryUserById(req.getInviterId());
+            inviter = userRepository.queryUserById(inviterId);
             if (null == inviter) {
                 throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
             }
@@ -476,8 +491,11 @@ public class UserService {
             User user1 = userRepository.queryUserByWalletAddress(walletAddress);
             return Result.success(user1);
         }
-
-        return Result.success(user.getId());
+        try {
+            return Result.success(CryptUtil.encryptToString(baseConfiguration.getCipherKey().getBytes(StandardCharsets.UTF_8),user.getId().toString().getBytes(StandardCharsets.UTF_8)));
+        } catch (Exception e) {
+           throw new GlobalException(CodeMsg.USER_ENCRYPT_ERROR.fillArgs(e.getMessage()));
+        }
     }
 
     public Result queryClubAndChannelAddress(Long userId){
@@ -504,6 +522,11 @@ public class UserService {
         }
         userRelationAddressVo.setUserAddress(user.getWalletAddress());
         return Result.success(userRelationAddressVo);
+    }
+
+    public Result queryBlockChainExplorer(int  blockChainType){
+       //todo
+        return Result.success(explorer);
     }
 
 

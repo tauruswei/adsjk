@@ -81,6 +81,7 @@ spring:
     slAmount: 400
     clubAmount: 4000
     redisChannel: COSD-Transaction
+    cipherKey: 3XIIJHvwPVhG1LgUQx0NTHQQruFsJdcFjMjrOnmayk8
 
   ############################################################
   #
@@ -101,7 +102,7 @@ logging:
 web3j:
   bsc:
     client-address: https://endpoints.omniatech.io/v1/bsc/testnet/public
-    browserUrl: https://testnet.bscscan.com/
+    explorer: https://testnet.bscscan.com/
     contractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
     usdtContractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
 #    12 个块才能确定一笔交易，3秒出一个块
