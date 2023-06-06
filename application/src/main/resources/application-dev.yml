@@ -1,29 +1,6 @@
 server:
-  port: 8091
+  port: 8090
 spring:
-  application:
-    name: application
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 20MB
-      max-request-size: 20MB
-      file-size-threshold: 1MB
-
-  ############################################################
-  #
-  # 跨域配置
-  #
-  ############################################################
-  # 允许所有来源跨域请求
-
-  mvc:
-    cors:
-      allowed-origins: "*"
-      # 允许所有请求方式
-      allowed-methods: "GET, POST, PUT, DELETE, OPTIONS"
-      # 允许所有请求头
-      allowed-headers: "*"
 
   ############################################################
   #
@@ -33,8 +10,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cosd
-    url: jdbc:mysql://127.0.0.1:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-    password: cosd@123.com
+    url: jdbc:mysql://127.0.0.1:3389/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
+    password: bm5jenZpY3ppb3Z1Y3puZyA
     connection-properties: config.decrypt=false;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJI/xqbyvpVttxfAKulKeSTIb7tZAGaFcPyTnE2r7AHTQ8kOnqKXDda4u59umt9XBFxi7db28KxeVooB138zuRUCAwEAAQ==
     druid:
       initial-size: 1
@@ -87,21 +64,11 @@ spring:
     host: 127.0.0.1
     port: 6379
     timeout: 1000
-    password: platform
+    password: ZGhqYWtmaGRqa2FmamtkYQog
     poolMaxTotal: 300
     poolMaxIdle: 200
     poolMinIdle: 100
     poolMaxWait: 3
-  ############################################################
-  #
-  # 配置 thymeleaf 信息
-  #
-#  ############################################################
-#  thymeleaf:
-#    cache: false
-#    enabled: true
-#    prefix: file:src/main/resources/templates/
-#    suffix: .html
 
   ############################################################
   #
@@ -115,27 +82,6 @@ spring:
     clubAmount: 4000
     redisChannel: COSD-Transaction
 
-
-############################################################
-#
-# mybatis 配置
-#
-############################################################
-mybatis:
-  type-aliases-package: org.cos.common.entity
-  # 加载所有的 xml 文件
-  mapper-locations: classpath*:mapper/**/*.xml
-
-############################################################
-#
-# rest template 配置
-#
-#########################################################
-rest:
-  template:
-    connection:
-      connect-timeout: 30000
-      read-timeout: 30000
   ############################################################
   #
   # 配置 log
@@ -147,38 +93,11 @@ logging:
     org.apache.ibatis.mapping: DEBUG
   config: classpath:logback-dev.xml
 
-
-#########################################################
-
-# swagger的配置参数
-
-#########################################################
-swagger:
-  group-Name: COSD
-  title: COSD Restful Api
-  description: COSD restful test tools
-  license: Apache License Version 2.0
-  service-version: 1.0
-  version: 1.0
-  user-name: WeiBingtao
-  email: weibingtao@13156050650@163.com
-  #    显示指定包下的controller
-  base-package: org.cos.application.controller
-  #    对于url路径的筛选
-  antPath:
-  parameter-name: Authorization
-  parameter-type: string
-  parameter-description: token
-  type: header
-
-# pagehelper 配置
-pagehelper:
-  helper-dialect: mysql
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql    # 使用参数表达式查询总记录数
-
-
+############################################################
+#
+# web3j 配置
+#
+############################################################
 web3j:
   bsc:
     client-address: https://endpoints.omniatech.io/v1/bsc/testnet/public

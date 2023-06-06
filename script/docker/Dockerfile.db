@@ -1,13 +1,9 @@
 FROM mysql:5.7
 
 ENV MYSQL_ROOT_PASSWORD root
-ENV MYSQL_USER cosd
-ENV MYSQL_PASSWORD cosd@123.com
-ENV MYSQL_DATABASE cosd
 RUN mkdir /sql
 RUN chmod -R 777 /tmp /sql
 COPY script/db/dbinit.sql /docker-entrypoint-initdb.d/
 
 COPY script/db/cosd.sql /sql/cosd.sql
 COPY script/db/pool.sql /sql/pool.sql
-

@@ -1,0 +1,84 @@
+server:
+  port: 8090
+spring:
+  profiles:
+    active: dev
+  application:
+    name: application
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+      file-size-threshold: 1MB
+
+  ############################################################
+  #
+  # 跨域配置
+  #
+  ############################################################
+  # 允许所有来源跨域请求
+
+  mvc:
+    cors:
+      allowed-origins: "*"
+      # 允许所有请求方式
+      allowed-methods: "GET, POST, PUT, DELETE, OPTIONS"
+      # 允许所有请求头
+      allowed-headers: "*"
+
+
+############################################################
+#
+# mybatis 配置
+#
+############################################################
+mybatis:
+  type-aliases-package: org.cos.common.entity
+  # 加载所有的 xml 文件
+  mapper-locations: classpath*:mapper/**/*.xml
+
+############################################################
+#
+# rest template 配置
+#
+#########################################################
+rest:
+  template:
+    connection:
+      connect-timeout: 30000
+      read-timeout: 30000
+
+
+#########################################################
+
+# swagger的配置参数
+
+#########################################################
+swagger:
+  group-Name: COSD
+  title: COSD Restful Api
+  description: COSD restful test tools
+  license: Apache License Version 2.0
+  service-version: 1.0
+  version: 1.0
+  user-name: WeiBingtao
+  email: weibingtao@13156050650@163.com
+  #    显示指定包下的controller
+  base-package: org.cos.application.controller
+  #    对于url路径的筛选
+  antPath:
+  parameter-name: Authorization
+  parameter-type: string
+  parameter-description: token
+  type: header
+
+# pagehelper 配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql    # 使用参数表达式查询总记录数
+
+
+

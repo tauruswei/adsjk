@@ -87,7 +87,7 @@ spring:
     host: cosd-redis
     port: 6379
     timeout: 1000
-    password: platform
+    password: ZGhqYWtmaGRqa2FmamtkYQog
     poolMaxTotal: 300
     poolMaxIdle: 200
     poolMinIdle: 100

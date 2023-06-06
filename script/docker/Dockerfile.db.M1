@@ -6,3 +6,4 @@ RUN chmod -R 777 /tmp /sql
 COPY script/db/dbinit.sql /docker-entrypoint-initdb.d/
 
 COPY script/db/cosd.sql /sql/cosd.sql
+COPY script/db/pool.sql /sql/pool.sql
