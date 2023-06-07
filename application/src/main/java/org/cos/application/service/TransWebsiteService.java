@@ -277,6 +277,9 @@ public class TransWebsiteService {
         return Result.success(true);
     }
 
+//    购买/提现记录
+
+
 //    // 用户购买 COSD，数据库只是记录，不会修改用户的资产
 //    public Result purchaseCOSD(CosdStakeForSLReq req) {
 //        // trans_type 0

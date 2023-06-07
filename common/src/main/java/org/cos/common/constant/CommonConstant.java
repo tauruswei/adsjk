@@ -49,6 +49,7 @@ public class CommonConstant {
     public static final int USER_CHANEL=0;
     public static final int USER_CLUB=1;
     public static final int USER_PLAYER=2;
+    public static final int USER_GUEST=99;
 
 
 }

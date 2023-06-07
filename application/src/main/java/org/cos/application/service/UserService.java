@@ -11,6 +11,7 @@ import org.cos.common.convert.GameVoConvert;
 import org.cos.common.entity.data.dto.UserRelationDTO;
 import org.cos.common.entity.data.po.*;
 import org.cos.common.entity.data.req.*;
+import org.cos.common.entity.data.vo.UserGameVo;
 import org.cos.common.entity.data.vo.UserLoginVo;
 import org.cos.common.entity.data.vo.UserRelationAddressVo;
 import org.cos.common.exception.GlobalException;
@@ -35,6 +36,7 @@ import org.springframework.util.Base64Utils;
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -233,6 +235,36 @@ public class UserService {
             throw new GlobalException(CodeMsg.USER_RELATION_ADD_ERROR.fillArgs(e.getMessage()));
         }
         return Result.success();
+    }
+
+    public Result createGuestUser(){
+
+        Random rand = new Random();
+        int num = rand.nextInt(1000000); // 生成一个0 - 999999 之间的随机数
+
+        // 创建用户，直接存库
+        User user = new User();
+        user.setUserType(CommonConstant.USER_GUEST);
+        user.setName(String.format("Guest%06d",num));
+
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String randomString = new Random().ints(6, 0, characters.length())
+                .mapToObj(i -> characters.charAt(i))
+                .map(Object::toString)
+                .collect(Collectors.joining());
+
+        user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(randomString));
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
+        while(!ObjectUtils.isEmpty(userRepository.queryUserByName(user.getName()))){
+            num = rand.nextInt(1000000);
+            user.setName(String.format("user%06d",num));
+        }
+        userRepository.insertUser(user);
+        UserGameVo userGameVo = new UserGameVo();
+        userGameVo.setPassword(randomString);
+        userGameVo.setPlayerName(user.getName());
+        return Result.success(userGameVo);
     }
 
     public Result updateUser(UserUpdateReq req) {
