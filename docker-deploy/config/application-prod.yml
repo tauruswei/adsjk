@@ -104,6 +104,7 @@ spring:
     slAmount: 400
     clubAmount: 4000
     redisChannel: COSD-Transaction
+    cipherKey: 3XIIJHvwPVhG1LgUQx0NTHQQruFsJdcFjMjrOnmayk8
 
 ############################################################
 #

@@ -37,7 +37,7 @@ services:
     entrypoint:
       - "/bin/sh"
       - "-c"
-      - "java -jar -Dfile.encoding=UTF-8 /applications/application.jar --spring.config.location=/applications/application.yml --server.port=8090"
+      - "java -jar -Dfile.encoding=UTF-8 /applications/application.jar --spring.profiles.active=prod --server.port=8090"
     volumes:
       - ./config/application-prod.yml:/applications/application.yml
       - ./data/:/data/
