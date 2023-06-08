@@ -262,8 +262,8 @@ public class UserService {
         }
         userRepository.insertUser(user);
         UserGameVo userGameVo = new UserGameVo();
-        userGameVo.setPassword(randomString);
-        userGameVo.setPlayerName(user.getName());
+        userGameVo.setGuestUserPassword(randomString);
+        userGameVo.setGuestUserName(user.getName());
         return Result.success(userGameVo);
     }
 

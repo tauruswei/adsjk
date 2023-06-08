@@ -11,9 +11,11 @@ public class UserGameVo {
     // 在网站上的用户唯一标识
     private Long userId;
     // 在网站上的用户昵称
-    private String playerName;
-    // 游客的秘密
-    private String password;
+    private String userName;
+    // 游客的昵称
+    private String guestUserName;
+    // 游客的密码
+    private String guestUserPassword;
     // 用户类型：0-渠道商；1-俱乐部老板；2-普通用户
     private int userType;
     // 在网站上的用户头像图片地址

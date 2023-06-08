@@ -15,7 +15,7 @@ public class GameVoConvert {
     public static UserGameVo UserGameVoConvert(String Authorization, User user, List<Asset> assetList, List<NFT> nftList,boolean SLFlag) {
         UserGameVo userGameVo = new UserGameVo();
         userGameVo.setUserId(user.getId());
-        userGameVo.setPlayerName(user.getName());
+        userGameVo.setUserName(user.getName());
         userGameVo.setAuthorization(Authorization);
         userGameVo.setGuestFlag(false);
 
