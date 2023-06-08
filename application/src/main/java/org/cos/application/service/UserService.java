@@ -264,6 +264,9 @@ public class UserService {
         UserGameVo userGameVo = new UserGameVo();
         userGameVo.setGuestUserPassword(randomString);
         userGameVo.setGuestUserName(user.getName());
+        userGameVo.setUserId(user.getId());
+        userGameVo.setChesserDict(new HashMap<>());
+        userGameVo.setAuthorization("");
         return Result.success(userGameVo);
     }
 
