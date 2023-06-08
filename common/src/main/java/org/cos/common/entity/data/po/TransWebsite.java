@@ -58,7 +58,10 @@ public class TransWebsite {
     /**
      * 状态
      */
-    private String status;
+    private int status;
+
+    // 上链时间
+    private Long upchainTime;
 
     /**
      * 创建时间

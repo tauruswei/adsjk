@@ -36,8 +36,33 @@
         <set>
             <if test="status!=null and status != 0 ">status = #{status},</if>
             <if test="upchainTime!=null and upchainTime!=0 ">upchain_time = #{upchainTime},</if>
+            update_time=CURRENT_TIMESTAMP
         </set> where id=#{id}
     </update>
+
+
+    <select id="queryTransactionsList" resultMap="TransWebsiteResult" >
+        select
+        *
+        from trans_website
+        <where>
+            <if test="transType != null">
+                AND trans_type = #{transType}
+            </if>
+            <if test="fromUserId != null and fromUserId !=0">
+                AND from_user_id = #{fromUserId}
+            </if>
+            <if test="status != null ">
+                AND status = #{status}
+            </if>
+            <if test="upchainTime != null ">
+                AND upchain_time >= #{upchainTime}
+            </if>
+
+            order by upchain_time DESC
+
+        </where>
+    </select>
 
 
 

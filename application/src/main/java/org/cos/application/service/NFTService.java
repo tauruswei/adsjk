@@ -97,7 +97,7 @@ public class NFTService {
         if((null!=req.getPageNo())&&(null!=req.getPageSize())){
             PageHelper.startPage(req.getPageNo(),req.getPageSize());
         }else{
-            PageHelper.startPage(0,0);
+            PageHelper.startPage(1,10);
         }
         NFT nft = new NFT();
         nft.setUserId(req.getUserId());
@@ -121,7 +121,7 @@ public class NFTService {
         if((null!=req.getPageNo())&&(null!=req.getPageSize())){
             PageHelper.startPage(req.getPageNo(),req.getPageSize());
         }else{
-            PageHelper.startPage(0,0);
+            PageHelper.startPage(1,10);
         }
         NFT nft = new NFT();
         nft.setUserId(req.getUserId());

@@ -1,29 +1,24 @@
 package org.cos.application.service;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.cos.common.config.BaseConfiguration;
 import org.cos.common.constant.CommonConstant;
 import org.cos.common.entity.data.dto.PoolUserTimeDTO;
-import org.cos.common.entity.data.po.Asset;
-import org.cos.common.entity.data.po.Pool;
-import org.cos.common.entity.data.po.TransWebsite;
-import org.cos.common.entity.data.po.User;
+import org.cos.common.entity.data.po.*;
 import org.cos.common.entity.data.req.AssetQueryReq;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
-import org.cos.common.entity.data.req.PoolListReq;
-import org.cos.common.entity.data.vo.WebNFTVo;
+import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.exception.GlobalException;
-import org.cos.common.redis.PolicyKey;
 import org.cos.common.redis.RedisService;
 import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.repository.config.RepositoryNameSpaceHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.abi.FunctionEncoder;
@@ -44,7 +39,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -277,7 +271,32 @@ public class TransWebsiteService {
         return Result.success(true);
     }
 
-//    购买/提现记录
+    /**
+     * 交易历史记录查询
+     * @param req
+     * @return
+     */
+
+    public Result queryTransactionsList(TranListReq req){
+        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
+            PageHelper.startPage(req.getPageNo(),req.getPageSize());
+        }else{
+            PageHelper.startPage(1,10);
+        }
+
+        TransWebsite transWebsite= new TransWebsite();
+        if(ObjectUtils.isNotEmpty(req.getTransType())){
+            transWebsite.setTransType(req.getTransType());
+        }
+        transWebsite.setFromUserId(req.getUserId());
+        transWebsite.setStatus(req.getStatus());
+        transWebsite.setUpchainTime(req.getTime());
+        List<TransWebsite> transWebsites = transWebsiteRepository.queryTransactionsList(transWebsite);
+        PageInfo<TransWebsite> pageInfo = new PageInfo<>(transWebsites);
+
+        return Result.success(pageInfo);
+
+    }
 
 
 //    // 用户购买 COSD，数据库只是记录，不会修改用户的资产

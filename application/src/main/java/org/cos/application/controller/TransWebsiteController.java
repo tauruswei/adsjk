@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.TransWebsiteService;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.entity.data.req.PoolListReq;
+import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -63,6 +64,19 @@ public class TransWebsiteController {
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return webTranService.withdrawEvic(req);
+    }
+
+
+    @ApiOperation("交易列表查询")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("queryTransactionsList")
+    public Result queryTransactionsList(@Validated @RequestBody TranListReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return webTranService.queryTransactionsList(req);
     }
 
 //    @ApiOperation("用户解押星光池中的 COSD")
