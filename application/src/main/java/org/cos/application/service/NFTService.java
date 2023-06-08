@@ -100,8 +100,14 @@ public class NFTService {
             PageHelper.startPage(1,10);
         }
         NFT nft = new NFT();
-        nft.setUserId(req.getUserId());
-        nft.setStatus(req.getStatus());
+        if(ObjectUtils.isNotEmpty(req.getUserId())){
+
+            nft.setUserId(req.getUserId());
+        }
+        if(ObjectUtils.isNotEmpty(req.getStatus())){
+
+            nft.setStatus(req.getStatus());
+        }
         List<NFT> nfts = nftRepository.queryNFTsByUserIdAndStatus(nft);
 
         PageInfo<NFT> pageInfo = new PageInfo<>(nfts);
