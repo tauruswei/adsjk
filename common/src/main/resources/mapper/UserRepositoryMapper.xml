@@ -13,6 +13,10 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
+    <resultMap type="org.cos.common.entity.data.vo.WebStatisticalDataVo" id="WebStatisticalDataVoResult">
+        <result property="web3Count" column="web3_count" jdbcType="BIGINT"/>
+        <result property="web2Count" column="web2_count" jdbcType="BIGINT"/>
+    </resultMap>
 
     <insert id="insertUser" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.User">
         insert into user(name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time,remark)
@@ -70,6 +74,11 @@
         </set>
         where id=#{id}
     </update>
+
+    <select id="countWeb2AndWeb3User" resultMap="WebStatisticalDataVoResult">
+        SELECT  SUM(CASE WHEN wallet_address is NOT NULL THEN 1 ELSE 0 END) as web3_count , SUM(CASE WHEN wallet_address IS null THEN 1 ELSE 0 END) as web2_count FROM user;
+
+    </select>
 
     <insert id="insertSysUrBatch">
         insert into sys_ur(user_id,role_id,is_del)

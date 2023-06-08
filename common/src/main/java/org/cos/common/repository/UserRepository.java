@@ -3,6 +3,7 @@ package org.cos.common.repository;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.cos.common.entity.data.po.User;
+import org.cos.common.entity.data.vo.WebStatisticalDataVo;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public interface UserRepository {
     User queryUserById(Long userId);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
     User queryUserByWalletAddress(@Param("walletAddress") String walletAddress);
+    WebStatisticalDataVo countWeb2AndWeb3User();
 
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
