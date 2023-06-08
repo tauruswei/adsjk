@@ -29,7 +29,7 @@
             <if test="userId != null and userId !=0">
                 AND user_id = #{userId}
             </if>
-            <if test="status != null ">
+            <if test="status != null and status >= 0">
                 AND status = #{status}
             </if>
         </where>

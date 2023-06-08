@@ -24,6 +24,7 @@ public class WebNFTVoConvert {
             webNFTVo.setGameChances(obj.getAttr2());
             webNFTVo.setBlockChain("Binance Smart Chain");
             webNFTVo.setNftType(obj.getAttr1());
+            webNFTVo.setStatus(obj.getStatus());
             return webNFTVo;
         }).collect(Collectors.toList());
 

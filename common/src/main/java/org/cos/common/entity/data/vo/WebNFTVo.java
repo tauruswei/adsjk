@@ -10,6 +10,7 @@ public class WebNFTVo {
 //    private String ownerName;
     // 该 nft 是哪个游戏上的
 //    private int gameType;
+    private int status;
     private String blockChain;
     private String nftType;
     private String gameChances;
