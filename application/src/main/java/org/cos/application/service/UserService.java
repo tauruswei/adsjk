@@ -62,7 +62,7 @@ public class UserService {
     private AssetService assetService;
     @Autowired
     private NFTService nftService;
-    @Value("${web3j.bsc.explorer}")
+    @Value("${web3j.networkConfig.bsc.explorer}")
     private String explorer;
 
     @Autowired

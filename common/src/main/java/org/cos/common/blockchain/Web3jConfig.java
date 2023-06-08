@@ -1,5 +1,7 @@
 package org.cos.common.blockchain;
 
+import org.cos.common.config.Web3jConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,13 +15,16 @@ import java.io.IOException;
 
 @Configuration
 public class Web3jConfig {
-    @Value("${web3j.bsc.client-address}")
-    private String clientAddress;
-    @Value("${web3j.bsc.contractAddress}")
-    private String contractAddress;
+    @Autowired
+    private Web3jConfiguration web3jConfiguration;
+//    @Value("${web3j.networkConfig.bsc.client-address}")
+//    private String clientAddress;
+//    @Value("${web3j.networkConfig.bsc.contractAddress}")
+//    private String contractAddress;
     @Bean
     public Web3j web3j() {
-        return Web3j.build(new HttpService(clientAddress));
+        // todo 网络名称
+        return Web3j.build(new HttpService(web3jConfiguration.getNetworkConfig().get("bsc").getClientAddress()));
     }
 
 //    @Bean(name = "inviteFilter") // 如果你有多个过滤器，你需要指定每个过滤器的名字

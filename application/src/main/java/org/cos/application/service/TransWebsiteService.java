@@ -6,9 +6,13 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.cos.common.config.BaseConfiguration;
+import org.cos.common.config.Web3jConfiguration;
 import org.cos.common.constant.CommonConstant;
 import org.cos.common.entity.data.dto.PoolUserTimeDTO;
-import org.cos.common.entity.data.po.*;
+import org.cos.common.entity.data.po.Asset;
+import org.cos.common.entity.data.po.Pool;
+import org.cos.common.entity.data.po.TransWebsite;
+import org.cos.common.entity.data.po.User;
 import org.cos.common.entity.data.req.AssetQueryReq;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.entity.data.req.TranListReq;
@@ -18,7 +22,6 @@ import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.abi.FunctionEncoder;
@@ -45,6 +48,8 @@ import java.util.*;
 @Transactional
 public class TransWebsiteService {
     @Autowired
+    private Web3jConfiguration web3jConfiguration;
+    @Autowired
     private BaseConfiguration baseConfiguration;
     @Autowired
     private TransWebsiteRepository transWebsiteRepository;
@@ -62,12 +67,13 @@ public class TransWebsiteService {
     UserRepository userRepository;
     @Autowired
     RedisService redisService;
-    @Value("${web3j.bsc.privateKey}")
-    private String privateKey;
-    @Value("${web3j.bsc.usdtContractAddress}")
-    private String usdtContractAddress;
     @Autowired
     private Web3j web3j;
+////    @Value("${web3j.networkConfig.bsc.privateKey}")
+//    String privateKey = web3jConfiguration.getNetworkConfig().get("bsc").getPrivateKey();
+////    @Value("${web3j.networkConfig.bsc.usdtContractAddress}")
+//    String usdtContractAddress = web3jConfiguration.getNetworkConfig().get("bsc").getContract().get("busd").getAddress();
+
 
     public Result transactionAsync(CosdStakeForSLReq req) {
         try {
@@ -123,7 +129,8 @@ public class TransWebsiteService {
         }
 
 //        try {
-        Credentials credentials = Credentials.create(privateKey);
+        // todo 网络名称
+        Credentials credentials = Credentials.create(web3jConfiguration.getNetworkConfig().get("bsc").getPrivateKey());
 
         // 创建一个值为 1e18 的 uint256 变量
         BigInteger uint256 = BigInteger.valueOf(10).pow(18);
@@ -167,11 +174,13 @@ public class TransWebsiteService {
                 nonce,
                 gasPrice,
                 gasLimit,
-                usdtContractAddress,
+                // todo 网络名称 合约名称
+                web3jConfiguration.getNetworkConfig().get("bsc").getContract().get("busd").getAddress(),
                 encodedFunction
         );
         // 使用 TransactionEncoder 将原始交易对象进行签名
-        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, 97L, credentials);
+        // todo 网络名称
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, web3jConfiguration.getNetworkConfig().get("bsc").getChainId(), credentials);
 
         // 将签名后的交易对象发布到区块链上
         String hexValue = Numeric.toHexString(signedMessage);

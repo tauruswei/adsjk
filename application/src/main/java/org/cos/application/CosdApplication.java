@@ -3,6 +3,7 @@ package org.cos.application;
 //import com.primihub.biz.config.mq.SingleTaskChannel;
 
 import org.cos.common.config.BaseConfiguration;
+import org.cos.common.config.Web3jConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication(scanBasePackages="org.cos")
-@EnableConfigurationProperties(BaseConfiguration.class)
+@EnableConfigurationProperties({BaseConfiguration.class, Web3jConfiguration.class})
 @EnableAsync
 // 如果使用 Spring Boot 2.3.x 及以上版本，需要使用 @MapperScan 注解来指定扫描路径
 @MapperScan("org.cos.common.repository")

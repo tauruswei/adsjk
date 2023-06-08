@@ -64,7 +64,8 @@ public class RedisMessageSubscriber implements MessageListener {
 
     @Autowired
     private Web3j web3j;
-    @Value("${web3j.bsc.blockNumber}")
+    // todo 网络名称
+    @Value("${web3j.networkConfig.bsc.blockNumber}")
     private Long bscBlockNumber;
 
 //    @Override

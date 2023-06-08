@@ -29,10 +29,10 @@ public class BlockChainController {
     private Web3j web3j;
     //    @Autowired
 //    private Contract contract;
-    @Value("${web3j.bsc.contractAddress}")
-    private String contractAddress;
-    @Value("${web3j.bsc.privateKey}")
-    private String privateKey;
+//    @Value("${web3j.networkConfig.bsc.contractAddress}")
+//    private String contractAddress;
+//    @Value("${web3j.networkConfig.bsc.privateKey}")
+//    private String privateKey;
 
     @ApiOperation("查询区块号")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String", paramType = "header")
