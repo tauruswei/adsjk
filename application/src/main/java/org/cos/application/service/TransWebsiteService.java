@@ -17,10 +17,14 @@ import org.cos.common.entity.data.req.AssetQueryReq;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.exception.GlobalException;
+import org.cos.common.exception.GlobalExceptionHandler;
 import org.cos.common.redis.RedisService;
 import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
+import org.cos.common.tool.LogTool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +73,9 @@ public class TransWebsiteService {
     RedisService redisService;
     @Autowired
     private Web3j web3j;
+
+    Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
 ////    @Value("${web3j.networkConfig.bsc.privateKey}")
 //    String privateKey = web3jConfiguration.getNetworkConfig().get("bsc").getPrivateKey();
 ////    @Value("${web3j.networkConfig.bsc.usdtContractAddress}")
@@ -232,7 +239,10 @@ public class TransWebsiteService {
         PoolUserTimeDTO poolUserTimeDTO = poolUserRepository.queryPoolUserByUserIdForTime(poolId, userId);
         long timestamp = System.currentTimeMillis() / 1000;
         if(ObjectUtils.isEmpty(poolUserTimeDTO)){
-            throw new GlobalException(CodeMsg.POOL_USER_NOT_EXIST_ERROR);
+            logger.error( LogTool.failLog(CodeMsg.POOL_USER_NOT_EXIST_ERROR));
+            poolUserTimeDTO=new PoolUserTimeDTO();
+            poolUserTimeDTO.setFlag(false);
+            return Result.success();
         }
         Long createTime = (poolUserTimeDTO.getPoolUserCreateTime());
         // 星光 质押池没有锁仓
@@ -253,9 +263,9 @@ public class TransWebsiteService {
                 poolUserTimeDTO.setFlag(false);
             }
         }else{
+//            logger.error( LogTool.failLog(CodeMsg.POOL_USER_NOT_EXIST_ERROR));
             throw new GlobalException(CodeMsg.POOL_TYPE_ERROR);
         }
-
         return Result.success(poolUserTimeDTO);
 
     }
