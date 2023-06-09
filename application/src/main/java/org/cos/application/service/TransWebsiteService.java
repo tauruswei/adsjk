@@ -42,6 +42,7 @@ import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.utils.Numeric;
 
 import java.io.IOException;
+import java.lang.management.PlatformLoggingMXBean;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
@@ -242,7 +243,7 @@ public class TransWebsiteService {
             logger.error( LogTool.failLog(CodeMsg.POOL_USER_NOT_EXIST_ERROR));
             poolUserTimeDTO=new PoolUserTimeDTO();
             poolUserTimeDTO.setFlag(false);
-            return Result.success();
+            return Result.success(poolUserTimeDTO);
         }
         Long createTime = (poolUserTimeDTO.getPoolUserCreateTime());
         // 星光 质押池没有锁仓
