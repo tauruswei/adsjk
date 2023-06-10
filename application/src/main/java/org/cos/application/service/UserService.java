@@ -274,13 +274,13 @@ public class UserService {
         if(StringUtils.isNotBlank(req.getWalletAddress())){
             User user = userRepository.queryUserByWalletAddress(req.getWalletAddress());
             if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
-                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("请换个钱包地址"));
             }
         }
         if (StringUtils.isNotBlank(req.getName())){
             User user = userRepository.queryUserByName(req.getName());
             if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
-                throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("请换个用户名"));
             }
         }
 
