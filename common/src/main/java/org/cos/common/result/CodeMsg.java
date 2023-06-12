@@ -14,68 +14,68 @@ public class CodeMsg {
 	
 //	通用的错误码  5001XX
 	public static CodeMsg SUCCESS = new CodeMsg(0, "success");
-	public static CodeMsg SERVER_ERROR = new CodeMsg(500000, "服务端异常");
+	public static CodeMsg SERVER_ERROR = new CodeMsg(500000, "server internal error");
 	public static CodeMsg SERVER_DETAILED_ERROR = new CodeMsg(500100, "服务端异常：%s");
 	public static CodeMsg CLIENT_ERROR = new CodeMsg(500100, "客户端异常");
-	public static CodeMsg PARAMETER_VALID_ERROR = new CodeMsg(500101, "参数校验异常：%s");
+	public static CodeMsg PARAMETER_VALID_ERROR = new CodeMsg(500101, "parameter validation error：%s");
 
 //====================================================
 //                用户 模块
 //====================================================
-	public static CodeMsg USER_SENDCODE_ERROR = new CodeMsg(500101,"发送邮箱验证码异常: %s");
-	public static CodeMsg USER_ADD_ERROR = new CodeMsg(500102,"添加用户异常: %s");
-	public static CodeMsg USER_EXIST_ERROR = new CodeMsg(500103,"用户已存在: %s");
-	public static CodeMsg USER_NOT_EXIST_ERROR = new CodeMsg(500104,"用户不存在");
-	public static CodeMsg USER_EMAIL_NOT_EXIST_ERROR = new CodeMsg(500104,"该邮箱没有注册，请输入正确的邮箱");
+	public static CodeMsg USER_SENDCODE_ERROR = new CodeMsg(500101,"send verify code to to your email address error: %s");
+	public static CodeMsg USER_ADD_ERROR = new CodeMsg(500102,"add user error: %s");
+	public static CodeMsg USER_EXIST_ERROR = new CodeMsg(500103,"user already exists: %s");
+	public static CodeMsg USER_NOT_EXIST_ERROR = new CodeMsg(500104,"user does not exist");
+	public static CodeMsg USER_EMAIL_NOT_EXIST_ERROR = new CodeMsg(500104,"this email address is not registered, please enter the correct email address");
 
-	public static CodeMsg USER_QUERY_ERROR = new CodeMsg(500105,"查询用户失败：%s");
-	public static CodeMsg USER_LOGIN_ERROR = new CodeMsg(500106,"用户登录失败：%s");
-	public static CodeMsg USER_UPDATE_ERROR = new CodeMsg(500107,"更新用户失败：%s");
-	public static CodeMsg USER_RELATION_ADD_ERROR = new CodeMsg(500108,"添加用户关系异常: %s");
-	public static CodeMsg USER_RELATION_NOT_EXIST_ERROR = new CodeMsg(500109,"用户关系不存在");
-	public static CodeMsg USER_ENCRYPT_ERROR = new CodeMsg(500110,"用户加密失败：%s");
-	public static CodeMsg USER_DECRYPT_ERROR = new CodeMsg(500111,"用户解密失败：%s");
+	public static CodeMsg USER_QUERY_ERROR = new CodeMsg(500105,"query user error：%s");
+	public static CodeMsg USER_LOGIN_ERROR = new CodeMsg(500106,"user login error：%s");
+	public static CodeMsg USER_UPDATE_ERROR = new CodeMsg(500107,"update user error：%s");
+	public static CodeMsg USER_RELATION_ADD_ERROR = new CodeMsg(500108,"add user relation error: %s");
+	public static CodeMsg USER_RELATION_NOT_EXIST_ERROR = new CodeMsg(500109,"user relation does not exist");
+	public static CodeMsg USER_ENCRYPT_ERROR = new CodeMsg(500110,"user encrypts error：%s");
+	public static CodeMsg USER_DECRYPT_ERROR = new CodeMsg(500111,"user decrypts error：%s");
 
 
 //====================================================
 //                网站交易模块
 //====================================================
-	public static CodeMsg TRANS_WEBSITE_ADD_ERROR = new CodeMsg(500201,"添加交易异常: %s");
-	public static CodeMsg TRANS_WEBSITE_TYPE_ERROR = new CodeMsg(500202,"交易类型错误");
-	public static CodeMsg TRANS_WEBSITE_TX_EXIST_ERROR = new CodeMsg(500203,"交易已经存在,请检查 txid 是否正确");
-	public static CodeMsg TRANS_WEBSITE_WITHDRAW_ERROR = new CodeMsg(500204,"用户提现失败：%s");
-	public static CodeMsg TRANS_WEBSITE_UPCHAIN_ERROR = new CodeMsg(500205,"用户交易上链失败：%s");
+	public static CodeMsg TRANS_WEBSITE_ADD_ERROR = new CodeMsg(500201,"add transaction error: %s");
+	public static CodeMsg TRANS_WEBSITE_TYPE_ERROR = new CodeMsg(500202,"transaction type error");
+	public static CodeMsg TRANS_WEBSITE_TX_EXIST_ERROR = new CodeMsg(500203,"the transaction already exists, please check if the txid is correct");
+	public static CodeMsg TRANS_WEBSITE_WITHDRAW_ERROR = new CodeMsg(500204,"user withdraws error：%s");
+	public static CodeMsg TRANS_WEBSITE_UPCHAIN_ERROR = new CodeMsg(500205,"user transaction failed to connect\n：%s");
 
 
 //====================================================
 //                资产模块
 //====================================================
-	public static CodeMsg ASSET_ADD_ERROR = new CodeMsg(500301,"添加资产异常: %s");
-	public static CodeMsg ASSET_WITHDRAW_ERROR = new CodeMsg(500302,"用户提现失败: %s");
-	public static CodeMsg ASSET_UPDATE_ERROR = new CodeMsg(500303,"更新用户资产异常: %s");
-	public static CodeMsg ASSET_NOT_EXIST_ERROR = new CodeMsg(500304,"用户资产不存在");
-	public static CodeMsg ASSET_TYPE_ERROR = new CodeMsg(500305,"用户资产类型错误");
-	public static CodeMsg ASSET_ACOUNT_ERROR = new CodeMsg(500306,"用户资产不能为负数");
+	public static CodeMsg ASSET_ADD_ERROR = new CodeMsg(500301,"add user's asset error: %s");
+	public static CodeMsg ASSET_WITHDRAW_ERROR = new CodeMsg(500302,"user withdraws error：%s");
+	public static CodeMsg ASSET_UPDATE_ERROR = new CodeMsg(500303,"update user's asset error: %s");
+	public static CodeMsg ASSET_NOT_EXIST_ERROR = new CodeMsg(500304,"user's asset does not exist");
+	public static CodeMsg ASSET_TYPE_ERROR = new CodeMsg(500305,"user's asset type error");
+	public static CodeMsg ASSET_AMOUNT_ERROR = new CodeMsg(500306,"the number of user's asset cannot be less than 0");
 
 //====================================================
 //                质押池模块
 //====================================================
-	public static CodeMsg POOL_USER_ADD_ERROR = new CodeMsg(500401,"用户质押失败: %s");
-	public static CodeMsg POOL_USER_UPDATE_ERROR = new CodeMsg(500402,"更新用户质押异常: %s");
-	public static CodeMsg POOL_USER_BALANCE_ERROR = new CodeMsg(500403,"用户质押余额不能为负: %s");
-	public static CodeMsg POOL_NOT_EXIST_ERROR = new CodeMsg(500404,"质押池不存在");
-	public static CodeMsg POOL_TYPE_ERROR = new CodeMsg(500405,"质押池类型错误");
-	public static CodeMsg POOL_USER_NOT_EXIST_ERROR = new CodeMsg(500406,"用户没有在质押池中质押");
+	public static CodeMsg POOL_USER_ADD_ERROR = new CodeMsg(500401,"user stakes error: %s");
+	public static CodeMsg POOL_USER_UPDATE_ERROR = new CodeMsg(500402,"update user's staking information error: %s");
+	public static CodeMsg POOL_USER_BALANCE_ERROR = new CodeMsg(500403,"the number of user's staking cannot be less than 0: %s");
+	public static CodeMsg POOL_NOT_EXIST_ERROR = new CodeMsg(500404,"staking pool does not exist");
+	public static CodeMsg POOL_TYPE_ERROR = new CodeMsg(500405,"staking pool type error");
+	public static CodeMsg POOL_USER_NOT_EXIST_ERROR = new CodeMsg(500406,"user does not participate in the activity of the staking pool");
 
 
 
 //====================================================
 //                NFT 模块
 //====================================================
-	public static CodeMsg NFT_EXIST_ERROR = new CodeMsg(500401,"NFT 已存在");
-	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500402,"NFT 不存在: %s");
-	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500403,"NFT 添加失败: %s");
-	public static CodeMsg NFT_CHANCE_NOT_BE_NEGATIVE = new CodeMsg(500404,"NFT 次数不能为负数");
+	public static CodeMsg NFT_EXIST_ERROR = new CodeMsg(500401,"NFT already exist" );
+	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500402,"NFT does not exist error: %s");
+	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500403,"purchase NFT error: %s");
+	public static CodeMsg NFT_CHANCE_NOT_BE_NEGATIVE = new CodeMsg(500404,"the number of nft's chance cannot be less than 0");
 
 
 

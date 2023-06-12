@@ -133,7 +133,7 @@ public class TransWebsiteService {
         Result<Asset> result = assetService.queryUserAsset(assetQueryReq);
 
         if (result.getData().getAmount() + req.getFromAmount() < 0) {
-            throw new GlobalException(CodeMsg.ASSET_WITHDRAW_ERROR.fillArgs("用户没有足够的 EVIC 用于提现"));
+            throw new GlobalException(CodeMsg.ASSET_WITHDRAW_ERROR.fillArgs("user does not have enough evics"));
         }
 
 //        try {

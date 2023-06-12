@@ -61,7 +61,7 @@ public class GameService {
             Asset asset = assets.get(0);
             asset.setAmount(asset.getAmount()+moneyAmount);
             if(asset.getAmount()<0){
-                throw new GlobalException(CodeMsg.ASSET_ACOUNT_ERROR);
+                throw new GlobalException(CodeMsg.ASSET_AMOUNT_ERROR);
             }
             assetRepository.updateAsset(asset);
         }

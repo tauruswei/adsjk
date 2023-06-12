@@ -70,7 +70,7 @@ public class UserService {
 
     public Result sendCode(UserSendCodeReq req) {
         if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
-            throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("验证码还在有效期内"));
+            throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("the verify code is still within the validity period"));
         }
 //        User user;
 //        try {
@@ -150,10 +150,10 @@ public class UserService {
         // 判断 redis 中的邮箱验证码是否存在
         String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
         if(StringUtils.isBlank(req.getCode())){
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
         if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
-            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("验证码无效，请重新输入"));
+            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("verify code is invalid，please check your verify code"));
         }
         // 判断用户名的唯一性
         if(ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))){
@@ -274,13 +274,13 @@ public class UserService {
         if(StringUtils.isNotBlank(req.getWalletAddress())){
             User user = userRepository.queryUserByWalletAddress(req.getWalletAddress());
             if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
-                throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("请换个钱包地址"));
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("please change your wallet address"));
             }
         }
         if (StringUtils.isNotBlank(req.getName())){
             User user = userRepository.queryUserByName(req.getName());
             if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
-                throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("请换个用户名"));
+                throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("please change your user name"));
             }
         }
 
@@ -308,15 +308,15 @@ public class UserService {
         // 判断 redis 中的邮箱验证码是否存在
         if (StringUtils.isNotBlank(req.getCode())) {
             if (StringUtils.isBlank(req.getEmail())) {
-                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户邮箱不能为空"));
+                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("email can not be null"));
             }
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
             if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("验证码无效，请重新输入"));
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid，please check your verify code"));
             }
             user.setEmail(req.getEmail());
         }else{
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
 
 //        if (StringUtils.isNotBlank(req.getOldPasswd())) {
@@ -344,15 +344,15 @@ public class UserService {
         // 判断 redis 中的邮箱验证码是否存在
         if (StringUtils.isNotBlank(req.getCode())) {
             if (StringUtils.isBlank(req.getEmail())) {
-                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户邮箱不能为空"));
+                throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("email can not be null"));
             }
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
             if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("验证码无效，请重新输入"));
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid，please check your verify code"));
             }
             user.setEmail(req.getEmail());
         }else{
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("验证码不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
 
         user.setUpdateTime(new Date());
@@ -372,15 +372,15 @@ public class UserService {
         }
 
         if(StringUtils.isBlank(req.getOldPasswd())){
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户旧密码不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("old password can not be null"));
         }
         if(StringUtils.isBlank(req.getNewPasswd())){
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("用户新密码不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("new password can not be null"));
         }
 
         if (StringUtils.isNotBlank(req.getOldPasswd())) {
             if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs(("old password is not the same with the new password")));
             }
             user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
 
@@ -406,7 +406,7 @@ public class UserService {
                 throw new GlobalException(CodeMsg.USER_QUERY_ERROR);
             }
             if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getPasswd()), user.getPasswd())) {
-                throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("密码不正确"));
+                throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("password is not correct"));
             }
             String jwt = TokenManager.createJWT(user.getName(), Integer.parseInt(baseConfiguration.getTokenTimeOut()), "", new HashMap<>());
             userLoginVo.setToken(jwt);
@@ -422,7 +422,7 @@ public class UserService {
             throw new GlobalException(CodeMsg.USER_QUERY_ERROR);
         }
         if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getPasswd()), user.getPasswd())) {
-            throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("密码不正确"));
+            throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("password is not correct"));
         }
         String jwt = TokenManager.createJWT(user.getName(), Integer.parseInt(baseConfiguration.getTokenTimeOut()), "", new HashMap<>());
 
@@ -455,7 +455,7 @@ public class UserService {
             throw new GlobalException(CodeMsg.USER_QUERY_ERROR);
         }
         if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(passwd), user.getPasswd())) {
-            throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("密码不正确"));
+            throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("password is not correct"));
         }
         String jwt = TokenManager.createJWT(user.getName(), Integer.parseInt(baseConfiguration.getTokenTimeOut()), "", new HashMap<>());
 

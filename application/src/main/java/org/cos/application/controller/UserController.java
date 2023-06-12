@@ -206,7 +206,7 @@ public class UserController {
     @PostMapping("createChannelLeader")
     public Result createChannelLeader(@RequestBody UserUpdateReq req) {
         if (StringUtils.isBlank(req.getWalletAddress())){
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("钱包地址不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("wallet address can not be null"));
         }
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
@@ -221,7 +221,7 @@ public class UserController {
     @PostMapping("queryChannelLeaderByWalletAddress")
     public Result queryChannelLeaderByWalletAddress(@RequestBody UserUpdateReq req) {
         if (StringUtils.isBlank(req.getWalletAddress())){
-            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("钱包地址不能为空"));
+            throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("wallet address can not be null"));
         }
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))

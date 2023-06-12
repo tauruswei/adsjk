@@ -63,10 +63,10 @@ public class GlobalExceptionHandler {
         }else if(e instanceof HttpMessageNotReadableException){
             //  参数为null，json解析异常，比如 id= , 不同于id=""
             logger.error(LogTool.failLog(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("请求参数不能为 null")));
-            return Result.error(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("请求参数不能为 null"));
+            return Result.error(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("request parameter can not be null"));
         }else if(e instanceof NoPermissionException){
             logger.error(LogTool.failLog(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("没有权限")));
-            return Result.error(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("您没有权限"));
+            return Result.error(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("you do not permissionless"));
 //        }else if(e instanceof VerifyException){
 //            logger.error(LogTool.failLog(CodeMsg.ADMIN_VERIFY_ERROR.setMsg(e.getMessage())));
 //            return Result.error(CodeMsg.ADMIN_VERIFY_ERROR.setMsg(e.getMessage()));

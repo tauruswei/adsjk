@@ -319,7 +319,7 @@ public class RedisMessageSubscriber implements MessageListener {
                 } else {
                     asset1.setAmount(asset1.getAmount() + req.getToAmount());
                     if (asset1.getAmount() < 0) {
-                        throw new GlobalException(CodeMsg.ASSET_ACOUNT_ERROR);
+                        throw new GlobalException(CodeMsg.ASSET_AMOUNT_ERROR);
                     }
                     asset1.setUpdateTime(new Date());
                     if ((req.getToAssetType() != CommonConstant.COSD) && (req.getToAssetType() != CommonConstant.EVIC)) {
