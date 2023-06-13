@@ -2,6 +2,7 @@ package org.cos.common.repository;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.cos.common.entity.data.po.TransWebsite;
 import org.cos.common.entity.data.po.User;
 
@@ -18,6 +19,9 @@ public interface TransWebsiteRepository {
 //    User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
     void updateTransWebsiteStatus(@Param("id") Long id, @Param("status") int status,@Param("upchainTime") long time);
     List<TransWebsite> queryTransactionsList(TransWebsite transWebsite);
+    @Select("SELECT SUM(to_amount) AS total_amount FROM trans_website where trans_type=7")
+    long sumEvicSales();
+
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
 //    void deleteSysUrBatch(/*@Param("roleArray") Long[] roleArray,*/ @Param("userId")Long userId);
