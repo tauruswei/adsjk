@@ -24,7 +24,7 @@ public class Web3jConfig {
     @Bean
     public Web3j web3j() {
         // todo 网络名称
-        return Web3j.build(new HttpService(web3jConfiguration.getNetworkConfig().get("bsc").getClientAddress()));
+        return Web3j.build(new HttpService(web3jConfiguration.getNetworkConfig().get("bsc").getRpcUrl()));
     }
 
 //    @Bean(name = "inviteFilter") // 如果你有多个过滤器，你需要指定每个过滤器的名字

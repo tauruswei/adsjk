@@ -24,7 +24,7 @@ public class ContractController {
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String", paramType = "query")
     @PostMapping("getContractConfig")
     public Result getContractConfig(@RequestParam(name = "network",required = true) String network) {
-        return Result.success(web3jConfiguration.getNetworkConfig().get(network).getContract());
+        return Result.success(web3jConfiguration.getNetworkConfig().get(network));
     }
 
 }
