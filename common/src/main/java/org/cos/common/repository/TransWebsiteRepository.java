@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.cos.common.entity.data.po.TransWebsite;
 import org.cos.common.entity.data.po.User;
+import org.cos.common.entity.data.req.TranBlurListReq;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public interface TransWebsiteRepository {
 //    User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
     void updateTransWebsiteStatus(@Param("id") Long id, @Param("status") int status,@Param("upchainTime") long time);
     List<TransWebsite> queryTransactionsList(TransWebsite transWebsite);
+    List<TransWebsite> queryBlurTransactionsList(@Param("req") TranBlurListReq tranBlurListReq);
     @Select("SELECT SUM(to_amount) AS total_amount FROM trans_website where trans_type=7")
     long sumEvicSales();
 

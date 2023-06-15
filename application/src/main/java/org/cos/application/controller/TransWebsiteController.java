@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.TransWebsiteService;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
-import org.cos.common.entity.data.req.PoolListReq;
+import org.cos.common.entity.data.req.TranBlurListReq;
 import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +77,18 @@ public class TransWebsiteController {
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return webTranService.queryTransactionsList(req);
+    }
+
+    @ApiOperation("交易列表模糊查询")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("queryBlurTransactionsList")
+    public Result queryBlurTransactionsList(@Validated @RequestBody TranBlurListReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return webTranService.queryBlurTransactionsList(req);
     }
 
 //    @ApiOperation("用户解押星光池中的 COSD")

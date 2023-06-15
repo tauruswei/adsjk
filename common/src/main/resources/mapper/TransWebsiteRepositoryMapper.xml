@@ -64,6 +64,32 @@
         </where>
     </select>
 
+    <select id="queryBlurTransactionsList" resultMap="TransWebsiteResult" parameterType="org.cos.common.entity.data.req.TranBlurListReq">
+        select
+        *
+        from trans_website
+        <where>
+            <if test="req.transType != null and req.transType.length > 0">
+            AND trans_type in
+                <foreach item="type" collection="req.transType" open="(" separator="," close=")">
+                    #{type}
+                </foreach>
+            </if>
+            <if test="req.userId != null and req.userId !=0">
+                AND from_user_id = #{req.userId}
+            </if>
+            <if test="req.status != null ">
+                AND status = #{req.status}
+            </if>
+            <if test="req.time != null ">
+                AND upchain_time >= #{req.time}
+            </if>
+
+            order by upchain_time DESC
+
+        </where>
+    </select>
+
 
 
     <select id="queryUserByEmail" resultMap="TransWebsiteResult" parameterType="string">
