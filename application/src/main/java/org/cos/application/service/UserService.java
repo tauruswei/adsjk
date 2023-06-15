@@ -91,9 +91,9 @@ public class UserService {
         try {
 //            mailUtil.sendTextMail(subject, mail, req.getEmail(), code + "");
             Map<String, Object> myMap = new HashMap<String, Object>() {{
-                put("code", String.valueOf(code).chars().map(Character::getNumericValue).toArray());
+                put("code", code);
             }};
-            mailUtil.sendThymeleafMail(subject,mail,req.getEmail(),myMap,"email1");
+            mailUtil.sendThymeleafMail(subject,mail,req.getEmail(),myMap,"email1-english");
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs(e.getMessage()));
         }

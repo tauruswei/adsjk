@@ -1,21 +1,28 @@
 package org.cos.common.redis;
 
 import com.alibaba.fastjson.JSON;
+import io.lettuce.core.models.stream.PendingEntry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.*;
+import redis.clients.jedis.params.XReadGroupParams;
+import redis.clients.jedis.params.XReadParams;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 @Service
 public class RedisService {
 
 	@Autowired
 	JedisCluster jedisCluster;
+
+	@Value("")
+	String streamKey;
+	@Value("")
+	String groupName;
+
 
 	/**
 	 * 获取当个对象
@@ -390,7 +397,7 @@ public class RedisService {
 	}
 
 	/**
-	 * 获取指定键的所有属性（哈希）
+	 * 发布 消息，订阅者会接收消息
 	 * @param key
 	 * @return
 	 */
@@ -403,6 +410,71 @@ public class RedisService {
 //			returnToPool(jedis);
 //		}
 	}
+
+//	/**
+//	 * 使用 redis stream 创建 stream,创建 group,同时添加 key
+//， 	 * @param key
+//	 * @return
+//	 */
+//	public void xadd(String key,String value){
+//		Map<String,String> map = new HashMap<>();
+//		map.put(key,value);
+//		jedisCluster.xgroupCreate(streamKey, groupName, StreamEntryID.LAST_ENTRY, true);
+//
+////		Jedis jedis = null;
+////		try{
+////			jedis =  jedisPool.getResource();
+//
+//		jedisCluster.xadd(streamKey, StreamEntryID.NEW_ENTRY, map);
+////		}finally {
+////			returnToPool(jedis);
+////		}
+//	}
+
+	public StreamEntryID xadd(String key, Map<String, String> content) {
+		return jedisCluster.xadd(key, StreamEntryID.NEW_ENTRY, content);
+	}
+
+	public long xlen(String key) {
+		return jedisCluster.xlen(key);
+	}
+
+	public String xgroupCreate(String key, String group, Boolean makeStream) {
+		return jedisCluster.xgroupCreate(key, group,  StreamEntryID.LAST_ENTRY, makeStream);
+	}
+
+	public Map.Entry<String, List<StreamEntry>> xreadOne(XReadParams xReadParams, Map<String, StreamEntryID> streams) {
+		XReadGroupParams xReadGroupParams = new XReadGroupParams();
+		xReadGroupParams.count(1);
+		return this.xread(xReadParams, streams).get(0);
+	}
+
+	public List<Map.Entry<String, List<StreamEntry>>> xread(XReadParams xReadParams, Map<String, StreamEntryID> streams) {
+		return jedisCluster.xread(xReadParams, streams);
+	}
+
+	public List<Map.Entry<String, List<StreamEntry>>> xreadGroup(String group, String consumer, XReadGroupParams xReadGroupParams, Map<String, StreamEntryID> streams) {
+		return jedisCluster.xreadGroup(group, consumer, xReadGroupParams, streams);
+	}
+
+	public List<StreamEntry> xrange(String key, StreamEntryID start, StreamEntryID end, int count) {
+		return jedisCluster.xrange(key, start, end, count);
+	}
+
+	public List<StreamEntry> xrevrange(String key, StreamEntryID start, StreamEntryID end, int count) {
+		return jedisCluster.xrevrange(key, start, end, count);
+	}
+
+	public long xack(String key, String group, StreamEntryID... ids) {
+		return jedisCluster.xack(key, group, ids);
+	}
+
+	public long xdel(String key, StreamEntryID... ids) {
+		return jedisCluster.xdel(key, ids);
+	}
+//	public List<PendingEntry> xpending(String key, String group,String consumer){
+//		List<Object> pendingEntries = jedisCluster.xpending(key.getBytes(StandardCharsets.UTF_8), group.getBytes(StandardCharsets.UTF_8), "-".getBytes(StandardCharsets.UTF_8), "+".getBytes(StandardCharsets.UTF_8), 10, consumer.getBytes(StandardCharsets.UTF_8));
+//	}
 
 	private <T> String beanToString(T value) {
 		if(value == null) {
