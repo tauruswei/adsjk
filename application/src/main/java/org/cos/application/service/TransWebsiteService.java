@@ -15,6 +15,7 @@ import org.cos.common.entity.data.po.TransWebsite;
 import org.cos.common.entity.data.po.User;
 import org.cos.common.entity.data.req.AssetQueryReq;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
+import org.cos.common.entity.data.req.TranBlurListReq;
 import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.exception.GlobalExceptionHandler;
@@ -312,6 +313,32 @@ public class TransWebsiteService {
         transWebsite.setStatus(req.getStatus());
         transWebsite.setUpchainTime(req.getTime());
         List<TransWebsite> transWebsites = transWebsiteRepository.queryTransactionsList(transWebsite);
+        PageInfo<TransWebsite> pageInfo = new PageInfo<>(transWebsites);
+
+        return Result.success(pageInfo);
+
+    }
+    /**
+     * 交易历史记录模糊查询
+     * @param req
+     * @return
+     */
+
+    public Result queryBlurTransactionsList(TranBlurListReq req){
+        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
+            PageHelper.startPage(req.getPageNo(),req.getPageSize());
+        }else{
+            PageHelper.startPage(1,10);
+        }
+
+//        TransWebsite transWebsite= new TransWebsite();
+//        if(ObjectUtils.isNotEmpty(req.getTransType())){
+//            transWebsite.setTransType(req.getTransType());
+//        }
+//        transWebsite.setFromUserId(req.getUserId());
+//        transWebsite.setStatus(req.getStatus());
+//        transWebsite.setUpchainTime(req.getTime());
+        List<TransWebsite> transWebsites = transWebsiteRepository.queryBlurTransactionsList(req);
         PageInfo<TransWebsite> pageInfo = new PageInfo<>(transWebsites);
 
         return Result.success(pageInfo);
