@@ -4,40 +4,43 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisCluster;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class RedisService {
 
 	@Autowired
-	JedisPool jedisPool;
+	JedisCluster jedisCluster;
 
 	/**
 	 * 获取当个对象
 	 * */
 	public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
-		Jedis jedis = null;
-		try {
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try {
+//			jedis =  jedisPool.getResource();
 			//生成真正的key
 			String realKey  = prefix.getPrefix() + key;
-			String  str = jedis.get(realKey);
+			String  str = jedisCluster.get(realKey);
 			T t =  stringToBean(str, clazz);
 			return t;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
 	 * 设置对象
 	 * */
 	public <T> boolean set(KeyPrefix prefix, String key,  T value) {
-		Jedis jedis = null;
-		try {
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try {
+//			jedis =  jedisPool.getResource();
 			String str = beanToString(value);
 			if(str == null || str.length() <= 0) {
 				return false;
@@ -46,14 +49,14 @@ public class RedisService {
 			String realKey  = prefix.getPrefix() + key;
 			int seconds =  prefix.expireSeconds();
 			if(seconds <= 0) {
-				jedis.set(realKey, str);
+				jedisCluster.set(realKey, str);
 			}else {
-				jedis.setex(realKey, seconds, str);
+				jedisCluster.setex(realKey, seconds, str);
 			}
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -63,59 +66,59 @@ public class RedisService {
 	 * @return
 	 */
 	public boolean expire(String key,int seconds) {
-		Jedis jedis = null;
-		try {
-			jedis =  jedisPool.getResource();
-			jedis.expire(key, seconds);
+//		Jedis jedis = null;
+//		try {
+//			jedis =  jedisPool.getResource();
+			jedisCluster.expire(key, seconds);
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
 	 * 判断key是否存在
 	 * */
 	public <T> boolean exists(KeyPrefix prefix, String key) {
-		Jedis jedis = null;
-		try {
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try {
+//			jedis =  jedisPool.getResource();
 			//生成真正的key
 			String realKey  = prefix.getPrefix() + key;
-			return  jedis.exists(realKey);
-		}finally {
-			returnToPool(jedis);
-		}
+			return  jedisCluster.exists(realKey);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
 	 * 增加值
 	 * */
 	public <T> Long incr(KeyPrefix prefix, String key) {
-		Jedis jedis = null;
-		try {
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try {
+//			jedis =  jedisPool.getResource();
 			//生成真正的key
 			String realKey  = prefix.getPrefix() + key;
-			return  jedis.incr(realKey);
-		}finally {
-			returnToPool(jedis);
-		}
+			return  jedisCluster.incr(realKey);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
 	 * 减少值
 	 * */
 	public <T> Long decr(KeyPrefix prefix, String key) {
-		Jedis jedis = null;
-		try {
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try {
+//			jedis =  jedisPool.getResource();
 			//生成真正的key
 			String realKey  = prefix.getPrefix() + key;
-			return  jedis.decr(realKey);
-		}finally {
-			returnToPool(jedis);
-		}
+			return  jedisCluster.decr(realKey);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	/**
 	 * 获取list中指定范围的数据
@@ -126,26 +129,26 @@ public class RedisService {
 	 * @return
 	 */
 	public List<String> lrange(KeyPrefix prefix,String key,long start,long stop){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			List<String> lrange = jedis.lrange(realKey, -stop, -start);
+			List<String> lrange = jedisCluster.lrange(realKey, -stop, -start);
 			Collections.reverse(lrange);
 			return lrange;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	public Set<String> keys(KeyPrefix prefix){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix()+"*";
-			return jedis.keys(realKey);
-		}finally {
-			returnToPool(jedis);
-		}
+			return jedisCluster.keys(realKey);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	/**
 	 * 向list中添加数据
@@ -154,16 +157,16 @@ public class RedisService {
 	 * @retur
 	 */
 	public Long  lpush(KeyPrefix prefix,String key, String value){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
 //			String value = beanToString(prefix1.getPrefix()+key1);
-			Long lpush = jedis.lpush(realKey, value);
+			Long lpush = jedisCluster.lpush(realKey, value);
 			return lpush;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -173,14 +176,14 @@ public class RedisService {
 	 * @return
 	 */
 	public long llen(KeyPrefix prefix,String key){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			return jedis.llen(realKey);
-		}finally {
-			returnToPool(jedis);
-		}
+			return jedisCluster.llen(realKey);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -189,13 +192,13 @@ public class RedisService {
 	 * @return
 	 */
 	public Long del(String key){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
-			return jedis.del(key);
-		}finally {
-			returnToPool(jedis);
-		}
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
+			return jedisCluster.del(key);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	/**
 	 * 删除list中的集合中的指定value
@@ -205,14 +208,14 @@ public class RedisService {
 	 * @return
 	 */
 	public Long lrem(KeyPrefix prefix,String key,String value){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			return jedis.lrem(realKey,0,value);
-		}finally {
-			returnToPool(jedis);
-		}
+			return jedisCluster.lrem(realKey,0,value);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 //	/**
@@ -257,14 +260,14 @@ public class RedisService {
 	 * @return
 	 */
 	public String hget(KeyPrefix prefix,String key,String field) {
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			return jedis.hget(realKey, field);
-		}finally {
-			returnToPool(jedis);
-		}
+			return jedisCluster.hget(realKey, field);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	/**
 	 * 获取指定field的value
@@ -273,13 +276,13 @@ public class RedisService {
 	 * @return
 	 */
 	public String hget(String key,String field) {
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
-			return jedis.hget(key, field);
-		}finally {
-			returnToPool(jedis);
-		}
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
+			return jedisCluster.hget(key, field);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -290,15 +293,15 @@ public class RedisService {
 	 * @return
 	 */
 	public Boolean lindex(KeyPrefix prefix,String key,Long index){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			jedis.lindex(realKey, index);
+			jedisCluster.lindex(realKey, index);
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -309,15 +312,15 @@ public class RedisService {
 	 * @param value
 	 */
 	public boolean hset(KeyPrefix prefix,String key,String field,String value){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			jedis.hset(realKey, field, value);
+			jedisCluster.hset(realKey, field, value);
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	/**
 	 * 向哈希中添加field-value属性
@@ -326,14 +329,14 @@ public class RedisService {
 	 * @param value
 	 */
 	public boolean hset(String key,String field,String value){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
-			jedis.hset(key, field, value);
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
+			jedisCluster.hset(key, field, value);
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -343,18 +346,18 @@ public class RedisService {
 	 * @param map
 	 */
 	public boolean hmset(KeyPrefix prefix,String key,Map map){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
 			String realKey  = prefix.getPrefix() + key;
-			jedis.hmset(realKey, map);
+			jedisCluster.hmset(realKey, map);
 			if(prefix.expireSeconds()!=0){
-				jedis.expire(realKey, prefix.expireSeconds());
+				jedisCluster.expire(realKey, prefix.expireSeconds());
 			}
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 	/**
 	 * 向哈希中添加多个field-value属性
@@ -362,14 +365,14 @@ public class RedisService {
 	 * @param map
 	 */
 	public boolean hmset(String key,Map map){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
-			jedis.hmset(key, map);
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
+			jedisCluster.hmset(key, map);
 			return true;
-		}finally {
-			returnToPool(jedis);
-		}
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -377,13 +380,13 @@ public class RedisService {
 	 * @param key
 	 */
 	public Map hgetall(String key){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
-			return jedis.hgetAll(key);
-		}finally {
-			returnToPool(jedis);
-		}
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
+			return jedisCluster.hgetAll(key);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	/**
@@ -392,13 +395,13 @@ public class RedisService {
 	 * @return
 	 */
 	public Long publish(String channel, String message){
-		Jedis jedis = null;
-		try{
-			jedis =  jedisPool.getResource();
-			return jedis.publish(channel,message);
-		}finally {
-			returnToPool(jedis);
-		}
+//		Jedis jedis = null;
+//		try{
+//			jedis =  jedisPool.getResource();
+			return jedisCluster.publish(channel,message);
+//		}finally {
+//			returnToPool(jedis);
+//		}
 	}
 
 	private <T> String beanToString(T value) {

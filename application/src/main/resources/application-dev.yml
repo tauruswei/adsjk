@@ -30,30 +30,28 @@ spring:
     port: 587
     username: wbt@chessofstars.io # 发送方邮箱地址
     password: Xiao120315!
-#    username: 13156050650@163.com
-#    password: Xiao120315!
+    #    username: 13156050650@163.com
+    #    password: Xiao120315!
     # 发送方邮箱登录密码或者授权码
     subject: verify your email
     properties:
       mail:
-#        store:
-#          protocol: pop3
+        #        store:
+        #          protocol: pop3
         smtp:
           auth: true  # 开启 SMTP 验证
           starttls:
             enable: true  # 开启 Transport Layer Security (TLS) 加密
-#            required: true
-#          port: 587
-#          socketFactory:
-#            port: 587
-#            fallback: false
-##            class: javax.net.ssl.SSLSocketFactory
-#          connectiontimeout: 30000
-#          timeout: 30000
-#          writetimeout: 30000
-#        debug: false
-
-
+  #            required: true
+  #          port: 587
+  #          socketFactory:
+  #            port: 587
+  #            fallback: false
+  ##            class: javax.net.ssl.SSLSocketFactory
+  #          connectiontimeout: 30000
+  #          timeout: 30000
+  #          writetimeout: 30000
+  #        debug: false
 
   ############################################################
   #
@@ -61,14 +59,11 @@ spring:
   #
   ############################################################
   redis:
-    host: 127.0.0.1
-    port: 6379
-    timeout: 1000
-    password: ZGhqYWtmaGRqa2FmamtkYQog
-    poolMaxTotal: 300
-    poolMaxIdle: 200
-    poolMinIdle: 100
-    poolMaxWait: 3
+    password: 1234
+    cluster:
+      nodes: 127.0.0.1:6371,127.0.0.1:6372,127.0.0.1:6373,192.168.2.155:6374,192.168.2.155:6375,192.168.2.155:6376
+      # 最大重定向次数
+      max-redirects: 5
 
   ############################################################
   #
@@ -104,9 +99,9 @@ web3j:
     bsc:
       rpcUrl: https://bsc-testnet.publicnode.com
       explorer: https://testnet.bscscan.com/
-  #    contractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
-  #    usdtContractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
-  #    12 个块才能确定一笔交易，3秒出一个块
+      #    contractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
+      #    usdtContractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
+      #    12 个块才能确定一笔交易，3秒出一个块
       blockNumber: 12
       chainId: 97
       privateKey: 93abdcd7328576f4b477bfef78b30fcfb0c755fb01b8f3ea00804b7d57fb640a

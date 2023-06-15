@@ -1,27 +1,40 @@
 package org.cos.common.redis;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.HostAndPort;
+import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class RedisPoolFactory {
 
-	@Autowired
-	RedisConfig redisConfig;
-	
+	@Value("${spring.redis.cluster.nodes}")
+	private String clusterNodes;
+	@Value("${spring.redis.password}")
+	private String password;
 	@Bean
-	public JedisPool jedisPoolFactory() {
+	public JedisCluster getJedisCluster() {
+		Set<HostAndPort> jedisClusterNodes = new HashSet<>();
+		for (String node : clusterNodes.split(",")) {
+			String[] parts = node.split(":");
+			jedisClusterNodes.add(new HostAndPort(parts[0], Integer.parseInt(parts[1])));
+		}
+
+		// 配置连接池
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
-		poolConfig.setMaxIdle(redisConfig.getPoolMaxIdle());
-		poolConfig.setMaxTotal(redisConfig.getPoolMaxTotal());
-		poolConfig.setMinIdle(redisConfig.getPoolMinIdle());
-//		poolConfig.setMaxWaitMillis(redisConfig.getPoolMaxWait() * 1000);
-		JedisPool jp = new JedisPool(poolConfig, redisConfig.getHost(), redisConfig.getPort(),
-				redisConfig.getTimeout()*1000, redisConfig.getPassword(), 0);
-		return jp;
+		poolConfig.setMaxTotal(100);
+		poolConfig.setMaxIdle(20);
+		// 其他连接池参数设置...
+
+		// 创建 JedisCluster 实例
+		JedisCluster jedisCluster = new JedisCluster(jedisClusterNodes,2000, 2000, 5, password,  poolConfig);
+		return jedisCluster;
+
 	}
 	
 }
