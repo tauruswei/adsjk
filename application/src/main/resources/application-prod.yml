@@ -80,6 +80,8 @@ spring:
     clubAmount: 4000
     redisChannel: COSD-Transaction
     cipherKey: 3XIIJHvwPVhG1LgUQx0NTHQQruFsJdcFjMjrOnmayk8
+    allowedOrigins: www.chessofstars.io,192.168.2.150,123.249.69.100
+
 
   ############################################################
   #
