@@ -26,7 +26,7 @@ public class CoresFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-        String origin = request.getHeader("origin");
+        String origin = request.getHeader("Access-Control-Allow-Origin");
         if(Arrays.asList(domain.split(",")).contains(origin)){
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setHeader("Access-Control-Allow-Origin", origin);
