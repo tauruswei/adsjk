@@ -194,31 +194,37 @@ public class RedisMessageSubscriber implements MessageListener {
         // 处理接收到的消息
         CosdStakeForSLReq cosdStakeForSLReq = JSON.parseObject(body, CosdStakeForSLReq.class);
         try {
+            log.info("1");
             while (ObjectUtils.isEmpty(cosdStakeForSLReq.getBlockNumber()) || cosdStakeForSLReq.getBlockNumber().equals(0L)) {
                 EthTransaction ethTx = web3j.ethGetTransactionByHash(cosdStakeForSLReq.getTxId()).send();
                 Transaction tx = ethTx.getTransaction().orElse(null);
                 if (ObjectUtils.isEmpty(tx)) {
+                    log.info("2");
+
                     Thread.sleep(3000);
                     continue;
                 }
                 cosdStakeForSLReq.setBlockNumber(tx.getBlockNumber().longValue());
             }
+            log.info("3");
+
 
             EthBlockNumber ethBlockNumber = web3j.ethBlockNumber().sendAsync().get();
             BigInteger blockNumber = ethBlockNumber.getBlockNumber();
 //            BigInteger blockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
-
+            log.info("4");
             while (blockNumber.compareTo(BigInteger.valueOf(cosdStakeForSLReq.getBlockNumber() + bscBlockNumber)) < 0) {
                 Thread.sleep(6000);
+                log.info("5");
                 blockNumber = web3j.ethBlockNumber().sendAsync().get().getBlockNumber();
             }
-
+            log.info("6");
             EthTransaction txn = web3j.ethGetTransactionByHash(cosdStakeForSLReq.getTxId()).send();
-
+            log.info("7");
             String blockHash = txn.getResult().getBlockHash();
-
+            log.info("8");
             BigInteger blockTime = web3j.ethGetBlockByHash(blockHash, true).send().getBlock().getTimestamp();
-
+            log.info("9");
             cosdStakeForSLReq.setBlockNumber(txn.getResult().getBlockNumber().longValue());
             cosdStakeForSLReq.setUpChainTime(blockTime.longValue());
 
