@@ -1,0 +1,30 @@
+server {
+  listen       80;
+
+
+  #charset koi8-r;
+  access_log  /var/log/nginx/host.access.log;
+
+  location / {
+    root   /usr/share/nginx/html;
+    index  template/index.html index.html;
+    try_files $uri $uri/ /index.html;    # 这个非常重要，采用vue-router的时候，必须配置这个
+  }
+  location ^~ /prod-api/cosd/ {
+      proxy_pass http://192.168.2.150:8090/;
+      proxy_set_header Host $host;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+  #error_page  404              /404.html;
+
+  # redirect server error pages to the static page /50x.html
+  #
+  error_page   500 502 503 504  /50x.html;
+  location = /50x.html {
+    root   /usr/share/nginx/html;
+  }
+
+}
+
+

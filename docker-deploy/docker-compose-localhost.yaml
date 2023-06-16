@@ -18,11 +18,11 @@ services:
     image: $REDIS_IMAGE
     container_name: cosd-redis
     restart: always
-#    ports:
-#      - "6379:6379"
+    ports:
+      - "6379:6379"
     volumes:
       - "./data/redis:/data"
-      - "./config/redis.conf.game-dev:/usr/local/etc/redis/redis.conf"
+      - "./config/redis.conf:/usr/local/etc/redis/redis.conf"
     command:
       "redis-server /usr/local/etc/redis/redis.conf"
     networks:
@@ -54,7 +54,7 @@ services:
     image: $WEB
     restart: always
     volumes:
-      - "./config/default.conf.game-dev:/etc/nginx/conf.d/default.conf"
+      - "./config/default.conf.local:/etc/nginx/conf.d/default.conf"
     ports:
       - "1433:80"
     environment:
