@@ -1,15 +1,12 @@
 package org.cos.common.exception;
 
-import org.cos.common.tool.LogTool;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
-import org.apache.commons.lang3.StringUtils;
+import org.cos.common.tool.LogTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -19,11 +16,9 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.naming.NoPermissionException;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.util.List;
 
 

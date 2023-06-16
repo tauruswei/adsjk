@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: cosd
     url: jdbc:mysql://cosd-mysql:3306/cosd?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull&allowMultiQueries=true&useSSL=false
-    password: cosd@123.com
+    password: bm5jenZpY3ppb3Z1Y3puZyA
     connection-properties: config.decrypt=false;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJI/xqbyvpVttxfAKulKeSTIb7tZAGaFcPyTnE2r7AHTQ8kOnqKXDda4u59umt9XBFxi7db28KxeVooB138zuRUCAwEAAQ==
     druid:
       initial-size: 1
@@ -62,7 +62,7 @@ spring:
     host: cosd-redis
     port: 6379
     timeout: 1000
-    password: platform
+    password: ZGhqYWtmaGRqa2FmamtkYQog
     poolMaxTotal: 300
     poolMaxIdle: 200
     poolMinIdle: 100
@@ -80,7 +80,7 @@ spring:
     clubAmount: 4000
     redisChannel: COSD-Transaction
     cipherKey: 3XIIJHvwPVhG1LgUQx0NTHQQruFsJdcFjMjrOnmayk8
-    allowedOrigins: www.chessofstars.io,192.168.2.150,123.249.69.100
+    allowedOrigins: https://www.chessofstars.io,http://www.chessofstars.io,http://192.168.2.150:1433,http://123.249.69.100:1433,http://127.0.0.1:1433
 
 
   ############################################################

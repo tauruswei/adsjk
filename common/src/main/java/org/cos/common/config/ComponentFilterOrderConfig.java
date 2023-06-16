@@ -1,5 +1,6 @@
 package org.cos.common.config;
 
+import org.cos.common.filter.ExceptionHandlerFilter;
 import org.cos.common.filter.GetIpAddrFilter;
 import org.cos.common.filter.TokenFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -37,5 +38,13 @@ public class ComponentFilterOrderConfig {
         filterRegistrationBean.addUrlPatterns("/certificate/*", "/localCA/*");
         filterRegistrationBean.setOrder(7);
         return filterRegistrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean<ExceptionHandlerFilter> exceptionHandlerFilter() {
+        FilterRegistrationBean<ExceptionHandlerFilter> registrationBean = new FilterRegistrationBean<>();
+        ExceptionHandlerFilter filter = new ExceptionHandlerFilter();
+        registrationBean.setFilter(filter);
+        registrationBean.setOrder(Integer.MAX_VALUE); // 设置为最后一个 Filter
+        return registrationBean;
     }
 }

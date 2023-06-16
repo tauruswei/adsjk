@@ -15,9 +15,10 @@ public class CodeMsg {
 //	通用的错误码  5001XX
 	public static CodeMsg SUCCESS = new CodeMsg(0, "success");
 	public static CodeMsg SERVER_ERROR = new CodeMsg(500000, "server internal error");
-	public static CodeMsg SERVER_DETAILED_ERROR = new CodeMsg(500100, "服务端异常：%s");
-	public static CodeMsg CLIENT_ERROR = new CodeMsg(500100, "客户端异常");
-	public static CodeMsg PARAMETER_VALID_ERROR = new CodeMsg(500101, "parameter validation error：%s");
+	public static CodeMsg SERVER_DETAILED_ERROR = new CodeMsg(500001, "服务端异常：%s");
+	public static CodeMsg CLIENT_ERROR = new CodeMsg(500002, "客户端异常");
+	public static CodeMsg PARAMETER_VALID_ERROR = new CodeMsg(500003, "parameter validation error：%s");
+	public static CodeMsg SERVER_ORIGIN_ERROR = new CodeMsg(500004, "illegal access");
 
 //====================================================
 //                用户 模块
