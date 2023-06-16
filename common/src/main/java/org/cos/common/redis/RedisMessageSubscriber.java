@@ -22,14 +22,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.DefaultBlockParameter;
-import org.web3j.protocol.core.methods.response.*;
+import org.web3j.protocol.core.methods.response.EthBlockNumber;
+import org.web3j.protocol.core.methods.response.EthTransaction;
+import org.web3j.protocol.core.methods.response.Transaction;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * @Author: WeiBingtao/13156050650@163.com
@@ -196,7 +194,9 @@ public class RedisMessageSubscriber implements MessageListener {
         try {
             log.info("1");
             while (ObjectUtils.isEmpty(cosdStakeForSLReq.getBlockNumber()) || cosdStakeForSLReq.getBlockNumber().equals(0L)) {
+                log.info("11");
                 EthTransaction ethTx = web3j.ethGetTransactionByHash(cosdStakeForSLReq.getTxId()).send();
+                log.info("12");
                 Transaction tx = ethTx.getTransaction().orElse(null);
                 if (ObjectUtils.isEmpty(tx)) {
                     log.info("2");
