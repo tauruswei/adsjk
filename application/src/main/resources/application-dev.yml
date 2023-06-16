@@ -116,6 +116,8 @@ logging:
 web3j:
   networkConfig:
     bsc:
+      networkName: Binance Smart Chain Testnet
+      nativeCurrency: BNB
       rpcUrl: https://bsc-testnet.publicnode.com
       explorer: https://testnet.bscscan.com/
   #    contractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"

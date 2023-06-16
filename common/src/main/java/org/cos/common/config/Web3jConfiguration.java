@@ -16,6 +16,8 @@ public class Web3jConfiguration {
     // getters and setters
     @Data
     public static class NetworkConfig {
+        private String networkName;
+        private String nativeCurrency;
         private String rpcUrl;
         private String explorer;
         private Integer blockNumber;
