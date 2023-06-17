@@ -107,7 +107,7 @@ web3j:
     bsc:
       networkName: Binance Smart Chain Mainnet
       nativeCurrency: BNB
-      rpcUrl: https://bsc-testnet.publicnode.com
+      rpcUrls: https://bsc-testnet.publicnode.com,https://endpoints.omniatech.io/v1/bsc/testnet/public
       explorer: https://testnet.bscscan.com/
       #    contractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"
       #    usdtContractAddress: "0x401084C7F44f4e2d2945F37bcad2406c24edE223"

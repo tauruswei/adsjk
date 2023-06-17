@@ -2,6 +2,7 @@ package org.cos.common.config;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,7 +19,8 @@ public class Web3jConfiguration {
     public static class NetworkConfig {
         private String networkName;
         private String nativeCurrency;
-        private String rpcUrl;
+        @Value("#{'${web3j.rpcUrls}'.split(',')}")
+        private String[] rpcUrls;
         private String explorer;
         private Integer blockNumber;
         private Integer chainId;

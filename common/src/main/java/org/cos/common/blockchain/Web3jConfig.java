@@ -23,8 +23,8 @@ public class Web3jConfig {
 //    private String contractAddress;
     @Bean
     public Web3j web3j() {
-        // todo 网络名称
-        return Web3j.build(new HttpService(web3jConfiguration.getNetworkConfig().get("bsc").getRpcUrl()));
+        // todo 网络名称,网络链接
+        return Web3j.build(new HttpService(web3jConfiguration.getNetworkConfig().get("bsc").getRpcUrls()[0]));
     }
 
 //    @Bean(name = "inviteFilter") // 如果你有多个过滤器，你需要指定每个过滤器的名字
