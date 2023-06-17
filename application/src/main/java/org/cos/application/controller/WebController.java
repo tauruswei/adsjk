@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.cos.common.config.BaseConfiguration;
 import org.cos.common.entity.data.vo.WebStatisticalDataVo;
 import org.cos.common.redis.DownloadKey;
 import org.cos.common.redis.RedisService;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 public class WebController {
+    @Autowired
+    private BaseConfiguration baseConfiguration;
     @Autowired
     private RedisService redisService;
     @Autowired
@@ -46,6 +49,15 @@ public class WebController {
 
         return Result.success(webStatisticalDataVo);
     }
+
+    @ApiOperation("获取网站配置")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("getWebConfig")
+    public Result getWebConfig(){
+        return Result.success(baseConfiguration.getWebConfig());
+    }
+
+
 
 
 

@@ -14,4 +14,5 @@ public class BaseConfiguration {
     private String redisChannel;
     private String cipherKey;
     private String allowedOrigins;
+    private WebConfig webConfig;
 }
