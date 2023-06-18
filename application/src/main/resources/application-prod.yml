@@ -25,7 +25,8 @@ spring:
   # 配置邮箱信息
   #
   ############################################################
-  host: smtp.163.com  # SMTP 服务器地址
+  mail:
+    host: smtp.163.com  # SMTP 服务器地址
     #    port: 465
     username: 13156050650@163.com  # 发送方邮箱地址
     password: GGXCXQBLVCHJULTQ # 发送方邮箱登录密码或者授权码
