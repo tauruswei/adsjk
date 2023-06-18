@@ -26,33 +26,22 @@ spring:
   #
   ############################################################
   mail:
-    host: smtp.office365.com  # SMTP 服务器地址
-    port: 587
-    username: wbt@chessofstars.io # 发送方邮箱地址
-    password: Xiao120315!
-    #    username: 13156050650@163.com
-    #    password: Xiao120315!
-    # 发送方邮箱登录密码或者授权码
+    host: smtp.163.com  # SMTP 服务器地址
+    port: 25
+    username: 13156050650@163.com  # 发送方邮箱地址
+    password: GGXCXQBLVCHJULTQ # 发送方邮箱登录密码或者授权码
     subject: verify your email
     properties:
       mail:
-        #        store:
-        #          protocol: pop3
         smtp:
+          ssl:
+            trust: smtp.163.com
           auth: true  # 开启 SMTP 验证
           starttls:
             enable: true  # 开启 Transport Layer Security (TLS) 加密
-  #            required: true
-  #          port: 587
-  #          socketFactory:
-  #            port: 587
-  #            fallback: false
-  ##            class: javax.net.ssl.SSLSocketFactory
-  #          connectiontimeout: 30000
-  #          timeout: 30000
-  #          writetimeout: 30000
-  #        debug: false
-
+            required: true
+          timeout: 5000  # 连接超时时间
+          connectiontimeout: 5000  # 连接超时时间
   ############################################################
   #
   # 配置 redis, 目前主要是用来存放验证码，后面会加入限流队列
