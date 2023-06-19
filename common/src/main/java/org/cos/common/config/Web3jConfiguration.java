@@ -33,7 +33,7 @@ public class Web3jConfiguration {
         public static class ContractProperties {
             private String address;
             private String abi;
-            private String imageUrl;
+            private String image;
         }
     }
 }
