@@ -59,6 +59,20 @@ public class WebController {
         return Result.success(webStatisticalDataVo);
     }
 
+    @ApiOperation("获取网站的统计数据")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @GetMapping("getStatisticalData1")
+    public Result getStatisticalData1(){
+
+        WebStatisticalDataVo webStatisticalDataVo = new WebStatisticalDataVo();
+       webStatisticalDataVo.setDownloadCount(1000);
+       webStatisticalDataVo.setWeb2Count(205);
+       webStatisticalDataVo.setWeb3Count(86);
+       webStatisticalDataVo.setGameCount(3216);
+
+        return Result.success(webStatisticalDataVo);
+    }
+
     @ApiOperation("获取网站配置")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("getWebConfig")
