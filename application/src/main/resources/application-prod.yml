@@ -30,7 +30,7 @@ spring:
     #    port: 465
     username: 13156050650@163.com  # 发送方邮箱地址
     password: GGXCXQBLVCHJULTQ # 发送方邮箱登录密码或者授权码
-    subject: verify your email
+    subject: Verification - Chess of Stars
     properties:
       mail:
         smtp:

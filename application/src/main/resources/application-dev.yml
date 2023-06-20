@@ -46,7 +46,7 @@ spring:
     #    username: 13156050650@163.com
     #    password: Xiao120315!
     # 发送方邮箱登录密码或者授权码
-    subject: verify your email
+    subject: Verification - Chess of Stars
     properties:
       mail:
         #        store:
