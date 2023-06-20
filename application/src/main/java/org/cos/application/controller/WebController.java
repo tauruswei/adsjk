@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.cos.common.config.BaseConfiguration;
 import org.cos.common.entity.data.vo.WebStatisticalDataVo;
 import org.cos.common.redis.DownloadKey;
@@ -43,6 +44,9 @@ public class WebController {
         // 获取web3用户
 
         WebStatisticalDataVo webStatisticalDataVo = userRepository.countWeb2AndWeb3User();
+        if(ObjectUtils.isEmpty(webStatisticalDataVo)){
+            webStatisticalDataVo = new WebStatisticalDataVo();
+        }
         webStatisticalDataVo.setDownloadCount(downloadCount);
         // todo 游戏数量
         webStatisticalDataVo.setGameCount(1);
