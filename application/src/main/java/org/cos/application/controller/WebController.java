@@ -12,6 +12,7 @@ import org.cos.common.redis.RedisService;
 import org.cos.common.repository.UserRepository;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +38,7 @@ public class WebController {
 
     @ApiOperation("获取网站的统计数据")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("getStatisticalData")
+    @GetMapping("getStatisticalData")
     public Result getStatisticalData(){
         // 获取游戏的下载量
         Integer downloadCount = redisService.get(DownloadKey.getDownload, "", Integer.class);
