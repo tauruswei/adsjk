@@ -1,7 +1,6 @@
 package org.cos.common.redis;
 
 import com.alibaba.fastjson.JSON;
-import io.lettuce.core.models.stream.PendingEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -472,9 +471,11 @@ public class RedisService {
 	public long xdel(String key, StreamEntryID... ids) {
 		return jedisCluster.xdel(key, ids);
 	}
-//	public List<PendingEntry> xpending(String key, String group,String consumer){
-//		List<Object> pendingEntries = jedisCluster.xpending(key.getBytes(StandardCharsets.UTF_8), group.getBytes(StandardCharsets.UTF_8), "-".getBytes(StandardCharsets.UTF_8), "+".getBytes(StandardCharsets.UTF_8), 10, consumer.getBytes(StandardCharsets.UTF_8));
-//	}
+	public List<Object> xpending(String key, String group, String consumer){
+		List<Object> pendingEntries = jedisCluster.xpending(key.getBytes(StandardCharsets.UTF_8), group.getBytes(StandardCharsets.UTF_8), "-".getBytes(StandardCharsets.UTF_8), "+".getBytes(StandardCharsets.UTF_8), 10, consumer.getBytes(StandardCharsets.UTF_8));
+//		List<Object> pendingEntries = jedisCluster.xpending(key, group, "-", "+", 10, consumer);
+		return pendingEntries;
+	}
 
 	private <T> String beanToString(T value) {
 		if(value == null) {
