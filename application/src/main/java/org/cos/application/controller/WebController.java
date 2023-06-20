@@ -42,9 +42,13 @@ public class WebController {
     public Result getStatisticalData(){
         // 获取游戏的下载量
         Integer downloadCount = redisService.get(DownloadKey.getDownload, "", Integer.class);
+        if(ObjectUtils.isEmpty(downloadCount)){
+            downloadCount =0;
+        }
         // 获取web3用户
 
         WebStatisticalDataVo webStatisticalDataVo = userRepository.countWeb2AndWeb3User();
+        log.info("======>请求--{}--接口开始,参数:{}", webStatisticalDataVo);
         if(ObjectUtils.isEmpty(webStatisticalDataVo)){
             webStatisticalDataVo = new WebStatisticalDataVo();
         }
