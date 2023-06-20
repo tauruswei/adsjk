@@ -26,6 +26,8 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+            <version>3.6.0</version>
+
         </dependency>
         <!--邮箱验证吗-->
         <dependency>
@@ -193,6 +195,15 @@
         </dependency>
 
     </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>3.6.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 <!--    <dependencyManagement>-->
 <!--        <dependencies>-->
 <!--            &lt;!&ndash;  Needed to avoid conflict with OkHttp being used in auth0-java and okhttp3 being used by spring &ndash;&gt;-->

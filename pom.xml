@@ -80,6 +80,7 @@
 
     </dependencies>
 
+
     <dependencyManagement>
         <dependencies>
 <!--            <dependency>-->
@@ -89,6 +90,11 @@
 <!--                <type>pom</type>-->
 <!--                <scope>import</scope>-->
 <!--            </dependency>-->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>3.6.0</version>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
