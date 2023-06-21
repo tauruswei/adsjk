@@ -40,8 +40,8 @@ spring:
           starttls:
             enable: true  # 开启 Transport Layer Security (TLS) 加密
             required: true
-          timeout: 5000  # 连接超时时间
-          connectiontimeout: 5000  # 连接超时时间
+          timeout: 10000  # 连接超时时间
+          connectiontimeout: 10000  # 连接超时时间
           socketFactory:
             port: 465
             class: javax.net.ssl.SSLSocketFactory
