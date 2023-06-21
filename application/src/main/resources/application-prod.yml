@@ -27,9 +27,10 @@ spring:
   ############################################################
   mail:
     host: smtp.office365.com  # SMTP 服务器地址
-      port: 587
-      username: cosd@chessofstars.io # 发送方邮箱地址
-      password: Xiao120315!
+    port: 587
+    username: cosd@chessofstars.io # 发送方邮箱地址
+    password: Xiao120315!
+
     properties:
       mail:
         smtp:
