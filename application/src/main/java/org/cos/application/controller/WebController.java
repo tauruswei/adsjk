@@ -45,6 +45,7 @@ public class WebController {
         if(ObjectUtils.isEmpty(downloadCount)){
             downloadCount =0;
         }
+
         // 获取web3用户
 
         WebStatisticalDataVo webStatisticalDataVo = userRepository.countWeb2AndWeb3User();
@@ -52,9 +53,17 @@ public class WebController {
         if(ObjectUtils.isEmpty(webStatisticalDataVo)){
             webStatisticalDataVo = new WebStatisticalDataVo();
         }
+
+        // 官网假数据
+        downloadCount +=1000;
+        webStatisticalDataVo.setWeb2Count(webStatisticalDataVo.getWeb2Count()+205);
+        webStatisticalDataVo.setWeb3Count(webStatisticalDataVo.getWeb3Count()+86);
+        webStatisticalDataVo.setGameCount(3216);
+
+
         webStatisticalDataVo.setDownloadCount(downloadCount);
         // todo 游戏数量
-        webStatisticalDataVo.setGameCount(1);
+
 
         return Result.success(webStatisticalDataVo);
     }
