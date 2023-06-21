@@ -30,7 +30,7 @@ spring:
     port: 587
     username: cosd@chessofstars.io # 发送方邮箱地址
     password: Xiao120315!
-
+    subject: Verification - Chess of Stars
     properties:
       mail:
         smtp:
