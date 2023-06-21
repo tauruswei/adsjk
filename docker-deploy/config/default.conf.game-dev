@@ -11,6 +11,12 @@ server {
     try_files $uri $uri/ /index.html;    # 这个非常重要，采用vue-router的时候，必须配置这个
   }
   location ^~ /prod-api/cosd/ {
+
+      add_header 'Access-Control-Allow-Origin' $allow_origin always;
+      add_header 'Access-Control-Allow-Methods' 'GET,POST,OPTIONS';
+      add_header 'Access-Control-Allow-Credentials' 'true';
+      add_header 'Access-Control-Allow-Headers' 'Accept,Authorization,Cache-Control,Content-Type,DNT,If-Modified-Since,Keep-Alive,Origin,User-Agent,X-Mx-ReqToken,X-Requested-With';
+
       proxy_pass http://cosd-application:8090/;
       proxy_set_header Host $host;
       proxy_set_header X-Real-IP $remote_addr;
