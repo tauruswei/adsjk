@@ -1,6 +1,11 @@
 package org.cos.common.util;
 
+import ch.qos.logback.classic.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.cos.common.config.BaseConfiguration;
+import org.cos.common.exception.GlobalException;
+import org.cos.common.result.CodeMsg;
+import org.cos.common.tool.LogTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +36,9 @@ import java.util.Map;
  * @Date 2019/12/13 10:22
  */
 @Component
+@Slf4j
 public class MailUtil {
+
     @Autowired
     BaseConfiguration baseConfiguration;
     @Autowired
@@ -230,16 +237,14 @@ public class MailUtil {
                 .build();
 
         try {
-            System.out.println("Attempting to send an email based on a template using the AWS SDK for Java (v2)...");
+            log.info("Attempting to send an email based on a template using the AWS SDK for Java (v2)...");
             SendEmailResponse sendEmailResponse = client.sendEmail(emailRequest);
-            System.out.println("email based on a template was sent");
+            log.info("email based on a template was sent");
             return sendEmailResponse;
 
         } catch (SesV2Exception e) {
-            System.err.println(e.awsErrorDetails().errorMessage());
-            System.exit(1);
+           throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs(e.awsErrorDetails().errorMessage()));
         }
-        return null;
     }
 
     // snippet-start:[ses.java2.list.templates.sesv2.main]
