@@ -2,13 +2,19 @@ package org.cos.common.util;
 
 import org.cos.common.config.BaseConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.ses.model.SesException;
+import software.amazon.awssdk.services.sesv2.SesV2Client;
+import software.amazon.awssdk.services.sesv2.model.*;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -17,7 +23,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Map;
-
 /**
  * @Description 邮件相关工具类
  * http://www.javaboy.org/2019/0717/springboot-mail.html
@@ -27,12 +32,29 @@ import java.util.Map;
  */
 @Component
 public class MailUtil {
-@Autowired
-BaseConfiguration baseConfiguration;
+    @Autowired
+    BaseConfiguration baseConfiguration;
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
     private TemplateEngine templateEngine;
+
+    @Value("${spring.myapp.aws.ses.accessKeyId}")
+    private String awsAccessKeyId;
+
+    @Value("${spring.myapp.aws.ses.secretKey}")
+    private String awsSecretKey;
+
+    @Value("${spring.myapp.aws.ses.region}")
+    private String region;
+
+    @Bean
+    public SesV2Client sesV2Client() {
+        return SesV2Client.builder()
+                .region(Region.of(region.toLowerCase()))
+                .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(awsAccessKeyId, awsSecretKey)))
+                .build();
+    }
 
     /**
      * 发送简单的文件邮件
@@ -178,5 +200,65 @@ BaseConfiguration baseConfiguration;
         String process = templateEngine.process(templatePath, context);
         helper.setText(process, true);
         javaMailSender.send(mimeMessage);
+    }
+
+    public static SendEmailResponse SendMessageTemplate(SesV2Client client, String sender, Template myTemplate,String recipient){
+
+        Destination destination = Destination.builder()
+                .toAddresses(recipient)
+                .build();
+
+        /*
+         Specify both name and favorite animal (favoriteanimal) in your code when defining the Template object.
+         If you don't specify all the variables in the template, Amazon SES doesn't send the email.
+        */
+//        Template myTemplate = Template.builder()
+//                .templateName(templateName)
+//                .templateData("{\n" +
+//                        "  \"code\": \"666666\"\n" +
+//                        "}")
+//                .build();
+
+        EmailContent emailContent = EmailContent.builder()
+                .template(myTemplate)
+                .build();
+
+        SendEmailRequest emailRequest = SendEmailRequest.builder()
+                .destination(destination)
+                .content(emailContent)
+                .fromEmailAddress(sender)
+                .build();
+
+        try {
+            System.out.println("Attempting to send an email based on a template using the AWS SDK for Java (v2)...");
+            SendEmailResponse sendEmailResponse = client.sendEmail(emailRequest);
+            System.out.println("email based on a template was sent");
+            return sendEmailResponse;
+
+        } catch (SesV2Exception e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+            System.exit(1);
+        }
+        return null;
+    }
+
+    // snippet-start:[ses.java2.list.templates.sesv2.main]
+    public static void createTemplate(SesV2Client sesv2Client, CreateEmailTemplateRequest createTemplateRequest) {
+
+        try {
+            sesv2Client.createEmailTemplate(createTemplateRequest);
+            System.out.println("Email template has been created.");
+        } catch (SesException e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+        }
+    }
+    public static void deleteTemplate(SesV2Client sesv2Client, DeleteEmailTemplateRequest deleteEmailTemplateRequest) {
+
+        try {
+            sesv2Client.deleteEmailTemplate(deleteEmailTemplateRequest);
+            System.out.println("Email template has been created.");
+        } catch (SesException e) {
+            System.err.println(e.awsErrorDetails().errorMessage());
+        }
     }
 }

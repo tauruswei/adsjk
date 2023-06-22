@@ -32,6 +32,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+import software.amazon.awssdk.services.sesv2.SesV2Client;
+import software.amazon.awssdk.services.sesv2.model.SendEmailResponse;
+import software.amazon.awssdk.services.sesv2.model.Template;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
@@ -64,11 +67,18 @@ public class UserService {
     private NFTService nftService;
     @Value("${web3j.networkConfig.bsc.explorer}")
     private String explorer;
+    @Value("${spring.myapp.aws.ses.verifyCodeTemplate}")
+    private String verifyCodeTemplate;
+    @Autowired
+    private SesV2Client sesV2Client;
+    @Value("${spring.mail.usernameAlias}")
+    private String sender;
+
 
     @Autowired
     private PoolUserRepository poolUserRepository;
 
-    public Result sendCode(UserSendCodeReq req) {
+    public Result sendCode1(UserSendCodeReq req) {
         if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("the verify code is still within the validity period"));
         }
@@ -97,6 +107,31 @@ public class UserService {
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs(e.getMessage()));
         }
+        // 验证码 存 redis
+        boolean success = redisService.set(UserKey.getEmail, req.getEmail(), code);
+
+
+        if (!success) {
+            throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR);
+        }
+        return Result.success(UserKey.getEmail.expireSeconds());
+    }
+    public Result sendCode(UserSendCodeReq req) {
+        if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
+            throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("the verify code is still within the validity period"));
+        }
+        int max = (int) Math.pow(10, 6) - 1;
+        int min = (int) Math.pow(10, 6 - 1);
+        Random random = new Random();
+        int code = random.nextInt(max - min + 1) + min;
+        Template myTemplate = Template.builder()
+                .templateName(verifyCodeTemplate)
+                .templateData("{\n" +
+                        "  \"code\": \""+code+"\"\n" +
+                        "}")
+                .build();
+        SendEmailResponse sendEmailResponse = MailUtil.SendMessageTemplate(sesV2Client, sender, myTemplate, req.getEmail());
+
         // 验证码 存 redis
         boolean success = redisService.set(UserKey.getEmail, req.getEmail(), code);
 

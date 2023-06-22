@@ -40,6 +40,17 @@ public class UserController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
         return userService.sendCode(req);
     }
+    @ApiOperation("发送验证码 aws，但是不使用 aws ec2 机器")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("sendCode1")
+    public Result sendCode1(@Validated @RequestBody UserSendCodeReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return userService.sendCode1(req);
+    }
 
     @ApiOperation("用户注册")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")

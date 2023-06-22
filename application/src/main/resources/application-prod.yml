@@ -26,25 +26,33 @@ spring:
   #
   ############################################################
   mail:
-    host: smtp.163.com  # SMTP 服务器地址
-    #    port: 465
-    username: 13156050650@163.com  # 发送方邮箱地址
-    password: GGXCXQBLVCHJULTQ # 发送方邮箱登录密码或者授权码
+    host: smtp.office365.com  # SMTP 服务器地址
+    port: 587
+    username: wbt@chessofstars.io # 发送方邮箱地址
+    usernameAlias: COSD <cosd@chessofstars.io> # 发送方的邮箱别名
+    password: Xiao120315!
+    #    username: 13156050650@163.com
+    #    password: Xiao120315!
+    # 发送方邮箱登录密码或者授权码
     subject: Verification - Chess of Stars
     properties:
       mail:
+        #        store:
+        #          protocol: pop3
         smtp:
-          ssl:
-            trust: smtp.163.com
           auth: true  # 开启 SMTP 验证
           starttls:
             enable: true  # 开启 Transport Layer Security (TLS) 加密
-            required: true
-          timeout: 5000  # 连接超时时间
-          connectiontimeout: 5000  # 连接超时时间
-          socketFactory:
-            port: 465
-            class: javax.net.ssl.SSLSocketFactory
+    #            required: true
+    #          port: 587
+    #          socketFactory:
+    #            port: 587
+    #            fallback: false
+    ##            class: javax.net.ssl.SSLSocketFactory
+    #          connectiontimeout: 30000
+    #          timeout: 30000
+    #          writetimeout: 30000
+    #        debug: false
   ############################################################
   #
   # 配置 redis, 目前主要是用来存放验证码，后面会加入限流队列
@@ -72,11 +80,18 @@ spring:
     clubAmount: 4000
     redisChannel: COSD-Transaction
     cipherKey: 3XIIJHvwPVhG1LgUQx0NTHQQruFsJdcFjMjrOnmayk8
-    webConfig:
-      cdnConfig:
-        url: https://s3.ap-northeast-1.amazonaws.com/www.chessofstars.io
-        version: 1.0
-  #    allowedOrigins: https://assets.chessofstars.io,http://assets.chessofstars.io,http://192.168.2.150:1433,http://123.249.69.100:1433,http://127.0.0.1:1433,https://54.238.247.122:1433,http://54.238.247.122:1433,http://54.238.247.122
+#    webConfig:
+#      cdnConfig:
+#        url: https://s3.ap-northeast-1.amazonaws.com/www.chessofstars.io
+#        version: 1.0
+    aws:
+      ses:
+        accessKeyId: AKIASBV7DL66FPX7YGHR
+        secretKey: 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
+        region: ap-northeast-1
+        verifyCodeTemplate: VerifyCodeTemplate-English
+
+
 
 
   ############################################################
