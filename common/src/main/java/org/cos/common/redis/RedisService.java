@@ -62,6 +62,25 @@ public class RedisService {
 	 * @param seconds
 	 * @return
 	 */
+	public boolean expire(KeyPrefix prefix, String key,int seconds) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			//生成真正的key
+			String realKey  = prefix.getPrefix() + key;
+			jedis.expire(realKey, seconds);
+			return true;
+		}finally {
+			returnToPool(jedis);
+		}
+	}
+
+	/**
+	 * 设置key过期时间
+	 * @param key
+	 * @param seconds
+	 * @return
+	 */
 	public boolean expire(String key,int seconds) {
 		Jedis jedis = null;
 		try {

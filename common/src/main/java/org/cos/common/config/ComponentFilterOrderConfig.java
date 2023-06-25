@@ -13,7 +13,7 @@ import javax.servlet.Filter;
 @Configuration("filterconfig")
 public class ComponentFilterOrderConfig {
     @Bean
-    public Filter MyHiddenHttpMethodFilter(){
+    public Filter ipFilter(){
         return new GetIpAddrFilter();//自定义的过滤器
     }
     @Bean
@@ -23,7 +23,7 @@ public class ComponentFilterOrderConfig {
     @Bean
     public FilterRegistrationBean filterRegistrationBean1(){
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
-        filterRegistrationBean.setFilter(MyHiddenHttpMethodFilter());
+        filterRegistrationBean.setFilter(ipFilter());
         filterRegistrationBean.setName("IpFilter");
         filterRegistrationBean.addUrlPatterns("/*");
         filterRegistrationBean.setOrder(6);//order的数值越小 则优先级越高
@@ -35,7 +35,7 @@ public class ComponentFilterOrderConfig {
         filterRegistrationBean.setFilter(tokenAuthorFilter());
         filterRegistrationBean.setName("TokenFilter");
 //        filterRegistrationBean.addUrlPatterns("/user/*", "/certificate/*", "/localCA/*");
-        filterRegistrationBean.addUrlPatterns("/certificate/*", "/localCA/*");
+        filterRegistrationBean.addUrlPatterns("/user/logout", "/localCA/*");
         filterRegistrationBean.setOrder(7);
         return filterRegistrationBean;
     }

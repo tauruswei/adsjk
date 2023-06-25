@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotBlank;
+import javax.servlet.http.HttpServletRequest;
 
 @Api(value = "用户controller",tags = "用户组模块", description = "用户组模块 Rest API")
 @RequestMapping("user")
@@ -89,13 +89,13 @@ public class UserController {
     @ApiOperation("用户退出登录")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("logout")
-    public Result logout(@Validated @RequestBody UserLoginReq req) {
+    public Result logout( HttpServletRequest request) {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
-        return userService.login(req);
+        return userService.logout(request);
     }
 
 

@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -41,18 +42,19 @@ public final class TokenManager {
 		long nowMillis = System.currentTimeMillis();
 		Date now = new Date(nowMillis);
 		String id = UUID.randomUUID().toString();
+		map.put("ip", MDC.get("ip"));
 
 		JwtBuilder builder = Jwts.builder()
 				//jwtid
 				.setId(id)
+				//自定义claim
+				.setClaims(map)
 				//接受者
 				.setAudience(userName)
 				//主题
 				.setSubject(subject)
 				//颁发者
 				.setIssuer("COSD")
-				//自定义claim
-				.setClaims(map)
 				//签发时间
 				.setIssuedAt(now)
 				//签名算法及密钥
@@ -107,10 +109,9 @@ public final class TokenManager {
 			throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs(e.getMessage()));
 		}
 		return checkResult;
-
 	}
 
-	private static Claims parseJWT(String jwtStr) {
+	public static Claims parseJWT(String jwtStr) {
 		SecretKey secretKey = generalKey();
 		return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtStr).getBody();
 	}

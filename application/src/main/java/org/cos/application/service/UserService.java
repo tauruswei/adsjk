@@ -2,7 +2,9 @@ package org.cos.application.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cos.common.config.BaseConfiguration;
@@ -16,6 +18,7 @@ import org.cos.common.entity.data.vo.UserLoginVo;
 import org.cos.common.entity.data.vo.UserRelationAddressVo;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.redis.RedisService;
+import org.cos.common.redis.TokenBlockedKey;
 import org.cos.common.redis.UserKey;
 import org.cos.common.repository.PoolUserRepository;
 import org.cos.common.repository.UserRelationRepository;
@@ -37,6 +40,7 @@ import software.amazon.awssdk.services.sesv2.model.SendEmailResponse;
 import software.amazon.awssdk.services.sesv2.model.Template;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -467,6 +471,15 @@ public class UserService {
         userLoginVo.setUserId(user.getId());
         userLoginVo.setUserType(user.getUserType());
         return Result.success(userLoginVo);
+    }
+
+    public Result logout(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        Claims claims = TokenManager.parseJWT(new String(Base64.decodeBase64(token)));
+        long now = System.currentTimeMillis();
+        long time = claims.getExpiration().getTime();
+        redisService.set(TokenBlockedKey.getBlockedKey((int) (time-now)/1000),token,"blocked");
+        return Result.success();
     }
 
     public Result queryUserByInviterId(UserQueryByInviterIdReq req) {
