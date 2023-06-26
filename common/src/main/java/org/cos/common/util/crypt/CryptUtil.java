@@ -4,14 +4,20 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.util.Base64Utils;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Formatter;
 
 public class CryptUtil {
+
+    static String key = "BLOCKCHAINAESKEY";
+    static String iv = "AESKEYBLOCKCHAIN";
     private CryptUtil(){
 
     }
@@ -73,5 +79,24 @@ public class CryptUtil {
         SecretKey keySpec = new SecretKeySpec(byteKey, "AES");
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
         return Base64Utils.encodeToString(cipher.doFinal(input));
+    }
+
+    public static String encryptAES(String message) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+        IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+
+        byte[] encryptedBytes = cipher.doFinal(message.getBytes(StandardCharsets.UTF_8));
+        return toHex(encryptedBytes).toUpperCase();
+
+    }
+    public static String toHex(byte[] bytes) {
+        Formatter formatter = new Formatter();
+        for (byte b : bytes) {
+            formatter.format("%02x", b);
+        }
+        return formatter.toString();
     }
 }

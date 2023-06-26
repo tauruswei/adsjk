@@ -276,7 +276,7 @@ public class UserService {
         return Result.success();
     }
 
-    public Result createGuestUser(){
+    public Result createGuestUser() {
 
         Random rand = new Random();
         int num = rand.nextInt(1000000); // 生成一个0 - 999999 之间的随机数
@@ -292,7 +292,12 @@ public class UserService {
                 .map(Object::toString)
                 .collect(Collectors.joining());
 
-        user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(randomString));
+        try {
+            // 加密用户的随机密码，是为了和前端统一起来，前端 传递的密码都是加密的
+            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(CryptUtil.encryptAES(randomString)));
+        } catch (Exception e) {
+            throw new GlobalException(CodeMsg.USER_ENCRYPT_ERROR.fillArgs(e.getMessage()));
+        }
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
         while(!ObjectUtils.isEmpty(userRepository.queryUserByName(user.getName()))){
@@ -498,9 +503,16 @@ public class UserService {
     }
 
     public Result getUserProfile(String userName, String passwd) {
+
         User user = userRepository.queryUserByName(userName);
         if (null == user) {
             throw new GlobalException(CodeMsg.USER_QUERY_ERROR);
+        }
+        try {
+            // 前端传过来的 password 是加密的，游戏传过来的是明文，这里和前端统一起来
+            passwd = CryptUtil.encryptAES(passwd);
+        } catch (Exception e) {
+            throw new GlobalException(CodeMsg.USER_ENCRYPT_ERROR.fillArgs(e.getMessage()));
         }
         if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(passwd), user.getPasswd())) {
             throw new GlobalException(CodeMsg.USER_LOGIN_ERROR.fillArgs("password is not correct"));
