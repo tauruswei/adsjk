@@ -60,7 +60,7 @@ public class TokenFilter implements Filter {
         // 验证 token 是否在redis中，用户退出登录，会将token放入redis中
         boolean exists = redisService.exists(TokenBlockedKey.getBlockedKey(5), auth);
         if (exists){
-            throw new GlobalException(CodeMsg.TRAN_OTHER_ERROR.fillArgs("The token is  invalid, please obtain it again."));
+            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token is invalid. Please obtain it again."));
         }
 
         //验证token
@@ -69,12 +69,12 @@ public class TokenFilter implements Filter {
         // 验证token 绑定的ip
         String ip = claim.get("ip", String.class);
         if (!StringUtils.equalsIgnoreCase(ip,MDC.get("ip"))){
-            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("The token does not match the current access IP, please obtain it again."));
+            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token does not match the current access IP. Please obtain it again."));
         }
 
 
 //		ManagePerson managePerson = (ManagePerson) JSON.toJSON(claim.get("operator"));
-//        MDC.put("userName", claim.get("userName").toString());
+        MDC.put("userName", claim.getAudience());
 //        MDC.put("cn",claim.get("cn").toString());
 //        MDC.put("group_flag", claim.get("group_flag").toString());
 //        MDC.put("uid", claim.get("uid").toString());

@@ -44,7 +44,7 @@ public class ComponentFilterOrderConfig {
         FilterRegistrationBean<ExceptionHandlerFilter> registrationBean = new FilterRegistrationBean<>();
         ExceptionHandlerFilter filter = new ExceptionHandlerFilter();
         registrationBean.setFilter(filter);
-        registrationBean.setOrder(Integer.MAX_VALUE); // 设置为最后一个 Filter
+        registrationBean.setOrder(0); // 设置为第一个 Filter，自定义 filter 中抛出的异常，也会捕获
         return registrationBean;
     }
 }

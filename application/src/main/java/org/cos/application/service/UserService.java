@@ -192,7 +192,7 @@ public class UserService {
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
         if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
-            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("verify code is invalid，please check your verify code"));
+            throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("verify code is invalid. Please check your verify code"));
         }
         // 判断用户名的唯一性
         if(ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))){
@@ -351,7 +351,7 @@ public class UserService {
             }
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
             if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid，please check your verify code"));
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid. Please check your verify code"));
             }
             user.setEmail(req.getEmail());
         }else{
@@ -387,7 +387,7 @@ public class UserService {
             }
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
             if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
-                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid，please check your verify code"));
+                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid. Please check your verify code"));
             }
             user.setEmail(req.getEmail());
         }else{
@@ -536,7 +536,7 @@ public class UserService {
         User user = new User();
 //        user = userRepository.queryUserByWalletAddressAndUserType(walletAddress, 0);
         if (null != userRepository.queryUserByWalletAddressAndUserType(walletAddress, 0)) {
-            throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("该钱包地址已经绑定了一个渠道商"));
+            throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("this wallet address has already been bound to a user"));
         }
         //先创建用户，存库
         user.setWalletAddress(walletAddress);

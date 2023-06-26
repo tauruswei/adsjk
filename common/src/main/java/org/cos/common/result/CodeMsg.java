@@ -73,24 +73,24 @@ public class CodeMsg {
 //====================================================
 //                NFT 模块
 //====================================================
-	public static CodeMsg NFT_EXIST_ERROR = new CodeMsg(500401,"NFT already exist" );
-	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500402,"NFT does not exist error: %s");
-	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500403,"purchase NFT error: %s");
-	public static CodeMsg NFT_CHANCE_NOT_BE_NEGATIVE = new CodeMsg(500404,"the number of nft's chance cannot be less than 0");
+	public static CodeMsg NFT_EXIST_ERROR = new CodeMsg(500501,"NFT already exist" );
+	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500502,"NFT does not exist error: %s");
+	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500503,"purchase NFT error: %s");
+	public static CodeMsg NFT_CHANCE_NOT_BE_NEGATIVE = new CodeMsg(500504,"the number of nft's chance cannot be less than 0");
 
 
 
 
-
-
-
-	//====================================================
+//====================================================
 //                token 模块
 //====================================================
-	public static CodeMsg TOKEN_NOT_EXIST = new CodeMsg(500201, "Token cannot be empty");
-	public static CodeMsg TOKEN_EXPIRED_ERROR = new CodeMsg(500202, "Token expired error：%s");
-	public static CodeMsg TOKEN_SIGNATURE_ERROR = new CodeMsg(500203, "Token signature error：%s");
-	public static CodeMsg TOKEN_OTHER_ERROR = new CodeMsg(500204, "Token other error：%s");
+	public static CodeMsg TOKEN_NOT_EXIST = new CodeMsg(500601, "Token cannot be empty");
+	public static CodeMsg TOKEN_EXPIRED_ERROR = new CodeMsg(500602, "Token expired error：%s");
+	public static CodeMsg TOKEN_SIGNATURE_ERROR = new CodeMsg(500603, "Token signature error：%s");
+	public static CodeMsg TOKEN_OTHER_ERROR = new CodeMsg(500604, "Token other error：%s");
+
+
+
 
 //====================================================
 //                交易 模块
