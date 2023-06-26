@@ -17,6 +17,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Arrays;
 
 
 /**
@@ -46,10 +47,20 @@ public class TokenFilter implements Filter {
 		/*
 		  1.执行接口调用需要进行身份认证检查token 合法性
 		 */
-		logger.debug("request url" + ((HttpServletRequest) request).getRequestURI());
+        String requestURI =  ((HttpServletRequest) request).getRequestURI();
+
+        logger.debug("request url" + requestURI);
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
+
+        String[] excludeUrls = new String[]{"/user/login","/user/sendCode","/user/resetPasswd","/user/validateEmailIsAvaliable",
+        "/user/queryChannelLeaderByWalletAddress","/user/register","/game/getUserProfile","/user/createGuestUser","/web/increaseDownload","/web/getStatisticalData"};
+        if (Arrays.asList(excludeUrls).contains(requestURI)||((requestURI.matches("^/webTransaction/(?!queryUserIsAbleForUnStake|queryUserIsAbleForStake|queryTransactionsList|queryBlurTransactionsList).*$")))){
+            chain.doFilter(request, response);
+            return;
+        }
+
         String auth = httpServletRequest.getHeader("Authorization");
 
         if (StringUtils.isBlank(auth)) {
