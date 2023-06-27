@@ -32,6 +32,7 @@ public class Web3jConfiguration {
         @Data
         public static class ContractProperties {
             private String address;
+            private String proxyAddress;
             private String abi;
             private String image;
         }
