@@ -26,6 +26,7 @@ public class Web3jConfiguration {
         private Integer chainId;
         @JsonIgnore
         private String privateKey;
+        private String nftReceiveAddress;
         private Map<String, ContractProperties> contract;
 
         // getters and setters
