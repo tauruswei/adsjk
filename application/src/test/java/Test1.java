@@ -39,6 +39,7 @@ import software.amazon.awssdk.services.sesv2.model.DeleteEmailTemplateRequest;
 import software.amazon.awssdk.services.sesv2.model.EmailTemplateContent;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -51,10 +52,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 @RunWith(SpringRunner.class)
@@ -515,4 +513,48 @@ public class Test1 {
         System.out.println("Test 4 passed");
     }
 
+    @Test
+    public void test6(){
+        String errMsg = "[code=500604, msg=Token other error：the token is invalid, please obtain it again.]";
+
+// 去除左右两侧的 []
+        errMsg = errMsg.substring(1, errMsg.length() - 1);
+
+// 按照 "," 分割字符串，获取 msg 部分
+        String[] parts = errMsg.split(", ");
+
+// 选择 msg 部分
+        String msg = parts[1];
+
+        System.out.println(msg);
+    }
+
+    @Test
+    public void test7() throws Exception {
+        String key = "BLOCKCHAINAESKEY";
+        String iv = "AESKEYBLOCKCHAIN";
+        String message = "Xiao120315!";
+
+        String encrypted = encryptAES(message, key, iv);
+        System.out.println(encrypted);
+    }
+    public static String encryptAES(String message, String key, String iv) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+        IvParameterSpec ivSpec = new IvParameterSpec(iv.getBytes(StandardCharsets.UTF_8));
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
+
+        byte[] encryptedBytes = cipher.doFinal(message.getBytes(StandardCharsets.UTF_8));
+        return toHex(encryptedBytes).toUpperCase();
+
+    }
+    public static String toHex(byte[] bytes) {
+        Formatter formatter = new Formatter();
+        for (byte b : bytes) {
+            formatter.format("%02x", b);
+        }
+        return formatter.toString();
+    }
 }
+
