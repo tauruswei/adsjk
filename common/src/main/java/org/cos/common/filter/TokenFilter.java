@@ -61,7 +61,13 @@ public class TokenFilter implements Filter {
             return;
         }
 
+
+
         String auth = httpServletRequest.getHeader("Authorization");
+        // 前端目前将 token 设置在 header 的 token 字段
+        if(StringUtils.isBlank(auth)){
+            auth = httpServletRequest.getHeader("Token");
+        }
 
         if (StringUtils.isBlank(auth)) {
             //不存在token
