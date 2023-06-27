@@ -85,6 +85,12 @@ spring:
       cdnConfig:
         url: https://s3.ap-northeast-1.amazonaws.com/www.chessofstars.io
         version: 1.0
+    aws:
+      ses:
+        accessKeyId: AKIASBV7DL66FPX7YGHR
+        secretKey: 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
+        region: ap-northeast-1
+        verifyCodeTemplate: VerifyCodeTemplate-English
 
 
   ############################################################
