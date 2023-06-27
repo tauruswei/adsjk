@@ -44,6 +44,9 @@ public class ExceptionHandlerFilter extends GenericFilterBean {
             codeMsg.setCode(code);
             codeMsg.setMsg(msg);
             logger.error(LogTool.failLog(codeMsg));
+            if (code>=500601 && code <=500604) {
+                httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            }
 
             String jsonResponse = objectMapper.writeValueAsString(response);
             httpServletResponse.getWriter().write(jsonResponse);
