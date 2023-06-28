@@ -1,51 +1,51 @@
+import com.alibaba.fastjson.JSON;
 import io.reactivex.disposables.Disposable;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.cos.application.CosdApplication;
+import org.cos.common.entity.data.req.CosdStakeForSLReq;
+import org.cos.common.redis.RedisService;
+import org.cos.common.redis.TransactionKey;
 import org.cos.common.util.ZipUtils;
-import org.cos.common.util.crypt.CryptUtil;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.web3j.abi.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.web3j.abi.EventEncoder;
+import org.web3j.abi.EventValues;
+import org.web3j.abi.FunctionReturnDecoder;
+import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Event;
-import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.RawTransaction;
-import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameter;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.EthFilter;
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
-import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.core.methods.response.Log;
-import org.web3j.protocol.core.methods.response.Transaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.protocol.websocket.WebSocketService;
 import org.web3j.tx.Contract;
-import org.web3j.utils.Numeric;
+import redis.clients.jedis.StreamEntry;
+import redis.clients.jedis.StreamEntryID;
+import redis.clients.jedis.StreamPendingEntry;
+import redis.clients.jedis.params.XReadGroupParams;
 
-import javax.crypto.*;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
-import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+@SpringBootTest(classes = CosdApplication.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class Test1 {
+    @Autowired
+    RedisService redisService;
     @Test
     public void test1(){
         Date date1 = new Date();
@@ -297,5 +297,105 @@ public class Test1 {
 //                }
 //            }
     }
+    @Test
+    public void test6(){
 
+//        redisService.xgroupCreate("testStream", "testGGroup", true);
+        Map<String,String> map = new HashMap<>();
+        map.put("testKey1","testValue1");
+        map.put("testKey2","testValue2");
+        map.put("testKey3","testValue3");
+        map.put("testKey4","testValue4");
+        redisService.xadd(TransactionKey.getTx,"tx",map);
+
+    }
+    @Test
+    public void test7(){
+
+        redisService.xgroupCreate("testStream", "testGGroup", true);
+//        Map<String,String> map = new HashMap<>();
+//        map.put("testKey5","testValue5");
+
+
+//        redisService.xadd("testStream",map);
+
+        // Setup parameters
+        XReadGroupParams xReadGroupParams = new XReadGroupParams().noAck().count(2);
+        Map<String, StreamEntryID> entry = new HashMap<>();
+        entry.put("testStream", StreamEntryID.UNRECEIVED_ENTRY);
+        List<Map.Entry<String, List<StreamEntry>>> entries = redisService.xreadGroup(TransactionKey.getTx, "tx", CosdStakeForSLReq.class);
+// Read from stream
+//        List<StreamEntry> result = jedisCluster.xreadGroup(group, consumer, xReadGroupParams, entry);
+//
+// Process result
+//        for (StreamEntry message : entries) {
+//            System.out.println("Received message: " + message.getID() + " = " + message.getFields());
+//        }
+//        redisService.xreadGroup("testGGroup","a",)
+//        redisService.xadd("testStream",map);
+        System.out.println(entries);
+
+    }
+    @Test
+    public void test8(){
+
+//        redisService.xgroupCreate("testStream", "testGGroup", true);
+
+
+        for (int i = 0; i < 20; i++) {
+            CosdStakeForSLReq cosdStakeForSLReq = new CosdStakeForSLReq();
+            cosdStakeForSLReq.setTxId("tx"+i);
+            cosdStakeForSLReq.setBlockNumber((long) i);
+
+            Map<String,String> map = new HashMap<>();
+            map.put("tx", JSON.toJSONString(cosdStakeForSLReq));
+            redisService.xadd(TransactionKey.getTx,"tx",cosdStakeForSLReq);
+        }
+    }
+
+    @Test
+    public void test9(){
+        XReadGroupParams xReadGroupParams = new XReadGroupParams().count(5);
+        Map<String, StreamEntryID> entry = new HashMap<>();
+        entry.put("testStream", StreamEntryID.UNRECEIVED_ENTRY);
+        List<Map.Entry<String, List<StreamEntry>>> entries = redisService.xreadGroup(TransactionKey.getTx,"tx", CosdStakeForSLReq.class);
+        if (ObjectUtils.isNotEmpty(entries)&& entries.size()>0){
+            Map.Entry<String, List<StreamEntry>> stringListEntry = entries.get(0);
+            List<StreamEntry> value = stringListEntry.getValue();
+            for(StreamEntry streamEntry:value){
+                Map<String, String> fields = streamEntry.getFields();
+                for (Map.Entry<String, String> fieldEntry : fields.entrySet()) {
+                    System.out.println("Field: " + fieldEntry.getKey() + " Value: " + fieldEntry.getValue());
+                }
+            }
+        }
+    }
+
+    @Test
+    public void test10(){
+        String streamName = "testStream";
+        String groupName = "testGroup";
+        String consumerName = "consumer_a";
+//        List<Object> xpending = redisService.xpending(streamName, groupName, consumerName);
+//        System.out.println(xpending);
+//
+//        for (Object message : xpending) {
+//            List<Object> message1 = (List<Object>) message;
+//            String id = new String( (byte[])message1.get(0),StandardCharsets.UTF_8); // 消息ID
+//            String consumerName1 = new String((byte[]) message1.get(1),StandardCharsets.UTF_8); // 消费者名
+//            long elapsedMillis = (Long) message1.get(2); // 自消费者读取此消息以来的毫秒数
+//            long timesDelivered = (Long) message1.get(3); // 消息被传递的次数
+//
+//            System.out.println("Message ID: " + id);
+//            System.out.println("Consumer Name: " + consumerName1);
+//            System.out.println("Elapsed Milliseconds: " + elapsedMillis);
+//            System.out.println("Times Delivered: " + timesDelivered);
+//        }
+        List<StreamPendingEntry> xpending = redisService.xpending(TransactionKey.getTx,"",CosdStakeForSLReq.class);
+        for ( StreamPendingEntry message : xpending) {
+            List<StreamEntry> xrange = redisService.xrange(streamName, message.getID(), message.getID(), 1);
+            System.out.println(xrange.get(0).getFields());
+            System.out.println(message);
+        }
+    }
 }

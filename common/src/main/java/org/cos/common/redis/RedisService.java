@@ -1,6 +1,8 @@
 package org.cos.common.redis;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,10 +19,12 @@ public class RedisService {
 	@Autowired
 	JedisCluster jedisCluster;
 
-	@Value("")
-	String streamKey;
-	@Value("")
-	String groupName;
+	@Value("${spring.redis.stream.key}")
+	private String streamKey;
+	@Value("${spring.redis.stream.group}")
+	private String streamGroup;
+	@Value("${spring.redis.stream.consumer}")
+	private String streamConsumer;
 
 
 	/**
@@ -429,9 +433,13 @@ public class RedisService {
 ////			returnToPool(jedis);
 ////		}
 //	}
-
-	public StreamEntryID xadd(String key, Map<String, String> content) {
-		return jedisCluster.xadd(key, StreamEntryID.NEW_ENTRY, content);
+	// 向 stream 中添加对象
+ 	public <T> StreamEntryID xadd(KeyPrefix prefix,String key,T value) {
+		String realKey  = prefix.getPrefix() + key;
+		String content = beanToString(value);
+		Map<String,String> map = new HashMap();
+		map.put(realKey,content);
+		return jedisCluster.xadd(streamKey, StreamEntryID.NEW_ENTRY, map);
 	}
 
 	public long xlen(String key) {
@@ -451,9 +459,29 @@ public class RedisService {
 	public List<Map.Entry<String, List<StreamEntry>>> xread(XReadParams xReadParams, Map<String, StreamEntryID> streams) {
 		return jedisCluster.xread(xReadParams, streams);
 	}
+//	public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
 
-	public List<Map.Entry<String, List<StreamEntry>>> xreadGroup(String group, String consumer, XReadGroupParams xReadGroupParams, Map<String, StreamEntryID> streams) {
-		return jedisCluster.xreadGroup(group, consumer, xReadGroupParams, streams);
+	public <T>List<Map<StreamEntryID,T>> xreadGroup(KeyPrefix prefix, String key,  Class<T> clazz) {
+		List list = new ArrayList();
+		String realKey = prefix.getPrefix()+key;
+		// todo 每次读 10 个交易
+		XReadGroupParams xReadGroupParams = new XReadGroupParams().count(10);
+		Map<String, StreamEntryID> entry = new HashMap<>();
+		entry.put(streamKey, StreamEntryID.UNRECEIVED_ENTRY);
+		List<Map.Entry<String, List<StreamEntry>>> entries = jedisCluster.xreadGroup(streamGroup, streamConsumer, xReadGroupParams, entry);
+		if (ObjectUtils.isNotEmpty(entries)&& entries.size()>0){
+			// todo 只读取 streamKey 下的交易
+			Map.Entry<String, List<StreamEntry>> stringListEntry = entries.get(0);
+			List<StreamEntry> value = stringListEntry.getValue();
+			for(StreamEntry streamEntry:value){
+				Map map = new HashMap();
+				Map<String, String> fields = streamEntry.getFields();
+				String s = fields.get(realKey);
+				T object = JSONObject.parseObject(fields.get(realKey), clazz);
+				list.add(map.put(streamEntry.getID(),object));
+			}
+		}
+		return list;
 	}
 
 	public List<StreamEntry> xrange(String key, StreamEntryID start, StreamEntryID end, int count) {
@@ -464,18 +492,38 @@ public class RedisService {
 		return jedisCluster.xrevrange(key, start, end, count);
 	}
 
-	public long xack(String key, String group, StreamEntryID... ids) {
-		return jedisCluster.xack(key, group, ids);
+	public long xack(StreamEntryID... ids) {
+		return jedisCluster.xack(streamKey, streamGroup, ids);
 	}
 
 	public long xdel(String key, StreamEntryID... ids) {
 		return jedisCluster.xdel(key, ids);
 	}
-	public List<Object> xpending(String key, String group, String consumer){
-		List<Object> pendingEntries = jedisCluster.xpending(key.getBytes(StandardCharsets.UTF_8), group.getBytes(StandardCharsets.UTF_8), "-".getBytes(StandardCharsets.UTF_8), "+".getBytes(StandardCharsets.UTF_8), 10, consumer.getBytes(StandardCharsets.UTF_8));
+
+	public <T>List<Map<StreamEntryID,T>> xpending(KeyPrefix prefix, String key,  Class<T> clazz){
+		List list = new ArrayList();
+//		List<Object> pendingEntries = jedisCluster.xpending(key.getBytes(StandardCharsets.UTF_8), group.getBytes(StandardCharsets.UTF_8), "-".getBytes(StandardCharsets.UTF_8), "+".getBytes(StandardCharsets.UTF_8), 10, consumer.getBytes(StandardCharsets.UTF_8));
 //		List<Object> pendingEntries = jedisCluster.xpending(key, group, "-", "+", 10, consumer);
-		return pendingEntries;
+		String realKey = prefix.getPrefix()+key;
+		StreamEntryID start = new StreamEntryID(0, 0);
+		StreamEntryID end = new StreamEntryID(Long.MAX_VALUE, Long.MAX_VALUE);
+		// todo 一次性读取 10个未确认的交易
+		List<StreamPendingEntry> xpending = jedisCluster.xpending(streamKey, streamGroup, start, end, 10, streamConsumer);
+		for ( StreamPendingEntry message : xpending) {
+			// todo 根据 消息id 读取消息详情
+			Map map = new HashMap<>();
+			List<StreamEntry> xrange = xrange(streamKey, message.getID(), message.getID(), 1);
+			Map<String, String> fields = xrange.get(0).getFields();
+			String s = fields.get(realKey);
+			T object = JSONObject.parseObject(fields.get(realKey), clazz);
+			list.add(map.put(message.getID(),object));
+
+		}
+
+//		jedisCluster.xpending
+		return list;
 	}
+
 
 	private <T> String beanToString(T value) {
 		if(value == null) {

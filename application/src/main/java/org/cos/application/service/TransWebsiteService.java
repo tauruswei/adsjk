@@ -20,6 +20,7 @@ import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.exception.GlobalExceptionHandler;
 import org.cos.common.redis.RedisService;
+import org.cos.common.redis.TransactionKey;
 import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
@@ -27,6 +28,7 @@ import org.cos.common.tool.LogTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.abi.FunctionEncoder;
@@ -73,6 +75,8 @@ public class TransWebsiteService {
     UserRepository userRepository;
     @Autowired
     RedisService redisService;
+    @Value("${spring.redis.stream.key}")
+    private String key;
     @Autowired
     private Web3j web3j;
 
@@ -115,7 +119,10 @@ public class TransWebsiteService {
                 throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
             }
             req.setTransWebsiteId(transWebsite.getId());
-            redisService.publish(baseConfiguration.getRedisChannel(), JSON.toJSON(req).toString());
+//            Map map = new HashMap<>();
+//            map.put(transWebsite.getTxId(),JSON.toJSONString(transWebsite));
+            redisService.xadd(TransactionKey.getTx,"",transWebsite);
+//            redisService.publish(baseConfiguration.getRedisChannel(), JSON.toJSON(req).toString());
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
         }
