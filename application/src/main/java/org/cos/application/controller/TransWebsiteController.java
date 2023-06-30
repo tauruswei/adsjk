@@ -94,7 +94,7 @@ public class TransWebsiteController {
     @ApiOperation("验证token有效性")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("checkToken")
-    public Result checkToken(@Validated @RequestBody TranBlurListReq req) {
+    public Result checkToken() {
         // 参数校验
 //        if (StringUtils.isBlank(req.getName()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");

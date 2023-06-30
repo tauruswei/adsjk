@@ -89,7 +89,7 @@ spring:
   #########################################################
   myapp:
     mailNickName: COSD
-    tokenTimeOut: 604800000
+    tokenTimeOut: 18000000
     slAmount: 400
     clubAmount: 4000
     redisChannel: COSD-Transaction
