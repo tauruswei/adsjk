@@ -1,13 +1,13 @@
 package org.cos.common.filter;
 
+import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.StringUtils;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.redis.RedisService;
 import org.cos.common.redis.TokenBlockedKey;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.token.CheckResult;
 import org.cos.common.token.TokenManager;
-import io.jsonwebtoken.Claims;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -56,10 +56,12 @@ public class TokenFilter implements Filter {
 
         String[] excludeUrls = new String[]{"/user/login","/user/sendCode","/user/resetPasswd","/user/validateEmailIsAvaliable",
         "/user/queryChannelLeaderByWalletAddress","/user/register","/game/getUserProfile","/user/createGuestUser","/web/increaseDownload","/web/getStatisticalData"};
-        if (Arrays.asList(excludeUrls).contains(requestURI)||((requestURI.matches("^/webTransaction/(?!queryUserIsAbleForUnStake|queryUserIsAbleForStake|queryTransactionsList|queryBlurTransactionsList).*$")))){
+//        if (Arrays.asList(excludeUrls).contains(requestURI)||((requestURI.matches("^/webTransaction/(?!queryUserIsAbleForUnStake|queryUserIsAbleForStake|queryTransactionsList|queryBlurTransactionsList).*$")))){
+        if (Arrays.asList(excludeUrls).contains(requestURI)){
             chain.doFilter(request, response);
             return;
         }
+
 
 
 
@@ -77,7 +79,7 @@ public class TokenFilter implements Filter {
         // 验证 token 是否在redis中，用户退出登录，会将token放入redis中
         boolean exists = redisService.exists(TokenBlockedKey.getBlockedKey(5), auth);
         if (exists){
-            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token is invalid. Please obtain it again."));
+            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token is invalid, please obtain it again."));
         }
 
         //验证token
@@ -86,7 +88,11 @@ public class TokenFilter implements Filter {
         // 验证token 绑定的ip
         String ip = claim.get("ip", String.class);
         if (!StringUtils.equalsIgnoreCase(ip,MDC.get("ip"))){
-            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token does not match the current access IP. Please obtain it again."));
+            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token does not match the current access ip, please obtain it again."));
+        }
+
+        if (claim.getExpiration().getTime() - System.currentTimeMillis()<18000000){
+            throw new GlobalException(CodeMsg.TOKEN_OTHER_ERROR.fillArgs("the token is about to expire, please obtain it again."));
         }
 
 

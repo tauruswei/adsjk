@@ -91,6 +91,18 @@ public class TransWebsiteController {
         return webTranService.queryBlurTransactionsList(req);
     }
 
+    @ApiOperation("验证token有效性")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("checkToken")
+    public Result checkToken(@Validated @RequestBody TranBlurListReq req) {
+        // 参数校验
+//        if (StringUtils.isBlank(req.getName()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
+//        if (StringUtils.isBlank(req.getAttrs()))
+//            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        return Result.success();
+    }
+
 //    @ApiOperation("用户解押星光池中的 COSD")
 //    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
 //    @PostMapping("unStakeForSL")
