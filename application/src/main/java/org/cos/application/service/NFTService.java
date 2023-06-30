@@ -124,19 +124,19 @@ public class NFTService {
 
     public Result queryNFTsByUserIdAndStatusGame(NFTListReq req){
 
-        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
-            PageHelper.startPage(req.getPageNo(),req.getPageSize());
-        }else{
-            PageHelper.startPage(1,10);
-        }
+//        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
+//            PageHelper.startPage(req.getPageNo(),req.getPageSize());
+//        }else{
+//            PageHelper.startPage(1,10);
+//        }
         NFT nft = new NFT();
         nft.setUserId(req.getUserId());
         nft.setStatus(req.getStatus());
         List<NFT> nfts = nftRepository.queryNFTsByUserIdAndStatus(nft);
 
-        PageInfo<NFT> pageInfo = new PageInfo<>(nfts);
+//        PageInfo<NFT> pageInfo = new PageInfo<>(nfts);
 
-        return Result.success(pageInfo);
+        return Result.success(nfts);
     }
 
     public Result updateNFTStatus(NFTUpdateReq req){

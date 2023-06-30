@@ -537,11 +537,11 @@ public class UserService {
         // 查找已使用的 NFT
         nftListReq.setStatus(CommonConstant.NFT_USED);
 
-        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
+        Result<List<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
 
 //        List<NFT> list = nfts.getData().getList();
 
-        return Result.success( GameVoConvert.UserGameVoConvert(jwt,user,assets.getData(),nfts.getData().getList(),poolUser.getAmount()>=baseConfiguration.getSlAmount()?true:false));
+        return Result.success( GameVoConvert.UserGameVoConvert(jwt,user,assets.getData(),nfts.getData(),poolUser.getAmount()>=baseConfiguration.getSlAmount()?true:false));
     }
 
     public Result createChannelLeader(String walletAddress) {

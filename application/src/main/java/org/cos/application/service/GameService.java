@@ -89,9 +89,9 @@ public class GameService {
         // 查找已使用的 NFT
         nftListReq.setStatus(1);
 
-        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
+        Result<List<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
 
-        UserGameVo userGameVo = GameVoConvert.UserGameVoConvert(jwt, user, assets1.getData(), nfts.getData().getList(),poolUser.getAmount()>baseConfiguration.getSlAmount()?true:false);
+        UserGameVo userGameVo = GameVoConvert.UserGameVoConvert(jwt, user, assets1.getData(), nfts.getData(),poolUser.getAmount()>baseConfiguration.getSlAmount()?true:false);
 
         return Result.success(userGameVo);
     }
@@ -138,9 +138,9 @@ public class GameService {
         // 查找已使用的 NFT
         nftListReq.setStatus(1);
 
-        Result<PageInfo<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
+        Result<List<NFT>> nfts = nftService.queryNFTsByUserIdAndStatusGame(nftListReq);
 
-        UserGameVo userGameVo = GameVoConvert.UserGameVoConvert(jwt, user, assets1.getData(), nfts.getData().getList(),poolUser.getAmount()>baseConfiguration.getSlAmount()?true:false);
+        UserGameVo userGameVo = GameVoConvert.UserGameVoConvert(jwt, user, assets1.getData(), nfts.getData(),poolUser.getAmount()>baseConfiguration.getSlAmount()?true:false);
         return Result.success(userGameVo);
     }
 }
