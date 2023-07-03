@@ -31,6 +31,25 @@ public class CommonConstant {
     public static final int EVIC=3;
     public static final int SL=4;
 
+    // 用户交易类型
+    public static final int PURCHASE_COSD=0;
+    public static final int STAKE_COSD_DEFI=1;
+    public static final int STAKE_COSD_SL=2;
+    public static final int STAKE_COSD_CLUB=3;
+    public static final int UNSTAKE_COSD_DEFI=4;
+    public static final int UNSTAKE_COSD_SL=5;
+    public static final int UNSTAKE_COSD_CLUB=6;
+    public static final int PURCHASE_EVIC=7;
+    public static final int WITHDRAW_EVIC=8;
+    public static final int PURCHASE_NFT=9;
+    public static final int TRANSFER_NFT=10;
+
+
+
+
+
+
+
     // evic 和 usdt的兑换比例
 
     public static final  int USDT_EVIC_EXCHANGE_RATE=100;

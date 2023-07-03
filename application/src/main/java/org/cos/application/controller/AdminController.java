@@ -4,15 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.cos.common.entity.data.vo.WebStatisticalDataVo;
-import org.cos.common.redis.DownloadKey;
-import org.cos.common.redis.RedisService;
+import org.cos.application.service.AdminService;
 import org.cos.common.repository.TransWebsiteRepository;
-import org.cos.common.repository.UserRepository;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Api(value = "Web controller", tags = "web 模块", description = "web 模块 Rest API")
@@ -21,21 +19,44 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AdminController {
     @Autowired
-    private RedisService redisService;
-    @Autowired
-    private UserRepository userRepository;
+    private AdminService adminService;
 
     @Autowired
     private TransWebsiteRepository transWebsiteRepository;
 
     @ApiOperation("统计 evic 的总销售量")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
-    @PostMapping("sumEvicSales")
-    public Result sumEvicSales(){
-        long l = transWebsiteRepository.sumEvicSales();
+    @PostMapping("sumEvic")
+    public Result sumEvic(@RequestParam(name = "transType",required = true) int transType,@RequestParam(name = "days",required = false) int days,@RequestParam(name = "userId",required = false,defaultValue = "0") Long userId){
 
-        return Result.success();
+        return adminService.sumEvicSales(transType,days,userId);
     }
+    @ApiOperation("统计 evic 某一天的销售量")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("sumEvicDay")
+    public Result sumEvicDay(@RequestParam(name = "transType",required = true) int transType,@RequestParam(name = "days",required = false) int days,@RequestParam(name = "userId",required = false,defaultValue = "0") Long userId){
+
+        return adminService.sumEvicSalesDay(transType,days,userId);
+    }
+
+    @ApiOperation("统计 星光玩家的数量")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("statisticalSL")
+    public Result statisticalSL(@RequestParam(name = "userId",required = false,defaultValue = "0") Long userId){
+
+        return adminService.statisticalSL(userId);
+    }
+
+    @ApiOperation("统计 NFT 销售和使用情况")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("statisticalNFT")
+    public Result statisticalNFT(@RequestParam(name = "userId",required = false,defaultValue = "0") Long userId){
+
+        return adminService.statisticalNFT(userId);
+    }
+
+
+
 
 
 

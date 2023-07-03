@@ -89,7 +89,10 @@ public class CodeMsg {
 	public static CodeMsg TOKEN_SIGNATURE_ERROR = new CodeMsg(500603, "Token signature error：%s");
 	public static CodeMsg TOKEN_OTHER_ERROR = new CodeMsg(500604, "Token other error：%s");
 
-
+//====================================================
+//                admin 模块
+//====================================================
+	public static CodeMsg EVIC_STATISTICAL_ERROR = new CodeMsg(500701, "Failed to retrieve statistical data.");
 
 
 //====================================================

@@ -19,6 +19,13 @@
         <result property="remark" column="remark" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <resultMap type="org.cos.common.entity.data.dto.AssetDTO" id="AssetDTOResult">
+        <result property="purchaseSumAmount" column="purchase_sum_amount" jdbcType="DECIMAL"/>
+        <result property="purchasePersons" column="purchase_persons" jdbcType="BIGINT"/>
+        <result property="withdrawSumAmount" column="withdraw_sum_amount" jdbcType="DECIMAL"/>
+        <result property="withdrawPersons" column="withdraw_persons" jdbcType="BIGINT"/>
+    </resultMap>
+
     <insert id="insertTransWebsite" useGeneratedKeys="true" keyProperty="id" parameterType="org.cos.common.entity.data.po.TransWebsite">
         insert into trans_website(txid,trans_type,from_user_id,from_asset_type,from_amount,to_user_id,to_asset_type,to_amount,nft_token_id,create_time,update_time,remark)
         values(#{txId},#{transType},#{fromUserId},#{fromAssetType},#{fromAmount},#{toUserId},#{toAssetType},#{toAmount},#{nftTokenId},#{createTime},#{updateTime},#{remark})
@@ -64,28 +71,52 @@
         </where>
     </select>
 
-    <select id="queryBlurTransactionsList" resultMap="TransWebsiteResult" parameterType="org.cos.common.entity.data.req.TranBlurListReq">
-        select
-        *
-        from trans_website
+    <select id="purchaseSumEvic"  resultMap="AssetDTOResult" parameterType="map">
+        SELECT SUM(to_amount) AS purchase_sum_amount, COUNT(*) AS purchase_persons FROM trans_website
         <where>
-            <if test="req.transType != null and req.transType.length > 0">
-            AND trans_type in
-                <foreach item="type" collection="req.transType" open="(" separator="," close=")">
-                    #{type}
-                </foreach>
+            trans_type=#{transType}
+            AND update_time >= DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
+            <if test="userId != null and userId !=0">
+                AND from_user_id =  #{userId}
             </if>
-            <if test="req.userId != null and req.userId !=0">
-                AND from_user_id = #{req.userId}
+        </where>
+    </select>
+
+
+    <select id="withdrawSumEvic"  resultMap="AssetDTOResult" parameterType="map">
+        SELECT SUM(from_amount) AS withdraw_sum_amount, COUNT(*) AS withdraw_persons FROM trans_website
+        <where>
+            trans_type=#{transType}
+            <if test="days != null and days !=0">
+                AND update_time >= DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
             </if>
-            <if test="req.status != null ">
-                AND status = #{req.status}
+            <if test="userId != null and userId !=0">
+                AND from_user_id =  #{userId}
             </if>
-            <if test="req.time != null ">
-                AND upchain_time >= #{req.time}
+        </where>
+    </select>
+
+    <select id="purchaseSumEvicDay" resultMap="AssetDTOResult" parameterType="map">
+        SELECT SUM(to_amount) AS purchase_sum_amount, COUNT(*) AS purchase_persons FROM trans_website
+        <where>
+            trans_type=#{transType}
+            AND update_time >=  DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
+            AND DATE_SUB(CURDATE(), INTERVAL #{days}-1 DAY) >= update_time
+            <if test="userId != null and userId !=0">
+                AND from_user_id = #{userId}
             </if>
 
-            order by upchain_time DESC
+        </where>
+    </select>
+    <select id="withdrawSumEvicDay"  resultMap="AssetDTOResult" parameterType="map">
+        SELECT SUM(from_amount) AS withdraw_sum_amount, COUNT(*) AS withdraw_persons FROM trans_website
+        <where>
+            trans_type=#{transType}
+            AND update_time >=  DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
+            AND DATE_SUB(CURDATE(), INTERVAL #{days}-1 DAY) >= update_time
+            <if test="userId != null and userId !=0">
+                AND from_user_id = #{userId}
+            </if>
 
         </where>
     </select>
@@ -160,4 +191,5 @@
     <update id="updateUserAccount">
         update sys_user set user_account=#{userAccount} where user_id=#{userId}
     </update>
+
 </mapper>

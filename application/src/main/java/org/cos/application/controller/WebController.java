@@ -49,7 +49,6 @@ public class WebController {
         // 获取web3用户
 
         WebStatisticalDataVo webStatisticalDataVo = userRepository.countWeb2AndWeb3User();
-        log.info("======>请求--{}--接口开始,参数:{}", webStatisticalDataVo);
         if(ObjectUtils.isEmpty(webStatisticalDataVo)){
             webStatisticalDataVo = new WebStatisticalDataVo();
         }
@@ -73,13 +72,24 @@ public class WebController {
     @GetMapping("getStatisticalData1")
     public Result getStatisticalData1(){
 
-        WebStatisticalDataVo webStatisticalDataVo = new WebStatisticalDataVo();
-       webStatisticalDataVo.setDownloadCount(1000);
-       webStatisticalDataVo.setWeb2Count(205);
-       webStatisticalDataVo.setWeb3Count(86);
-       webStatisticalDataVo.setGameCount(3216);
+        // 获取游戏的下载量
+        Integer downloadCount = redisService.get(DownloadKey.getDownload, "", Integer.class);
+        if(ObjectUtils.isEmpty(downloadCount)){
+            downloadCount =0;
+        }
 
+        // 获取web3用户
+
+        WebStatisticalDataVo webStatisticalDataVo = userRepository.countWeb2AndWeb3User();
+        if(ObjectUtils.isEmpty(webStatisticalDataVo)){
+            webStatisticalDataVo = new WebStatisticalDataVo();
+        }
+
+
+        webStatisticalDataVo.setDownloadCount(downloadCount);
+        // todo 游戏数量
         return Result.success(webStatisticalDataVo);
+
     }
 
     @ApiOperation("获取网站配置")
