@@ -13,6 +13,6 @@ public class BaseConfiguration {
     private int clubAmount;
     private String redisChannel;
     private String cipherKey;
-    private String allowedOrigins;
+    private String[] allowedOrigins;
     private WebConfig webConfig;
 }
