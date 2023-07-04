@@ -80,7 +80,9 @@ spring:
     clubAmount: 4000
     redisChannel: COSD-Transaction
     cipherKey: 3XIIJHvwPVhG1LgUQx0NTHQQruFsJdcFjMjrOnmayk8
-#    webConfig:
+
+    allowedOrigins: https://www.chessofstars.io,https://account.chessofstars.io,https://asset.chessofstars.io,https://test.chessofstars.io
+    #    webConfig:
 #      cdnConfig:
 #        url: https://s3.ap-northeast-1.amazonaws.com/www.chessofstars.io
 #        version: 1.0

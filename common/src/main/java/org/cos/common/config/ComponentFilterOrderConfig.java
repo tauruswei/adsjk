@@ -1,5 +1,6 @@
 package org.cos.common.config;
 
+import org.cos.common.filter.CorsFilter;
 import org.cos.common.filter.ExceptionHandlerFilter;
 import org.cos.common.filter.GetIpAddrFilter;
 import org.cos.common.filter.TokenFilter;
@@ -21,6 +22,11 @@ public class ComponentFilterOrderConfig {
         return new TokenFilter();//自定义的过滤器
     }
     @Bean
+    public Filter corsFilter(){
+        return new CorsFilter();//自定义的过滤器
+    }
+
+    @Bean
     public FilterRegistrationBean filterRegistrationBean1(){
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
         filterRegistrationBean.setFilter(ipFilter());
@@ -37,6 +43,14 @@ public class ComponentFilterOrderConfig {
 //        filterRegistrationBean.addUrlPatterns("/user/*", "/certificate/*", "/localCA/*");
 //        filterRegistrationBean.addUrlPatterns("/user/logout", "/localCA/*");
         filterRegistrationBean.setOrder(7);
+        return filterRegistrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean3(){
+        FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(corsFilter());
+        filterRegistrationBean.setName("corsFilter");
+        filterRegistrationBean.setOrder(1);
         return filterRegistrationBean;
     }
     @Bean
