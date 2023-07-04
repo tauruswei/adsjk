@@ -68,6 +68,12 @@ spring:
     poolMaxIdle: 200
     poolMinIdle: 100
     poolMaxWait: 3
+    stream:
+      maxMount: 10000
+      key: cosd-stream
+      group: cosd-group
+      consumer: cosd-user
+      maxTime: 86400000
 
   ############################################################
   #

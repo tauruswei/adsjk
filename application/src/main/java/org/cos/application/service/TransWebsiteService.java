@@ -20,6 +20,7 @@ import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.exception.GlobalExceptionHandler;
 import org.cos.common.redis.RedisService;
+import org.cos.common.redis.TransactionKey;
 import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
@@ -115,7 +116,7 @@ public class TransWebsiteService {
                 throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
             }
             req.setTransWebsiteId(transWebsite.getId());
-            redisService.publish(baseConfiguration.getRedisChannel(), JSON.toJSON(req).toString());
+            redisService.xadd(TransactionKey.getTx,"",req);
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
         }
