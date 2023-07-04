@@ -60,14 +60,20 @@ spring:
   #
   ############################################################
   redis:
-    host: cosd-redis
-    port: 6379
-    timeout: 1000
     password: platform
-    poolMaxTotal: 300
-    poolMaxIdle: 200
-    poolMinIdle: 100
-    poolMaxWait: 3
+    cluster:
+      nodes: 127.0.0.1:6371,127.0.0.1:6372,127.0.0.1:6373,192.168.2.155:6374,192.168.2.155:6375,192.168.2.155:6376
+      # 最大重定向次数
+      max-redirects: 5
+    stream:
+      maxMount: 10000
+      key: cosd-stream
+      group: cosd-group
+      consumer: cosd-user
+      maxTime: 86400000
+
+
+
 
   ############################################################
   #
