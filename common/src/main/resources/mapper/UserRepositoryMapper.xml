@@ -8,6 +8,7 @@
         <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="walletAddress" column="wallet_address" jdbcType="VARCHAR"/>
         <result property="userType" column="user_type" jdbcType="TINYINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
         <result property="userRelationId" column="user_relation_id" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
@@ -49,6 +50,14 @@
         where id=#{userId}
     </select>
 
+
+    <select id="queryUserList" resultMap="UserResult" parameterType="int">
+        select
+        id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
+        from user
+        where user_type=#{userType}
+    </select>
+
     <select id="queryUserByWalletAddressAndUserType" resultMap="UserResult">
         select
         id,name,passwd,email,wallet_address,user_type,user_relation_id,create_time,update_time
@@ -67,6 +76,7 @@
         <set>
             <if test="name!=null and name!=''">name = #{name},</if>
             <if test="userType!=null and userType!= 0 ">user_type = #{userType},</if>
+            <if test="status!=null and status!= 0 ">status = #{status},</if>
             <if test="passwd!=null and passwd!='' ">passwd = #{passwd},</if>
             <if test="email!=null and email!='' ">email = #{email},</if>
             <if test="walletAddress!=null and walletAddress!='' ">wallet_address = #{walletAddress},</if>

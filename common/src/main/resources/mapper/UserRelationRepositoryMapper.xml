@@ -15,12 +15,14 @@
             <id column="level0_id" property="id"/>
             <result column="level0_name" property="name"/>
             <result column="level0_email" property="email"/>
+            <result column="level0_status" property="status"/>
             <result column="level0_wallet_address" property="walletAddress"/>
         </association>
         <association property="level1" javaType="org.cos.common.entity.data.po.User">
             <id column="level1_id" property="id"/>
             <result column="level1_name" property="name"/>
             <result column="level1_email" property="email"/>
+            <result column="level1_status" property="status"/>
             <result column="level1_wallet_address" property="walletAddress"/>
         </association>
     </resultMap>
@@ -38,9 +40,9 @@
         where id=#{id}
     </select>
     <select id="queryUserByRelationId" resultMap="UserRelationDTO" parameterType="String">
-        SELECT u0.id AS level0_id, u0.name AS level0_name, u0.email AS level0_email, u0.wallet_address AS
+        SELECT u0.id AS level0_id, u0.name AS level0_name, u0.email AS level0_email, u0.status AS level0_status, u0.wallet_address AS
         level0_wallet_address,
-        u1.id AS level1_id, u1.name AS level1_name, u1.email AS level1_email, u1.wallet_address AS
+        u1.id AS level1_id, u1.name AS level1_name, u1.email AS level1_email,u1.status AS level1_status, u1.wallet_address AS
         level1_wallet_address
         from user_relation r
         LEFT JOIN user u0 ON r.level0 = u0.id

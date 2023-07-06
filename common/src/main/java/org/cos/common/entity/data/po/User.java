@@ -30,6 +30,10 @@ public class User {
      */
     private int userType;
     /**
+     * 用户状态：0-可用；1-不可用
+     */
+    private int status;
+    /**
      * 钱包地址
      */
     private String walletAddress;

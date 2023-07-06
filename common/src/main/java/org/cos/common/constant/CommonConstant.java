@@ -44,6 +44,9 @@ public class CommonConstant {
     public static final int PURCHASE_NFT=9;
     public static final int TRANSFER_NFT=10;
 
+    // 用户状态
+    public static final int USER_ACTIVE=0;
+    public static final int USER_INACTIVE=1;
 
 
 

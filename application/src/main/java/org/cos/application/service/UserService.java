@@ -83,7 +83,7 @@ public class UserService {
     private PoolUserRepository poolUserRepository;
 
     public Result sendCode1(UserSendCodeReq req) {
-        if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
+        if (StringUtils.isNotBlank(redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("the verify code is still within the validity period"));
         }
 //        User user;
@@ -107,7 +107,7 @@ public class UserService {
             Map<String, Object> myMap = new HashMap<String, Object>() {{
                 put("code", code);
             }};
-            mailUtil.sendThymeleafMail(subject,mail,req.getEmail(),myMap,"email1-english");
+            mailUtil.sendThymeleafMail(subject, mail, req.getEmail(), myMap, "email1-english");
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs(e.getMessage()));
         }
@@ -121,7 +121,7 @@ public class UserService {
         return Result.success(UserKey.getEmail.expireSeconds());
     }
     public Result sendCode(UserSendCodeReq req) {
-        if (StringUtils.isNotBlank( redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
+        if (StringUtils.isNotBlank(redisService.get(UserKey.getEmail, req.getEmail(), String.class))) {
             throw new GlobalException(CodeMsg.USER_SENDCODE_ERROR.fillArgs("the verify code is still within the validity period"));
         }
         int max = (int) Math.pow(10, 6) - 1;
@@ -131,7 +131,7 @@ public class UserService {
         Template myTemplate = Template.builder()
                 .templateName(verifyCodeTemplate)
                 .templateData("{\n" +
-                        "  \"code\": \""+code+"\"\n" +
+                        "  \"code\": \"" + code + "\"\n" +
                         "}")
                 .build();
         SendEmailResponse sendEmailResponse = MailUtil.SendMessageTemplate(sesV2Client, sender, myTemplate, req.getEmail());
@@ -169,7 +169,7 @@ public class UserService {
 
         User user = userRepository.queryUserByEmail(email);
 
-        if(ObjectUtils.isEmpty(user)){
+        if (ObjectUtils.isEmpty(user)) {
             throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
         }
         return Result.success(user);
@@ -179,7 +179,7 @@ public class UserService {
 
         User user = userRepository.queryUserByEmail(email);
 
-        if(!ObjectUtils.isEmpty(user)){
+        if (!ObjectUtils.isEmpty(user)) {
             return Result.success(false);
         }
         return Result.success(true);
@@ -188,18 +188,18 @@ public class UserService {
     public Result createUser(UserCreateReq req) {
         // 判断 redis 中的邮箱验证码是否存在
         String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
-        if(StringUtils.isBlank(req.getCode())){
+        if (StringUtils.isBlank(req.getCode())) {
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
-        if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
+        if ((!StringUtils.equalsIgnoreCase(req.getCode(), code)) || StringUtils.isBlank(code)) {
             throw new GlobalException(CodeMsg.USER_ADD_ERROR.fillArgs("verify code is invalid. Please check your verify code"));
         }
         // 判断用户名的唯一性
-        if(ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))){
+        if (ObjectUtils.isNotEmpty(userRepository.queryUserByName(req.getName()))) {
             throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
         }
         // 判断用户邮箱的唯一性
-        if(ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getEmail()))){
+        if (ObjectUtils.isNotEmpty(userRepository.queryUserByEmail(req.getEmail()))) {
             throw new GlobalException(CodeMsg.USER_EXIST_ERROR);
         }
 
@@ -225,9 +225,9 @@ public class UserService {
         UserRelation userRelation;
         // 存在邀请人
 //        if (req.getInviterId() != null && req.getInviterId() > 0) {
-        if(StringUtils.isNotBlank(req.getInviterId())){
+        if (StringUtils.isNotBlank(req.getInviterId())) {
 
-           Long inviterId;
+            Long inviterId;
 
             try {
                 byte[] decrypt = CryptUtil.decrypt(baseConfiguration.getCipherKey().getBytes(StandardCharsets.UTF_8), Base64Utils.decodeFromString(req.getInviterId()));
@@ -244,11 +244,11 @@ public class UserService {
             // 查询邀请人的用户关系，
             userRelation = userRelationRepository.queryUserRelationById(inviter.getUserRelationId());
             // 说明这是渠道商邀请
-            if(ObjectUtils.isEmpty(userRelation)){
+            if (ObjectUtils.isEmpty(userRelation)) {
                 userRelation = new UserRelation();
                 userRelation.setLevel0(inviter.getId());
 //            俱乐部老板/普通用户的邀请
-            }else{
+            } else {
                 // 俱乐部老板邀请
                 if (CommonConstant.USER_CLUB == inviter.getUserType()) {
                     userRelation.setLevel1(inviter.getId());
@@ -284,7 +284,7 @@ public class UserService {
         // 创建用户，直接存库
         User user = new User();
         user.setUserType(CommonConstant.USER_GUEST);
-        user.setName(String.format("Guest%06d",num));
+        user.setName(String.format("Guest%06d", num));
 
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
         String randomString = new Random().ints(6, 0, characters.length())
@@ -300,9 +300,9 @@ public class UserService {
         }
         user.setCreateTime(new Date());
         user.setUpdateTime(new Date());
-        while(!ObjectUtils.isEmpty(userRepository.queryUserByName(user.getName()))){
+        while (!ObjectUtils.isEmpty(userRepository.queryUserByName(user.getName()))) {
             num = rand.nextInt(1000000);
-            user.setName(String.format("user%06d",num));
+            user.setName(String.format("user%06d", num));
         }
         userRepository.insertUser(user);
         UserGameVo userGameVo = new UserGameVo();
@@ -315,15 +315,15 @@ public class UserService {
     }
 
     public Result updateUser(UserUpdateReq req) {
-        if(StringUtils.isNotBlank(req.getWalletAddress())){
+        if (StringUtils.isNotBlank(req.getWalletAddress())) {
             User user = userRepository.queryUserByWalletAddress(req.getWalletAddress());
-            if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
+            if (ObjectUtils.isNotEmpty(user) && user.getId() != req.getUserId()) {
                 throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("please change your wallet address"));
             }
         }
-        if (StringUtils.isNotBlank(req.getName())){
+        if (StringUtils.isNotBlank(req.getName())) {
             User user = userRepository.queryUserByName(req.getName());
-            if(ObjectUtils.isNotEmpty(user)&&user.getId()!=req.getUserId()){
+            if (ObjectUtils.isNotEmpty(user) && user.getId() != req.getUserId()) {
                 throw new GlobalException(CodeMsg.USER_EXIST_ERROR.fillArgs("please change your user name"));
             }
         }
@@ -355,11 +355,11 @@ public class UserService {
                 throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("email can not be null"));
             }
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
-            if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
+            if ((!StringUtils.equalsIgnoreCase(req.getCode(), code)) || StringUtils.isBlank(code)) {
                 throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid. Please check your verify code"));
             }
             user.setEmail(req.getEmail());
-        }else{
+        } else {
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
 
@@ -367,7 +367,7 @@ public class UserService {
 //            if (!StringUtils.equals(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getOldPasswd()), user.getPasswd())) {
 //                throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("用户输入的密码和原来的密码不一致"));
 //            }
-            user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
+        user.setPasswd(SignUtil.getMD5ValueLowerCaseByDefaultEncode(req.getNewPasswd()));
 //        }
 
         user.setUpdateTime(new Date());
@@ -391,11 +391,11 @@ public class UserService {
                 throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("email can not be null"));
             }
             String code = redisService.get(UserKey.getEmail, req.getEmail(), String.class);
-            if ((!StringUtils.equalsIgnoreCase(req.getCode(), code))||StringUtils.isBlank(code)) {
+            if ((!StringUtils.equalsIgnoreCase(req.getCode(), code)) || StringUtils.isBlank(code)) {
                 throw new GlobalException(CodeMsg.USER_UPDATE_ERROR.fillArgs("verify code is invalid. Please check your verify code"));
             }
             user.setEmail(req.getEmail());
-        }else{
+        } else {
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("verify code can not be null"));
         }
 
@@ -415,10 +415,10 @@ public class UserService {
             throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
         }
 
-        if(StringUtils.isBlank(req.getOldPasswd())){
+        if (StringUtils.isBlank(req.getOldPasswd())) {
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("old password can not be null"));
         }
-        if(StringUtils.isBlank(req.getNewPasswd())){
+        if (StringUtils.isBlank(req.getNewPasswd())) {
             throw new GlobalException(CodeMsg.PARAMETER_VALID_ERROR.fillArgs("new password can not be null"));
         }
 
@@ -483,7 +483,7 @@ public class UserService {
         Claims claims = TokenManager.parseJWT(new String(Base64.decodeBase64(token)));
         long now = System.currentTimeMillis();
         long time = claims.getExpiration().getTime();
-        redisService.set(TokenBlockedKey.getBlockedKey((int) (time-now)/1000),token,"blocked");
+        redisService.set(TokenBlockedKey.getBlockedKey((int) (time - now) / 1000), token, "blocked");
         return Result.success();
     }
 
@@ -527,7 +527,7 @@ public class UserService {
 
         // 获取用户是否具有玩星光的资格
         PoolUser poolUser = poolUserRepository.queryPoolUserByUserIdAndPoolId((long) CommonConstant.POOL_SL, user.getId());
-        if(ObjectUtils.isEmpty(poolUser)){
+        if (ObjectUtils.isEmpty(poolUser)) {
             poolUser = new PoolUser();
         }
 
@@ -541,7 +541,7 @@ public class UserService {
 
 //        List<NFT> list = nfts.getData().getList();
 
-        return Result.success( GameVoConvert.UserGameVoConvert(jwt,user,assets.getData(),nfts.getData(),poolUser.getAmount()>=baseConfiguration.getSlAmount()?true:false));
+        return Result.success(GameVoConvert.UserGameVoConvert(jwt, user, assets.getData(), nfts.getData(), poolUser.getAmount() >= baseConfiguration.getSlAmount() ? true : false));
     }
 
     public Result createChannelLeader(String walletAddress) {
@@ -578,49 +578,57 @@ public class UserService {
         return Result.success();
     }
 
-    public Result queryChannelLeaderByWalletAddress (String walletAddress) {
+    public Result queryChannelLeaderByWalletAddress(String walletAddress) {
 
         User user = userRepository.queryUserByWalletAddress(walletAddress);
-        if (ObjectUtils.isEmpty(user)){
+        if (ObjectUtils.isEmpty(user)) {
             createChannelLeader(walletAddress);
             User user1 = userRepository.queryUserByWalletAddress(walletAddress);
             return Result.success(user1);
         }
         try {
-            return Result.success(CryptUtil.encryptToString(baseConfiguration.getCipherKey().getBytes(StandardCharsets.UTF_8),user.getId().toString().getBytes(StandardCharsets.UTF_8)));
+            return Result.success(CryptUtil.encryptToString(baseConfiguration.getCipherKey().getBytes(StandardCharsets.UTF_8), user.getId().toString().getBytes(StandardCharsets.UTF_8)));
         } catch (Exception e) {
-           throw new GlobalException(CodeMsg.USER_ENCRYPT_ERROR.fillArgs(e.getMessage()));
+            throw new GlobalException(CodeMsg.USER_ENCRYPT_ERROR.fillArgs(e.getMessage()));
         }
     }
 
-    public Result queryClubAndChannelAddress(Long userId){
+    public Result queryClubAndChannelAddress(Long userId) {
         UserRelationAddressVo userRelationAddressVo = new UserRelationAddressVo();
         User user = userRepository.queryUserById(userId);
-        if(ObjectUtils.isEmpty(user)){
+        if (ObjectUtils.isEmpty(user)) {
             throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
         }
         userRelationAddressVo.setUserAddress(user.getWalletAddress());
 
         UserRelationDTO userRelationDTO = userRelationRepository.queryUserByRelationId(user.getUserRelationId());
-        if(ObjectUtils.isEmpty(userRelationDTO)){
+        if (ObjectUtils.isEmpty(userRelationDTO)) {
             return Result.success(userRelationAddressVo);
         }
-        User level0= userRelationDTO.getLevel0();
+        User level0 = userRelationDTO.getLevel0();
         User level1 = userRelationDTO.getLevel1();
-        if((!ObjectUtils.isEmpty(level0))&&(!ObjectUtils.isEmpty(level1))){
-            userRelationAddressVo.setChannelAddress(level0.getWalletAddress());
-            userRelationAddressVo.setClubAddress(level1.getWalletAddress());
-        }else if((ObjectUtils.isEmpty(level0))&&(!ObjectUtils.isEmpty(level1))){
-            userRelationAddressVo.setClubAddress(level1.getWalletAddress());
-        }else if((!ObjectUtils.isEmpty(level0))&&(ObjectUtils.isEmpty(level1))) {
-            userRelationAddressVo.setClubAddress(level0.getWalletAddress());
+        if ((!ObjectUtils.isEmpty(level0)) && (!ObjectUtils.isEmpty(level1))) {
+            if (level0.getStatus() == CommonConstant.USER_ACTIVE) {
+                userRelationAddressVo.setChannelAddress(level0.getWalletAddress());
+            }
+            if (level1.getStatus() == CommonConstant.USER_ACTIVE) {
+                userRelationAddressVo.setClubAddress(level1.getWalletAddress());
+            }
+        } else if ((ObjectUtils.isEmpty(level0)) && (!ObjectUtils.isEmpty(level1))) {
+            if (level1.getStatus() == CommonConstant.USER_ACTIVE) {
+                userRelationAddressVo.setClubAddress(level1.getWalletAddress());
+            }
+        } else if ((!ObjectUtils.isEmpty(level0)) && (ObjectUtils.isEmpty(level1))) {
+            if (level0.getStatus() == CommonConstant.USER_ACTIVE) {
+                userRelationAddressVo.setClubAddress(level0.getWalletAddress());
+            }
         }
         userRelationAddressVo.setUserAddress(user.getWalletAddress());
         return Result.success(userRelationAddressVo);
     }
 
-    public Result queryBlockChainExplorer(int  blockChainType){
-       //todo
+    public Result queryBlockChainExplorer(int blockChainType) {
+        //todo
         return Result.success(explorer);
     }
 

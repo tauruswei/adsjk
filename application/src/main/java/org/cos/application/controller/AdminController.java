@@ -5,13 +5,12 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.AdminService;
+import org.cos.common.entity.data.req.UserListReq;
+import org.cos.common.entity.data.req.UserUpdateReq;
 import org.cos.common.repository.TransWebsiteRepository;
 import org.cos.common.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(value = "Web controller", tags = "web 模块", description = "web 模块 Rest API")
 @RequestMapping("admin")
@@ -54,6 +53,25 @@ public class AdminController {
 
         return adminService.statisticalNFT(userId);
     }
+
+    @ApiOperation("获取渠道商和俱乐部老板的列表")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("userList")
+    public Result userList(@RequestBody UserListReq userListReq){
+
+        return adminService.userList(userListReq);
+    }
+
+
+    @ApiOperation("更改俱乐部老板和渠道商的身份")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("userUpdate")
+    public Result userUpdate(@RequestBody UserUpdateReq req){
+
+        return adminService.userUpdate(req);
+    }
+
+
 
 
 

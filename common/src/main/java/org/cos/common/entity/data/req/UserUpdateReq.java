@@ -31,6 +31,9 @@ public class UserUpdateReq {
     @ApiModelProperty(value = "邮箱验证码",name = "code",example = "123456" ,required = false)
 //    @NotBlank(message="Code cannot be empty.")
     private String code;
+    @ApiModelProperty(value = "用户状态",name = "status",example = "0" ,required = false)
+//    @NotBlank(message="Code cannot be empty.")
+    private int status;
 
 }
 

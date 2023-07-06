@@ -14,6 +14,7 @@ public interface UserRepository {
     User queryUserByEmail(String email);
     User queryUserByName(String name);
     List<User> queryUserByInviterId(Integer inviterId);
+    List<User> queryUserList(int userType);
     User queryUserById(Long userId);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
     User queryUserByWalletAddress(@Param("walletAddress") String walletAddress);
