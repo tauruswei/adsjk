@@ -127,7 +127,7 @@
         <where>
             trans_type=#{transType}
             AND update_time >=  DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
-            AND DATE_SUB(CURDATE(), INTERVAL #{days}-1 DAY) >= update_time
+            AND DATE_SUB(CURDATE(), INTERVAL #{days}-#{interval} DAY) >= update_time
             <if test="userId != null and userId !=0">
                 AND from_user_id = #{userId}
             </if>
@@ -139,7 +139,7 @@
         <where>
             trans_type=#{transType}
             AND update_time >=  DATE_SUB(CURDATE(), INTERVAL #{days} DAY)
-            AND DATE_SUB(CURDATE(), INTERVAL #{days}-1 DAY) >= update_time
+            AND DATE_SUB(CURDATE(), INTERVAL #{days}-#{interval}  DAY) >= update_time
             <if test="userId != null and userId !=0">
                 AND from_user_id = #{userId}
             </if>

@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -68,15 +69,48 @@ public class AdminService {
                 super.copyProperty(dest, name, value);
             }
         };
-        AssetDTO assetDTO = transWebsiteRepository.purchaseSumEvicDay(CommonConstant.PURCHASE_EVIC, days, userId);
+        AssetDTO assetDTO = transWebsiteRepository.purchaseSumEvicDay(CommonConstant.PURCHASE_EVIC, days, 1,userId);
 
-        AssetDTO assetDTO1 = transWebsiteRepository.withdrawSumEvicDay(CommonConstant.WITHDRAW_EVIC, days, userId);
+        AssetDTO assetDTO1 = transWebsiteRepository.withdrawSumEvicDay(CommonConstant.WITHDRAW_EVIC, days, 1,userId);
         try {
             beanUtils.copyProperties(assetDTO,assetDTO1);
         } catch (Exception e) {
             throw  new GlobalException(CodeMsg.EVIC_STATISTICAL_ERROR);
         }
         return Result.success(assetDTO);
+    }
+
+    /**
+     *
+     * @param transType 交易类型
+     * @param dataNum   需要多少组数据
+     * @param interval  间隔多少天
+     * @param userId
+     * @return
+     */
+    public Result graphData(int transType,int dataNum,int interval,Long userId){
+        BeanUtilsBean beanUtils = new BeanUtilsBean() {
+            @Override
+            public void copyProperty(Object dest, String name, Object value)
+                    throws IllegalAccessException, InvocationTargetException {
+                if(value == null)return;
+                super.copyProperty(dest, name, value);
+            }
+        };
+        List list = new ArrayList();
+        for (int i=0;i<dataNum;i++){
+            int days = (i+1)*interval;
+            AssetDTO assetDTO = transWebsiteRepository.purchaseSumEvicDay(CommonConstant.PURCHASE_EVIC, days, interval,userId);
+            AssetDTO assetDTO1 = transWebsiteRepository.withdrawSumEvicDay(CommonConstant.WITHDRAW_EVIC, days,interval, userId);
+            try {
+                beanUtils.copyProperties(assetDTO,assetDTO1);
+            } catch (Exception e) {
+                throw  new GlobalException(CodeMsg.EVIC_STATISTICAL_ERROR);
+            }
+            list.add(assetDTO);
+        }
+
+        return Result.success(list);
     }
     public Result statisticalSL(Long userId){
         return Result.success(poolUserRepository.statisticalSL(userId));

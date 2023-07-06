@@ -38,6 +38,16 @@ public class AdminController {
         return adminService.sumEvicSalesDay(transType,days,userId);
     }
 
+
+    @ApiOperation("图表数据")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @PostMapping("graphData")
+    public Result graphData(@RequestParam(name = "transType",required = true) int transType,@RequestParam(name = "dataNum",required = false) int dataNum,@RequestParam(name = "interval",required = false) int interval,@RequestParam(name = "userId",required = false,defaultValue = "0") Long userId){
+        return adminService.graphData(transType,dataNum,interval,userId);
+    }
+
+
+
     @ApiOperation("统计 星光玩家的数量")
     @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
     @PostMapping("statisticalSL")

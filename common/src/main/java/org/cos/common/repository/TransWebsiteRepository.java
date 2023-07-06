@@ -25,8 +25,8 @@ public interface TransWebsiteRepository {
 
     AssetDTO purchaseSumEvic(@Param("transType") int transType, @Param("days") int days, @Param("userId") long userId);
     AssetDTO withdrawSumEvic(@Param("transType") int transType,@Param("days") int days,@Param("userId") long userId);
-    AssetDTO purchaseSumEvicDay(@Param("transType") int transType,@Param("days") int days,@Param("userId") long userId);
-    AssetDTO withdrawSumEvicDay(@Param("transType") int transType,@Param("days") int days,@Param("userId") long userId);
+    AssetDTO purchaseSumEvicDay(@Param("transType") int transType,@Param("days") int days,@Param("interval") int interval,@Param("userId") long userId);
+    AssetDTO withdrawSumEvicDay(@Param("transType") int transType,@Param("days") int days,@Param("interval") int interval,@Param("userId") long userId);
 
 //    User queryUserByWalletAddressAndUserType(String walletAddress,  int userType);
 //    void insertSysUrBatch(@Param("urList") List<SysUr> urList);
