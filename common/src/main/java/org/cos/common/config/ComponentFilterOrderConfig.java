@@ -2,6 +2,7 @@ package org.cos.common.config;
 
 import org.cos.common.filter.GetIpAddrFilter;
 import org.cos.common.filter.TokenFilter;
+import org.cos.common.filter.XssFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,10 @@ public class ComponentFilterOrderConfig {
         return new TokenFilter();//自定义的过滤器
     }
     @Bean
+    public Filter xssFilter(){
+        return new XssFilter();
+    }
+    @Bean
     public FilterRegistrationBean filterRegistrationBean1(){
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
         filterRegistrationBean.setFilter(MyHiddenHttpMethodFilter());
@@ -36,6 +41,16 @@ public class ComponentFilterOrderConfig {
 //        filterRegistrationBean.addUrlPatterns("/user/*", "/certificate/*", "/localCA/*");
         filterRegistrationBean.addUrlPatterns("/certificate/*", "/localCA/*");
         filterRegistrationBean.setOrder(7);
+        return filterRegistrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean3(){
+        FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(xssFilter());
+        filterRegistrationBean.setName("XssFilter");
+        filterRegistrationBean.addUrlPatterns("/*");
+        filterRegistrationBean.setOrder(8);
         return filterRegistrationBean;
     }
 }
