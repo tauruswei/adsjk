@@ -551,6 +551,16 @@ public class Test1 {
                 "\tlocal value = redis.call ('SPOP', KEYS[1]) \n" +
                 "\treturn value\n" +
                 "end";
+
+        String SELL_SCRIP3 = "local exists = redis.call('EXISTS', KEYS[1])\n" +
+                "if exists == 0 then\n" +
+                "    return 'ERROR'\n" +
+                "else\n" +
+                "    local value = redis.call('SPOP', KEYS[1])\n" +
+                "    return value\n" +
+                "end";
+
+
         String collectionKey = String.format("BOCS:COLLECTION TEST:%s", UUID.randomUUID().toString());
         DefaultRedisScript redisScript = initDefaultRedisScript(SELL_SCRIP2, String.class);
 

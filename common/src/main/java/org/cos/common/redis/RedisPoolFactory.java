@@ -15,7 +15,7 @@ import java.util.Set;
 @Service
 public class RedisPoolFactory {
 
-	@Value("${spring.redis.cluster.nodes}")
+	@Value("${spring.redis.cluster.nodes1}")
 	private String clusterNodes;
 	@Value("${spring.redis.password}")
 	private String password;

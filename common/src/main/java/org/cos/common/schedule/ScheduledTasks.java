@@ -67,6 +67,9 @@ public class ScheduledTasks {
     public void consumeMessage() {
          List<Map<StreamEntryID, CosdStakeForSLReq>> maps = redisService.xreadGroup(TransactionKey.getTx, "", CosdStakeForSLReq.class);
          maps.forEach(map -> {
+             if (ObjectUtils.isEmpty(map)){
+                 return;
+             }
              map.forEach((id, cosdStakeForSLReq) -> {
                  try {
                      while (ObjectUtils.isEmpty(cosdStakeForSLReq.getBlockNumber()) || cosdStakeForSLReq.getBlockNumber().equals(0L)) {
@@ -117,6 +120,9 @@ public class ScheduledTasks {
         // 一次性读取 10个 pending 消息
         List<Map<StreamEntryID, CosdStakeForSLReq>> maps = redisService.xpending(TransactionKey.getTx, "", CosdStakeForSLReq.class);
         maps.forEach(map -> {
+            if (ObjectUtils.isEmpty(map)){
+                return;
+            }
             map.forEach((id, cosdStakeForSLReq) -> {
 
                 // 判断当前消息从创建到现在是否超过 制定的时间（毫秒）
