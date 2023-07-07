@@ -1,9 +1,6 @@
 package org.cos.common.config;
 
-import org.cos.common.filter.CorsFilter;
-import org.cos.common.filter.ExceptionHandlerFilter;
-import org.cos.common.filter.GetIpAddrFilter;
-import org.cos.common.filter.TokenFilter;
+import org.cos.common.filter.*;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +18,7 @@ public class ComponentFilterOrderConfig {
     public Filter tokenAuthorFilter(){
         return new TokenFilter();//自定义的过滤器
     }
+
     @Bean
     public Filter corsFilter(){
         return new CorsFilter();//自定义的过滤器
@@ -46,7 +44,15 @@ public class ComponentFilterOrderConfig {
         return filterRegistrationBean;
     }
     @Bean
-    public FilterRegistrationBean filterRegistrationBean3(){
+    public FilterRegistrationBean<XssFilter> xssFilter() {
+        FilterRegistrationBean<XssFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new XssFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(2);
+        return registrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean filterRegistrationBean4(){
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
         filterRegistrationBean.setFilter(corsFilter());
         filterRegistrationBean.setName("corsFilter");

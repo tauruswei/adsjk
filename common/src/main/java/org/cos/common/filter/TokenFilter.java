@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -33,6 +34,8 @@ public class TokenFilter implements Filter {
 
     @Autowired
     RedisService redisService;
+    @Value("${spring.profiles.active}")
+    String active;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -53,6 +56,11 @@ public class TokenFilter implements Filter {
         response.setContentType("application/json;charset=UTF-8");
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
+
+        if (StringUtils.equalsIgnoreCase("dev",active)){
+            chain.doFilter(request, response);
+            return;
+        }
 
         String[] excludeUrls = new String[]{"/user/login","/user/sendCode","/user/resetPasswd","/user/validateEmailIsAvaliable",
         "/user/queryChannelLeaderByWalletAddress","/user/register","/game/getUserProfile","/user/createGuestUser","/web/increaseDownload","/web/getStatisticalData"};
