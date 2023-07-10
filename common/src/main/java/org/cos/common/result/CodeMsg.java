@@ -77,11 +77,12 @@ public class CodeMsg {
 	public static CodeMsg NFT_NOT_EXIST_ERROR = new CodeMsg(500502,"NFT does not exist error: %s");
 	public static CodeMsg NFT_ADD_ERROR = new CodeMsg(500503,"purchase NFT error: %s");
 	public static CodeMsg NFT_CHANCE_NOT_BE_NEGATIVE = new CodeMsg(500504,"the number of nft's chance cannot be less than 0");
+	public static CodeMsg NFT_REFRESH_LATER_ERROR = new CodeMsg(500505,"You have successfully purchased the NFT blind box, It will take a few minutes,you can refresh later");
 
 
 
 
-//====================================================
+	//====================================================
 //                token 模块
 //====================================================
 	public static CodeMsg TOKEN_NOT_EXIST = new CodeMsg(500601, "Token cannot be empty");

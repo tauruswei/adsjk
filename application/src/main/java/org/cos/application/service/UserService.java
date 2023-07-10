@@ -134,6 +134,7 @@ public class UserService {
                         "  \"code\": \"" + code + "\"\n" +
                         "}")
                 .build();
+        log.info("code: {}",code);
         SendEmailResponse sendEmailResponse = MailUtil.SendMessageTemplate(sesV2Client, sender, myTemplate, req.getEmail());
 
         // 验证码 存 redis

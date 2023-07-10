@@ -13,4 +13,5 @@ public class NFTVo {
     private String attr1;
     private String attr2;
     private int status;
+    private long time;
 }

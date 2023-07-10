@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.cos.common.config.BaseConfiguration;
+import org.cos.common.constant.CommonConstant;
 import org.cos.common.convert.WebNFTVoConvert;
 import org.cos.common.entity.data.po.Asset;
 import org.cos.common.entity.data.po.NFT;
@@ -13,8 +14,11 @@ import org.cos.common.entity.data.po.TransWebsite;
 import org.cos.common.entity.data.req.NFTListReq;
 import org.cos.common.entity.data.req.NFTPurchaseReq;
 import org.cos.common.entity.data.req.NFTUpdateReq;
+import org.cos.common.entity.data.vo.NFTVo;
 import org.cos.common.entity.data.vo.WebNFTVo;
 import org.cos.common.exception.GlobalException;
+import org.cos.common.redis.NFTKey;
+import org.cos.common.redis.RedisService;
 import org.cos.common.repository.AssetRepository;
 import org.cos.common.repository.NFTRepository;
 import org.cos.common.repository.TransWebsiteRepository;
@@ -41,6 +45,8 @@ public class NFTService {
     private TransWebsiteRepository transWebsiteRepository;
     @Autowired
     private AssetRepository assetRepository;
+    @Autowired
+    private RedisService redisService;
 
     public Result purchaseNFT(NFTPurchaseReq req){
         // todo 缺少对用户id
@@ -140,13 +146,28 @@ public class NFTService {
     }
 
     public Result updateNFTStatus(NFTUpdateReq req){
-        NFT nft = nftRepository.queryNFTByTokenId(req.getTokenId());
-        if(ObjectUtils.isEmpty(nft)){
-            throw new GlobalException(CodeMsg.NFT_NOT_EXIST_ERROR);
+        NFT nft = nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId());
+        if(ObjectUtils.isNotEmpty(nft)){
+            nft.setStatus(req.getNftVo().getStatus());
+            nftRepository.updateNFTStatus(nft);
+            return Result.success(nft);
         }
-        nft.setStatus(req.getStatus());
-        nftRepository.updateNFTStatus(nft);
-        return Result.success(nft);
+        NFTVo nftVo = redisService.get(NFTKey.getTokenId, req.getNftVo().getTokenId(), NFTVo.class);
+        if(ObjectUtils.isNotEmpty(nftVo)){
+            throw new GlobalException(CodeMsg.NFT_REFRESH_LATER_ERROR);
+        }else{
+            NFT nft1 = new NFT();
+            nft1.setStatus(CommonConstant.NFT_USED);
+            nft1.setCreateTime(new Date());
+            nft1.setUpdateTime(new Date());
+            nft1.setTokenId(req.getNftVo().getTokenId());
+            nft1.setUserId(req.getUserId());
+            nft1.setAttr1(req.getNftVo().getAttr1());
+            nft1.setAttr2(req.getNftVo().getAttr2());
+            nft1.setUpchainTime(req.getNftVo().getTime());
+            nftRepository.insertNFT(nft1);
+            return Result.success(nft1);
+        }
     }
 
     public Result queryNFTByUserIdAndAtrr1(NFTListReq req){
