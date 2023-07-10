@@ -63,7 +63,7 @@ public class ScheduledTasks {
     private static final Logger log = LoggerFactory.getLogger(RedisMessageSubscriber.class);
 
     // 每隔5秒执行一次，读取 redis-stream 新提交的消息
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 10000)
     public void consumeMessage() {
         List<Map<StreamEntryID, CosdStakeForSLReq>> maps = redisService.xreadGroup(TransactionKey.getTx, "", CosdStakeForSLReq.class);
         maps.forEach(map -> {
@@ -120,7 +120,7 @@ public class ScheduledTasks {
     }
 
     // 每隔10秒执行一次,读取未被确认的交易
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 60000)
     public void consumePendingMessage() {
         // 一次性读取 10个 pending 消息
         List<Map<StreamEntryID, CosdStakeForSLReq>> maps = redisService.xpending(TransactionKey.getTx, "", CosdStakeForSLReq.class);
