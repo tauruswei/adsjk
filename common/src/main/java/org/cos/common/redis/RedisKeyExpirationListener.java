@@ -1,5 +1,12 @@
 package org.cos.common.redis;
 
+import org.apache.commons.lang3.StringUtils;
+import org.cos.common.constant.CommonConstant;
+import org.cos.common.entity.data.po.Asset;
+import org.cos.common.exception.GlobalException;
+import org.cos.common.repository.AssetRepository;
+import org.cos.common.result.CodeMsg;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
@@ -16,6 +23,8 @@ import javax.annotation.Resource;
 public class RedisKeyExpirationListener implements  MessageListener  {
     @Resource
     private RedisService redisService;
+    @Autowired
+    private AssetRepository assetRepository;
 
     /**
      * 客户端监听订阅的topic，当有消息的时候，会触发该方法;
@@ -36,8 +45,25 @@ public class RedisKeyExpirationListener implements  MessageListener  {
     @Override
     public void onMessage(Message message, byte[] pattern){
         String expiredKey = message.toString();
-//        System.out.println(expiredKey);
-        if(expiredKey.startsWith("SessionKey:sessionId")){
+        System.out.println(expiredKey);
+        if(expiredKey.startsWith("EvicKey:withdraw")){
+            String[] split = StringUtils.split(expiredKey, ":");
+            Long userId = Long.parseLong(split[2]);
+            Double amount = Double.parseDouble(split[3]);
+            Asset asset2 = new Asset();
+            // 查询当前用户的资产
+            Asset asset3 = assetRepository.queryAssetByUserIdAndType(userId, CommonConstant.EVIC);
+
+            asset3.setAmount(asset3.getAmount() - amount);
+            if (asset3.getAmount() < 0) {
+                throw new GlobalException(CodeMsg.ASSET_AMOUNT_ERROR);
+            }
+//            asset3.setUpdateTime(new Date());
+            try {
+                assetRepository.updateAsset(asset3);
+            } catch (Exception e) {
+                throw new GlobalException(CodeMsg.ASSET_UPDATE_ERROR.fillArgs(e.getMessage()));
+            }
 //            如果是SessionKey:sessionId开头的key，进行处理
 //            System.out.println("嘿嘿，失效了呀");
 //            new Thread(() -> redisService.lrem(SessionKey.getByList(), "sessions", expiredKey)).start();

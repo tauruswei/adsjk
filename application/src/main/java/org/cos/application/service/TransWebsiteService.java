@@ -19,6 +19,7 @@ import org.cos.common.entity.data.req.TranBlurListReq;
 import org.cos.common.entity.data.req.TranListReq;
 import org.cos.common.exception.GlobalException;
 import org.cos.common.exception.GlobalExceptionHandler;
+import org.cos.common.redis.EvicKey;
 import org.cos.common.redis.NFTKey;
 import org.cos.common.redis.RedisService;
 import org.cos.common.redis.TransactionKey;
@@ -221,6 +222,9 @@ public class TransWebsiteService {
         result.getData().setAmount(result.getData().getAmount() + req.getFromAmount());
         result.getData().setUpdateTime(new Date());
         assetRepository.updateAsset(result.getData());
+
+        // 更新数据库成功后，在redis中放入一个 过期 key，key 过期后(即提现失败)，将 提现的 evic 返回给用户
+        redisService.set(EvicKey.getWithdrawKey,String.format("%s:%s",req.getFromUserId().toString(),req.getFromAmount().toString()),req.getFromAmount());
 
         //todo 监听 trans-website 数据库异常上链记录
 

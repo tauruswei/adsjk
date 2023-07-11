@@ -9,6 +9,7 @@ import org.cos.common.entity.data.po.PoolUser;
 import org.cos.common.entity.data.po.User;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.exception.GlobalException;
+import org.cos.common.redis.EvicKey;
 import org.cos.common.redis.RedisMessageSubscriber;
 import org.cos.common.redis.RedisService;
 import org.cos.common.redis.TransactionKey;
@@ -294,6 +295,10 @@ public class ScheduledTasks {
                 break;
             // 用户提现 EVIC
             case 8:
+                // 删除 evic 提现的过期 key
+
+                redisService.del(EvicKey.getWithdrawKey.getPrefix()+String.format("%s:%s",req.getFromUserId().toString(),req.getFromAmount().toString()));
+                log.info("删除过期 key{}",EvicKey.getWithdrawKey.getPrefix()+String.format("%s:%s",req.getFromUserId().toString(),req.getFromAmount().toString()));
 //                Asset asset2 = new Asset();
 //                // 查询当前用户的资产
 //                Asset asset3 = assetRepository.queryAssetByUserIdAndType(req.getFromUserId(), req.getFromAssetType());
