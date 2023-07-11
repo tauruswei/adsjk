@@ -14,10 +14,8 @@ import org.cos.common.entity.data.po.TransWebsite;
 import org.cos.common.entity.data.req.NFTListReq;
 import org.cos.common.entity.data.req.NFTPurchaseReq;
 import org.cos.common.entity.data.req.NFTUpdateReq;
-import org.cos.common.entity.data.vo.NFTVo;
 import org.cos.common.entity.data.vo.WebNFTVo;
 import org.cos.common.exception.GlobalException;
-import org.cos.common.redis.NFTKey;
 import org.cos.common.redis.RedisService;
 import org.cos.common.repository.AssetRepository;
 import org.cos.common.repository.NFTRepository;
@@ -48,10 +46,10 @@ public class NFTService {
     @Autowired
     private RedisService redisService;
 
-    public Result purchaseNFT(NFTPurchaseReq req){
+    public Result purchaseNFT(NFTPurchaseReq req) {
         // todo 缺少对用户id
         TransWebsite transWebsite = new TransWebsite();
-        if(!Objects.isNull(nftRepository.queryTransWebsiteByTxId(req.getTxId()))){
+        if (!Objects.isNull(nftRepository.queryTransWebsiteByTxId(req.getTxId()))) {
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_TX_EXIST_ERROR);
         }
         transWebsite.setTxId(req.getTxId());
@@ -64,13 +62,13 @@ public class NFTService {
         transWebsite.setRemark(req.getRemark());
         try {
             transWebsiteRepository.insertTransWebsite(transWebsite);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
         }
         Asset asset = new Asset();
         NFT nft = new NFT();
 
-        switch (req.getTransType()){
+        switch (req.getTransType()) {
             // 用户购买 NFT 盲盒
             case 9:
                 asset.setUserId(req.getFromUserId());
@@ -84,7 +82,7 @@ public class NFTService {
                 nft.setUserId(req.getFromUserId());
                 try {
                     assetRepository.insertAsset(asset);
-                }catch (Exception e){
+                } catch (Exception e) {
                     throw new GlobalException(CodeMsg.ASSET_ADD_ERROR.fillArgs(e.getMessage()));
                 }
                 break;
@@ -98,19 +96,19 @@ public class NFTService {
         return Result.success();
     }
 
-    public Result queryNFTsByUserIdAndStatus(NFTListReq req){
+    public Result queryNFTsByUserIdAndStatus(NFTListReq req) {
 
-        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
-            PageHelper.startPage(req.getPageNo(),req.getPageSize());
-        }else{
-            PageHelper.startPage(1,10);
+        if ((null != req.getPageNo()) && (null != req.getPageSize())) {
+            PageHelper.startPage(req.getPageNo(), req.getPageSize());
+        } else {
+            PageHelper.startPage(1, 10);
         }
         NFT nft = new NFT();
-        if(ObjectUtils.isNotEmpty(req.getUserId())){
+        if (ObjectUtils.isNotEmpty(req.getUserId())) {
 
             nft.setUserId(req.getUserId());
         }
-        if(ObjectUtils.isNotEmpty(req.getStatus())){
+        if (ObjectUtils.isNotEmpty(req.getStatus())) {
 
             nft.setStatus(req.getStatus());
         }
@@ -128,7 +126,7 @@ public class NFTService {
         return Result.success(pageInfo1);
     }
 
-    public Result queryNFTsByUserIdAndStatusGame(NFTListReq req){
+    public Result queryNFTsByUserIdAndStatusGame(NFTListReq req) {
 
 //        if((null!=req.getPageNo())&&(null!=req.getPageSize())){
 //            PageHelper.startPage(req.getPageNo(),req.getPageSize());
@@ -145,32 +143,37 @@ public class NFTService {
         return Result.success(nfts);
     }
 
-    public Result updateNFTStatus(NFTUpdateReq req){
+    public Result updateNFTStatus(NFTUpdateReq req) {
+//        NFT nft = nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId());
+//        if(ObjectUtils.isNotEmpty(nft)){
+//            nft.setStatus(req.getNftVo().getStatus());
+//            nftRepository.updateNFTStatus(nft);
+//            return Result.success(nft);
+//        }
+//        NFTVo nftVo = redisService.get(NFTKey.getTokenId, req.getNftVo().getTokenId(), NFTVo.class);
+//        if(ObjectUtils.isNotEmpty(nftVo)){
+//            throw new GlobalException(CodeMsg.NFT_REFRESH_LATER_ERROR);
+//        }else{
+        // 在 active 列表的 nft，点击 use it for game，直接入库
         NFT nft = nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId());
         if(ObjectUtils.isNotEmpty(nft)){
-            nft.setStatus(req.getNftVo().getStatus());
-            nftRepository.updateNFTStatus(nft);
-            return Result.success(nft);
+            throw new GlobalException(CodeMsg.NFT_EXIST_ERROR);
         }
-        NFTVo nftVo = redisService.get(NFTKey.getTokenId, req.getNftVo().getTokenId(), NFTVo.class);
-        if(ObjectUtils.isNotEmpty(nftVo)){
-            throw new GlobalException(CodeMsg.NFT_REFRESH_LATER_ERROR);
-        }else{
-            NFT nft1 = new NFT();
-            nft1.setStatus(CommonConstant.NFT_USED);
-            nft1.setCreateTime(new Date());
-            nft1.setUpdateTime(new Date());
-            nft1.setTokenId(req.getNftVo().getTokenId());
-            nft1.setUserId(req.getUserId());
-            nft1.setAttr1(req.getNftVo().getAttr1());
-            nft1.setAttr2(req.getNftVo().getAttr2());
-            nft1.setUpchainTime(req.getNftVo().getTime());
-            nftRepository.insertNFT(nft1);
-            return Result.success(nft1);
-        }
+        NFT nft1 = new NFT();
+        nft1.setStatus(CommonConstant.NFT_USED);
+        nft1.setCreateTime(new Date());
+        nft1.setUpdateTime(new Date());
+        nft1.setTokenId(req.getNftVo().getTokenId());
+        nft1.setUserId(req.getUserId());
+        nft1.setAttr1(req.getNftVo().getAttr1());
+        nft1.setAttr2(req.getNftVo().getAttr2());
+        nft1.setUpchainTime(req.getNftVo().getTime());
+        nftRepository.insertNFT(nft1);
+        return Result.success(nft1);
+//        }
     }
 
-    public Result queryNFTByUserIdAndAtrr1(NFTListReq req){
+    public Result queryNFTByUserIdAndAtrr1(NFTListReq req) {
 
         NFT nft = new NFT();
         nft.setUserId(req.getUserId());

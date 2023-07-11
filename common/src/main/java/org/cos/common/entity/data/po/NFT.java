@@ -35,11 +35,11 @@ public class NFT {
      */
     private int status;
     /**
-     * 属性1
+     * 属性1,编号
      */
     private String attr1;
     /**
-     * 属性2
+     * 属性2，次数
      */
     private String attr2;
 

@@ -316,6 +316,9 @@ public class ScheduledTasks {
                     throw new GlobalException(CodeMsg.NFT_EXIST_ERROR);
                 }
                 nft.setUserId(req.getFromUserId());
+                if (CommonConstant.NFT_PURCHASED == req.getNftVo().getStatus()){
+                    break;
+                }
                 nft.setStatus(req.getNftVo().getStatus());
                 nft.setTokenId(req.getNftVo().getTokenId());
                 nft.setAttr1(req.getNftVo().getAttr1());
