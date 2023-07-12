@@ -119,7 +119,7 @@ public class ScheduledTasks {
     }
 
     // 每隔10秒执行一次,读取未被确认的交易
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 30000)
     public void consumePendingMessage() {
         // 一次性读取 10个 pending 消息
         List<Map<StreamEntryID, CosdStakeForSLReq>> maps = redisService.xpending(TransactionKey.getTx, "", CosdStakeForSLReq.class);
