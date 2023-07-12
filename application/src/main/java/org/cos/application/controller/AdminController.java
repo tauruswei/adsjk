@@ -80,6 +80,13 @@ public class AdminController {
 
         return adminService.userUpdate(req);
     }
+    @ApiOperation("统计 NFT 销售利润")
+    @ApiImplicitParam(name = "Authorization", value = "token", required = false, dataType = "String",paramType="header")
+    @GetMapping("getNftProfile")
+    public Result getNftProfile(){
+
+        return adminService.getNftProfile();
+    }
 
 
 

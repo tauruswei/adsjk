@@ -182,6 +182,21 @@ public class RedisService {
 	}
 
 	/**
+	 * 增加值
+	 * */
+	public <T> Double incrFloat(KeyPrefix prefix, String key, Double amount) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			//生成真正的key
+			String realKey  = prefix.getPrefix() + key;
+			return  jedis.incrByFloat(realKey,amount);
+		}finally {
+			returnToPool(jedis);
+		}
+	}
+
+	/**
 	 * 减少值
 	 * */
 	public <T> Long decr(KeyPrefix prefix, String key) {

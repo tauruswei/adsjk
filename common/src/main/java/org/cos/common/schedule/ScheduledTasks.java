@@ -3,6 +3,7 @@ package org.cos.common.schedule;
 import org.apache.commons.lang3.ObjectUtils;
 import org.cos.common.config.BaseConfiguration;
 import org.cos.common.constant.CommonConstant;
+import org.cos.common.entity.data.dto.UserRelationDTO;
 import org.cos.common.entity.data.po.Asset;
 import org.cos.common.entity.data.po.NFT;
 import org.cos.common.entity.data.po.PoolUser;
@@ -67,13 +68,13 @@ public class ScheduledTasks {
         List<Map<StreamEntryID, CosdStakeForSLReq>> maps = redisService.xreadGroup(TransactionKey.getTx, "", CosdStakeForSLReq.class);
         maps.forEach(map -> {
 
-            if (ObjectUtils.isEmpty(map)){
+            if (ObjectUtils.isEmpty(map)) {
                 return;
             }
 //            log.info("读取 redis 中新提交的交易");
 
             map.forEach((id, cosdStakeForSLReq) -> {
-                log.info("读取 redis 中新提交的交易，txid = {}",cosdStakeForSLReq.getTxId());
+                log.info("读取 redis 中新提交的交易，txid = {}", cosdStakeForSLReq.getTxId());
                 try {
                     while (ObjectUtils.isEmpty(cosdStakeForSLReq.getBlockNumber()) || cosdStakeForSLReq.getBlockNumber().equals(0L)) {
                         EthTransaction ethTx = web3j.ethGetTransactionByHash(cosdStakeForSLReq.getTxId()).send();
@@ -126,14 +127,14 @@ public class ScheduledTasks {
 
         maps.forEach(map -> {
 
-            if (ObjectUtils.isEmpty(map)){
+            if (ObjectUtils.isEmpty(map)) {
                 return;
             }
 //            log.info("读取 redis 中未被确认的交易");
 
             map.forEach((id, cosdStakeForSLReq) -> {
 
-                log.info("读取 redis 中未被确认的交易，txid = {}",cosdStakeForSLReq.getTxId());
+                log.info("读取 redis 中未被确认的交易，txid = {}", cosdStakeForSLReq.getTxId());
 
                 // 判断当前消息从创建到现在是否超过 制定的时间（毫秒）
                 //获取 StreamEntryID 的时间戳部分，它以毫秒为单位
@@ -197,7 +198,6 @@ public class ScheduledTasks {
     }
 
 
-
     public Result transaction(CosdStakeForSLReq req) {
         switch (req.getTransType()) {
             // 用户质押 COSD 到DEFI
@@ -242,13 +242,13 @@ public class ScheduledTasks {
                 if ((req.getPoolId() == CommonConstant.POOL_CLUB)) {
                     user.setId(req.getFromUserId());
                     User user1 = userRepository.queryUserById(req.getFromUserId());
-                    if (user.getUserType()!=user1.getUserType()){
+                    if (user.getUserType() != user1.getUserType()) {
                         user.setUpdateTime(new Date());
                         userRepository.updateUser(user);
                     }
                     // 俱乐部老板的变成普通用户后，需要更新 userrelation表，将俱乐部老板邀请的用户的 level1 和 level0变成空
-                    if (user.getUserType()==CommonConstant.USER_PLAYER){
-                        userRelationRepository.batchUpdateUserRelationClub(user.getId(),new Date());
+                    if (user.getUserType() == CommonConstant.USER_PLAYER) {
+                        userRelationRepository.batchUpdateUserRelationClub(user.getId(), new Date());
                     }
                 }
                 break;
@@ -295,8 +295,8 @@ public class ScheduledTasks {
             case 8:
                 // 删除 evic 提现的过期 key
 
-                redisService.del(EvicKey.getWithdrawKey.getPrefix()+String.format("%s:%s",req.getFromUserId().toString(),req.getFromAmount().toString()));
-                log.info("删除过期 key{}",EvicKey.getWithdrawKey.getPrefix()+String.format("%s:%s",req.getFromUserId().toString(),req.getFromAmount().toString()));
+                redisService.del(EvicKey.getWithdrawKey.getPrefix() + String.format("%s:%s", req.getFromUserId().toString(), req.getFromAmount().toString()));
+                log.info("删除过期 key{}", EvicKey.getWithdrawKey.getPrefix() + String.format("%s:%s", req.getFromUserId().toString(), req.getFromAmount().toString()));
 //                Asset asset2 = new Asset();
 //                // 查询当前用户的资产
 //                Asset asset3 = assetRepository.queryAssetByUserIdAndType(req.getFromUserId(), req.getFromAssetType());
@@ -319,15 +319,40 @@ public class ScheduledTasks {
                         "redis.call('DEL', KEYS[1]) \n" +
                         "return nft";
                 NFTVo nftVo = redisService.evalGet(NFTKey.getTokenId, req.getNftVo().getTokenId(), luaScript, NFTVo.class);
-                if(ObjectUtils.isNotEmpty(nftVo)){
+                if (ObjectUtils.isNotEmpty(nftVo)) {
                     req.setNftVo(nftVo);
                 }
                 NFT nft = new NFT();
                 if (!ObjectUtils.isEmpty(nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId()))) {
                     throw new GlobalException(CodeMsg.NFT_EXIST_ERROR);
                 }
+
+                // 统计 NFT 利润
+                User user1 = userRepository.queryUserById(req.getFromUserId());
+                UserRelationDTO userRelationDTO = userRelationRepository.queryUserByRelationId(user1.getUserRelationId());
+                Double clubProfile = 0D;
+                Double channelProfile = 0D;
+                if (ObjectUtils.isNotEmpty(userRelationDTO)) {
+                    User level0 = userRelationDTO.getLevel0();
+                    User level1 = userRelationDTO.getLevel1();
+                    if ((!ObjectUtils.isEmpty(level0)) && (!ObjectUtils.isEmpty(level1))) {
+                        if (level0.getStatus() == CommonConstant.USER_ACTIVE) {
+                            channelProfile = req.getFromAmount() * 0.01;
+                        }
+                        if (level1.getStatus() == CommonConstant.USER_ACTIVE) {
+                            clubProfile = req.getFromAmount() * 0.05;
+                        }
+                    } else if ((ObjectUtils.isEmpty(level0)) && (!ObjectUtils.isEmpty(level1))) {
+                        clubProfile = req.getFromAmount() * 0.05;
+                    } else if ((!ObjectUtils.isEmpty(level0)) && (ObjectUtils.isEmpty(level1))) {
+                        channelProfile = req.getFromAmount() * 0.05;
+                    }
+                }
+                redisService.incrFloat(ProfileKey.getClub, "", clubProfile);
+                redisService.incrFloat(ProfileKey.getChannel, "", channelProfile);
+                redisService.incrFloat(ProfileKey.getCompany, "", req.getFromAmount() * 0.1 - clubProfile - channelProfile);
                 nft.setUserId(req.getFromUserId());
-                if (CommonConstant.NFT_PURCHASED == req.getNftVo().getStatus()){
+                if (CommonConstant.NFT_PURCHASED == req.getNftVo().getStatus()) {
                     break;
                 }
                 nft.setStatus(req.getNftVo().getStatus());

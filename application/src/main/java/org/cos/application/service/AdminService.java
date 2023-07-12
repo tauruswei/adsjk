@@ -10,7 +10,9 @@ import org.cos.common.entity.data.dto.AssetDTO;
 import org.cos.common.entity.data.po.User;
 import org.cos.common.entity.data.req.UserListReq;
 import org.cos.common.entity.data.req.UserUpdateReq;
+import org.cos.common.entity.data.vo.ProfileVo;
 import org.cos.common.exception.GlobalException;
+import org.cos.common.redis.ProfileKey;
 import org.cos.common.redis.RedisService;
 import org.cos.common.repository.NFTRepository;
 import org.cos.common.repository.PoolUserRepository;
@@ -164,6 +166,17 @@ public class AdminService {
 
         userRepository.updateUser(user);
         return Result.success();
+    }
+
+    public Result getNftProfile(){
+        Double company = redisService.get(ProfileKey.getCompany, "", Double.class);
+        Double channel = redisService.get(ProfileKey.getChannel, "", Double.class);
+        Double club = redisService.get(ProfileKey.getClub, "", Double.class);
+        ProfileVo profileVo = new ProfileVo();
+        profileVo.setClubProfile(club);
+        profileVo.setChannelProfile(channel);
+        profileVo.setCompanyProfile(company);
+        return Result.success(profileVo);
     }
 
 }
