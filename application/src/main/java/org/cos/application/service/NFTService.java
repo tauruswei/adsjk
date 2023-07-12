@@ -16,6 +16,7 @@ import org.cos.common.entity.data.req.NFTPurchaseReq;
 import org.cos.common.entity.data.req.NFTUpdateReq;
 import org.cos.common.entity.data.vo.WebNFTVo;
 import org.cos.common.exception.GlobalException;
+import org.cos.common.redis.NFTKey;
 import org.cos.common.redis.RedisService;
 import org.cos.common.repository.AssetRepository;
 import org.cos.common.repository.NFTRepository;
@@ -45,6 +46,15 @@ public class NFTService {
     private AssetRepository assetRepository;
     @Autowired
     private RedisService redisService;
+
+    public static String luna_script = "if redis.call('exists', KEYS[1]) == 1 then " +
+            "local nft = redis.call('get', KEYS[1]); " +
+            "local nftJson = cjson.decode(nft); " +
+            "nftJson['status'] = ARGV[1]; " +
+            "redis.call('set', KEYS[1], cjson.encode(nftJson)); " +
+            "return 1; " +
+            "end; " +
+            "return 0;";
 
     public Result purchaseNFT(NFTPurchaseReq req) {
         // todo 缺少对用户id
@@ -154,6 +164,14 @@ public class NFTService {
 //        if(ObjectUtils.isNotEmpty(nftVo)){
 //            throw new GlobalException(CodeMsg.NFT_REFRESH_LATER_ERROR);
 //        }else{
+        ;
+        // 在 active 列表的 nft，点击 use it for game，分两种情况：（1） 如果 nft 的key，存在 redis 中，说明 nft 是在官网购买的，需要等待，防止交易回滚,
+        //                                                    （2） 如果 redis 中不存在，则直接入库
+        Boolean exist = redisService.evalSet(NFTKey.getTokenId, req.getNftVo().getTokenId(), luna_script, CommonConstant.NFT_USED);
+        if (exist){
+            return Result.success("");
+        }
+
         // 在 active 列表的 nft，点击 use it for game，直接入库
         NFT nft = nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId());
         if(ObjectUtils.isNotEmpty(nft)){

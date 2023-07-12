@@ -2,6 +2,7 @@ package org.cos.common.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import redis.clients.jedis.*;
 import redis.clients.jedis.params.XReadGroupParams;
 import redis.clients.jedis.params.XReadParams;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -99,6 +101,52 @@ public class RedisService {
 			jedis.expire(key, seconds);
 			return true;
 		}finally {
+			returnToPool(jedis);
+		}
+	}
+
+	/**
+	 * 执行lua 脚本
+	 * */
+	public <T> Boolean evalSet (KeyPrefix prefix, String key, String luaScript, T value) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			//生成真正的key
+			String realKey  = prefix.getPrefix() + key;
+			String str = beanToString(value);
+			if(str == null || str.length() <= 0) {
+				return false;
+			}
+			Object eval = jedis.eval(luaScript, Collections.singletonList(realKey), Arrays.asList(str));
+			if (eval.equals(1L)){
+				return true;
+			}
+			return false;
+
+		}finally {
+			returnToPool(jedis);
+		}
+	}
+
+	/**
+	 * 执行lua 脚本
+	 * */
+	public <T> T evalGet (KeyPrefix prefix, String key,String luaScript,Class<T> clazz) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			//生成真正的key
+			String realKey  = prefix.getPrefix() + key;
+			Object result = jedis.eval(luaScript, Collections.singletonList(realKey), new ArrayList<>());
+			if(result != null) {
+				return new ObjectMapper().readValue((String) result, clazz);
+			} else {
+				return null;
+			}
+		} catch(IOException e) {
+			throw new RuntimeException("Error parsing JSON", e);
+		} finally {
 			returnToPool(jedis);
 		}
 	}

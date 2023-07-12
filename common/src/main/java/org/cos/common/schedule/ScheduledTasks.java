@@ -8,11 +8,9 @@ import org.cos.common.entity.data.po.NFT;
 import org.cos.common.entity.data.po.PoolUser;
 import org.cos.common.entity.data.po.User;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
+import org.cos.common.entity.data.vo.NFTVo;
 import org.cos.common.exception.GlobalException;
-import org.cos.common.redis.EvicKey;
-import org.cos.common.redis.RedisMessageSubscriber;
-import org.cos.common.redis.RedisService;
-import org.cos.common.redis.TransactionKey;
+import org.cos.common.redis.*;
 import org.cos.common.repository.*;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
@@ -316,6 +314,14 @@ public class ScheduledTasks {
                 break;
             // 用户购买 NFT 盲盒
             case 9:
+                // 从redis中获取最新的 NFTvo 对象，因为在 active 列表选择 use it for game，会更新 NFTVo 对象，然后删除 nft 在redis 中的key
+                String luaScript = "local nft = redis.call('GET', KEYS[1]) \n" +
+                        "redis.call('DEL', KEYS[1]) \n" +
+                        "return nft";
+                NFTVo nftVo = redisService.evalGet(NFTKey.getTokenId, req.getNftVo().getTokenId(), luaScript, NFTVo.class);
+                if(ObjectUtils.isNotEmpty(nftVo)){
+                    req.setNftVo(nftVo);
+                }
                 NFT nft = new NFT();
                 if (!ObjectUtils.isEmpty(nftRepository.queryNFTByTokenId(req.getNftVo().getTokenId()))) {
                     throw new GlobalException(CodeMsg.NFT_EXIST_ERROR);

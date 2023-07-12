@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.cos.common.config.BaseConfiguration;
 import org.cos.common.config.Web3jConfiguration;
 import org.cos.common.constant.CommonConstant;
@@ -109,6 +110,10 @@ public class TransWebsiteService {
             transWebsite.setToAssetType(req.getToAssetType());
             transWebsite.setToAmount(req.getToAmount());
             transWebsite.setNftTokenId(req.getNftVo().getTokenId());
+            if (StringUtils.isNotBlank(req.getNftVo().getTokenId())){
+                // 防止用户买完 nft ，在nft active 列表，直接选择 use it for game，因此需要先将 nft 存redis
+                redisService.set(NFTKey.getTokenId,req.getNftVo().getTokenId(),req.getNftVo());
+            }
             transWebsite.setCreateTime(new Date());
             transWebsite.setUpdateTime(new Date());
             transWebsite.setRemark(req.getRemark());
@@ -119,9 +124,9 @@ public class TransWebsiteService {
             }
             req.setTransWebsiteId(transWebsite.getId());
 
-            if (ObjectUtils.isNotEmpty(req.getNftVo())){
-                redisService.set(NFTKey.getTokenId,req.getNftVo().getTokenId(),req.getNftVo());
-            }
+//            if (ObjectUtils.isNotEmpty(req.getNftVo())){
+//                redisService.set(NFTKey.getTokenId,req.getNftVo().getTokenId(),req.getNftVo());
+//            }
             redisService.xadd(TransactionKey.getTx,"",req);
         } catch (Exception e) {
             throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
