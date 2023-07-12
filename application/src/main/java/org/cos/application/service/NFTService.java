@@ -23,6 +23,7 @@ import org.cos.common.repository.NFTRepository;
 import org.cos.common.repository.TransWebsiteRepository;
 import org.cos.common.result.CodeMsg;
 import org.cos.common.result.Result;
+import org.cos.common.schedule.ScheduledTasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,14 +48,7 @@ public class NFTService {
     @Autowired
     private RedisService redisService;
 
-    public static String luna_script = "if redis.call('exists', KEYS[1]) == 1 then " +
-            "local nft = redis.call('get', KEYS[1]); " +
-            "local nftJson = cjson.decode(nft); " +
-            "nftJson['status'] = ARGV[1]; " +
-            "redis.call('set', KEYS[1], cjson.encode(nftJson)); " +
-            "return 1; " +
-            "end; " +
-            "return 0;";
+
 
     public Result purchaseNFT(NFTPurchaseReq req) {
         // todo 缺少对用户id
@@ -167,7 +161,7 @@ public class NFTService {
         ;
         // 在 active 列表的 nft，点击 use it for game，分两种情况：（1） 如果 nft 的key，存在 redis 中，说明 nft 是在官网购买的，需要等待，防止交易回滚,
         //                                                    （2） 如果 redis 中不存在，则直接入库
-        Boolean exist = redisService.evalSet(NFTKey.getTokenId, req.getNftVo().getTokenId(), luna_script, CommonConstant.NFT_USED);
+        Boolean exist = redisService.evalSet(NFTKey.getTokenId, req.getNftVo().getTokenId(), ScheduledTasks.luna_script, CommonConstant.NFT_USED);
         if (exist){
             return Result.success("");
         }

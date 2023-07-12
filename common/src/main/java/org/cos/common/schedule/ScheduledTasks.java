@@ -59,6 +59,15 @@ public class ScheduledTasks {
     @Value("${web3j.networkConfig.bsc.blockNumber}")
     private Long bscBlockNumber;
 
+    public static String luna_script = "if redis.call('exists', KEYS[1]) == 1 then " +
+            "local nft = redis.call('get', KEYS[1]); " +
+            "local nftJson = cjson.decode(nft); " +
+            "nftJson['status'] = ARGV[1]; " +
+            "redis.call('set', KEYS[1], cjson.encode(nftJson)); " +
+            "return 1; " +
+            "end; " +
+            "return 0;";
+
 
     private static final Logger log = LoggerFactory.getLogger(RedisMessageSubscriber.class);
 
@@ -371,7 +380,14 @@ public class ScheduledTasks {
                 }
                 break;
             case 10:
-                // todo 用户交易 NFT
+                Boolean exist = redisService.evalSet(NFTKey.getTokenId, req.getNftVo().getTokenId(), luna_script, CommonConstant.NFT_USED);
+                if (exist){
+                    //如果存在说明购买的 nft 还没有入库，还在redis中排队，因此只需改下状态就行
+                    break;
+                }else {
+                    // 否则直接更新库
+                    nftRepository.NFTIntoGame(CommonConstant.NFT_USED,req.getNftVo().getTokenId());
+                }
                 break;
             default:
                 // 交易类型错误

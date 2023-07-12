@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.cos.application.service.TransWebsiteService;
+import org.cos.common.constant.CommonConstant;
 import org.cos.common.entity.data.req.CosdStakeForSLReq;
 import org.cos.common.entity.data.req.TranBlurListReq;
 import org.cos.common.entity.data.req.TranListReq;
@@ -29,6 +30,9 @@ public class TransWebsiteController {
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM,"templateName");
 //        if (StringUtils.isBlank(req.getAttrs()))
 //            return BaseResultEntity.failure(BaseResultEnum.LACK_OF_PARAM, "attrs");
+        if(CommonConstant.TRANSFER_NFT==req.getTransType()&& req.getToUserId()==0){
+            return webTranService.NFTIntoGame(req);
+        }
         return webTranService.transactionAsync(req);
     }
     @ApiOperation("查询用户是否可以提现")

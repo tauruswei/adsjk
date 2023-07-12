@@ -16,6 +16,7 @@ public interface NFTRepository {
     List<NFT> queryNFTsByUserIdAndStatus(NFT nft);
     NFT queryNFTByUserIdAndAtrr1(NFT nft);
     void updateNFTStatus(NFT nft);
+    void NFTIntoGame(@Param("status") int status, @Param("tokenId") String tokenId);
     TransWebsite queryTransWebsiteByTxId(String txid);
     User queryUserByWalletAddressAndUserType(@Param("walletAddress") String walletAddress, @Param("userType") int userType);
     NFT queryNFTByTokenId(@Param("tokenId")String tokenId);

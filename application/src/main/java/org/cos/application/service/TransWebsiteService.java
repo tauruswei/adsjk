@@ -91,14 +91,14 @@ public class TransWebsiteService {
     public Result transactionAsync(CosdStakeForSLReq req) {
         try {
 
-            if (org.springframework.util.ObjectUtils.isEmpty(userRepository.queryUserById(req.getFromUserId()))) {
+            if (ObjectUtils.isEmpty(userRepository.queryUserById(req.getFromUserId()))) {
                 throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
             }
-            if (org.springframework.util.ObjectUtils.isEmpty(userRepository.queryUserById(req.getToUserId()))) {
+            if (ObjectUtils.isEmpty(userRepository.queryUserById(req.getToUserId()))) {
                 throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
             }
             TransWebsite transWebsite = new TransWebsite();
-            if (!Objects.isNull(transWebsiteRepository.queryTransWebsiteByTxId(req.getTxId()))) {
+            if (ObjectUtils.isNotEmpty(transWebsiteRepository.queryTransWebsiteByTxId(req.getTxId()))) {
                 throw new GlobalException(CodeMsg.TRANS_WEBSITE_TX_EXIST_ERROR);
             }
             transWebsite.setTxId(req.getTxId());
@@ -110,7 +110,7 @@ public class TransWebsiteService {
             transWebsite.setToAssetType(req.getToAssetType());
             transWebsite.setToAmount(req.getToAmount());
             transWebsite.setNftTokenId(req.getNftVo().getTokenId());
-            if (StringUtils.isNotBlank(req.getNftVo().getTokenId())){
+            if (StringUtils.isNotBlank(req.getNftVo().getTokenId())&& CommonConstant.PURCHASE_NFT == req.getTransType()){
                 // 防止用户买完 nft ，在nft active 列表，直接选择 use it for game，因此需要先将 nft 存redis
                 redisService.set(NFTKey.getTokenId,req.getNftVo().getTokenId(),req.getNftVo());
             }
@@ -133,6 +133,47 @@ public class TransWebsiteService {
         }
         return Result.success();
     }
+
+    public Result NFTIntoGame(CosdStakeForSLReq req) {
+        try {
+
+            if (ObjectUtils.isEmpty(userRepository.queryUserById(req.getFromUserId()))) {
+                throw new GlobalException(CodeMsg.USER_NOT_EXIST_ERROR);
+            }
+
+            TransWebsite transWebsite = new TransWebsite();
+            if (ObjectUtils.isNotEmpty(transWebsiteRepository.queryTransWebsiteByTxId(req.getTxId()))) {
+                throw new GlobalException(CodeMsg.TRANS_WEBSITE_TX_EXIST_ERROR);
+            }
+            transWebsite.setTxId(req.getTxId());
+            transWebsite.setTransType(req.getTransType());
+            transWebsite.setFromUserId(req.getFromUserId());
+            transWebsite.setFromAssetType(req.getFromAssetType());
+            transWebsite.setFromAmount(req.getFromAmount());
+            transWebsite.setToUserId(req.getToUserId());
+            transWebsite.setToAssetType(req.getToAssetType());
+            transWebsite.setToAmount(req.getToAmount());
+            transWebsite.setNftTokenId(req.getNftVo().getTokenId());
+            transWebsite.setCreateTime(new Date());
+            transWebsite.setUpdateTime(new Date());
+            transWebsite.setRemark(req.getRemark());
+            try {
+                transWebsiteRepository.insertTransWebsite(transWebsite);
+            } catch (Exception e) {
+                throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
+            }
+            req.setTransWebsiteId(transWebsite.getId());
+
+//            if (ObjectUtils.isNotEmpty(req.getNftVo())){
+//                redisService.set(NFTKey.getTokenId,req.getNftVo().getTokenId(),req.getNftVo());
+//            }
+            redisService.xadd(TransactionKey.getTx,"",req);
+        } catch (Exception e) {
+            throw new GlobalException(CodeMsg.TRANS_WEBSITE_ADD_ERROR.fillArgs(e.getMessage()));
+        }
+        return Result.success();
+    }
+
 
     public Result withdrawEvic(CosdStakeForSLReq req) {
 
